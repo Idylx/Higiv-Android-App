@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1083326843822",
+    "firebase_url": "https://hitch-guide-to-the-valais.firebaseio.com",
+    "project_id": "hitch-guide-to-the-valais",
+    "storage_bucket": "hitch-guide-to-the-valais.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1083326843822:android:05653e49e103cf52",
+        "android_client_info": {
+          "package_name": "ch.hes.it.higiv"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1083326843822-g0ldkhle6oeio0vc8obiktoai0qluk8s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ch.hes.it.higiv",
+            "certificate_hash": "1ec757a0d15077a6647c4d4719599fa28b41a4cb"
+          }
+        },
+        {
+          "client_id": "1083326843822-6cv3pgstv6014u2etgj1qjh31uifgd2m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDfi1Ur8i1DxXY3XthNqrvUy6YXLLv291k"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1083326843822-6cv3pgstv6014u2etgj1qjh31uifgd2m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
