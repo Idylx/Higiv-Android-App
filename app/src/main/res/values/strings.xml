@@ -40,5 +40,10 @@
     <string name="forgot_password_msg">We just need your registered Email Id to sent you password reset instructions.</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="FirstnameEditPage">Firstname</string>
+    <string name="LastnameEditPage">Lastname</string>
+    <string name="EmailEditPage">Email</string>
+    <string name="GenderEditPage">Gender</string>
+    <string name="PasswordEditPage">Password</string>
+    <string name="EditButtonEditPage">Edit</string>
 </resources>
