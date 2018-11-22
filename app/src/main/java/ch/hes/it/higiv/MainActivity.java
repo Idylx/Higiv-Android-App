@@ -1,20 +1,22 @@
 package ch.hes.it.higiv;
 
+import android.app.Activity;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity {
 
 
     private FirebaseAuth auth;
     private FirebaseAuth.AuthStateListener authListener;
 
-    private Button btnSignout;
+    private Button btnSignout, btnCreateTravel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         btnSignout = (Button) findViewById(R.id.sign_out);
+        btnCreateTravel = (Button) findViewById(R.id.btn_create_travel);
 
 
         btnSignout.setOnClickListener(new View.OnClickListener() {
@@ -38,6 +41,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+        btnCreateTravel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                TravelCreateFragment tcf = new TravelCreateFragment();
+                fragmentTransaction.add(R.id.fragment_container, tcf);
+                fragmentTransaction.commit();
+            }
+        });
 
     }
     //sign out method

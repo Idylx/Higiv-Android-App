@@ -38,4 +38,17 @@
     <string name="btn_sign_out">Sign Out</string>
     <string name="lbl_forgot_password">Forgot password?</string>
     <string name="forgot_password_msg">We just need your registered Email Id to sent you password reset instructions.</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="destination">Destination</string>
+    <string name="plate_number">Number plate</string>
+    <string name="btn_create_travel">Create a travel</string>
+    <string name="plate_number_state">VS</string>
+    <string name="number_of_person">Number of person</string>
+    <string name="CreationTravelSuccessful">Travel created !</string>
+    <string name="CreationTravelFailed">Travel creation failed !</string>
+    <string name="btn_begin_travel">Begin</string>
+    <string name="btn_stop_travel">Stop</string>
+    <string name="btn_send_alert">Send alert</string>
 </resources>
