@@ -16,10 +16,18 @@ public class MainActivity extends AppCompatActivity {
 
     private Button btnSignout;
 
+    //For testing
+    Button ToProfileActivity;
+    //End testing
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+
+
 
         auth = FirebaseAuth.getInstance();
         if (auth.getCurrentUser() != null) {
@@ -37,6 +45,20 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        //Testing
+        ToProfileActivity = (Button) findViewById(R.id.ToProfileButton);
+
+        ToProfileActivity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, ActivityProfile.class));
+                finish();
+            }
+        });
+        //End testing
+
+
 
 
     }

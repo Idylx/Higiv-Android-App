@@ -45,8 +45,11 @@
     <string name="EmailEditPage">Email</string>
     <string name="GenderEditPage">Gender</string>
     <string name="PasswordEditPage">Password</string>
-    <string name="EditButtonEditPage">Edit</string>
+    <string name="EditButtonEditPage">Save</string>
     <string name="MenEditPage">Men</string>
     <string name="womenEditPage">Women</string>
     <string name="otherEditPage">Others</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

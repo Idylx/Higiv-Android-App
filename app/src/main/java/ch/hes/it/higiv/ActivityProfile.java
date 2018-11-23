@@ -3,13 +3,42 @@ package ch.hes.it.higiv;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.Toast;
 
 public class ActivityProfile extends AppCompatActivity {
 
+    private EditStateSectionAdapter editStateSectionAdapter;
+    private ViewPager viewPager;
+
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-  }
+
+        editStateSectionAdapter = new EditStateSectionAdapter(getSupportFragmentManager());
+        viewPager = (ViewPager) findViewById(R.id.profileContainer);
+
+        Toast.makeText(this, "test", Toast.LENGTH_LONG).show();
+
+
+        setUpViewPager(viewPager);
+
+    }
+
+    public void setUpViewPager(ViewPager viewPager) {
+        EditStateSectionAdapter adapter = new EditStateSectionAdapter(getSupportFragmentManager());
+        adapter.addFragmentToList(new DetailProfilFragment(), "Detail Profile");
+        adapter.addFragmentToList(new EditProfilFragment(), "Edit Profile");
+
+        viewPager.setAdapter(adapter);
+
+    }
+
+    public void setViewPager(int fragmentNumber){
+        viewPager.setCurrentItem(fragmentNumber);
+    }
+
+
 }
