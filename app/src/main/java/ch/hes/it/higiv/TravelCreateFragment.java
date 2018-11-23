@@ -21,6 +21,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 import ch.hes.it.higiv.Model.Travel;
@@ -36,6 +37,14 @@ public class TravelCreateFragment extends Fragment {
     private Button btnBeginTravel, btnStopTravel, btnSendAlert;
     //Object Travel to save into Firebase
     private Travel travel;
+    //States possible in Switzerland
+    private ArrayList<String> states = new ArrayList<String>(){{
+        add("AG"); add("AI");add("AR");add("BE");add("BL");add("BS");
+        add("FR"); add("GE");add("GL");add("GR");add("JU");add("LU");
+        add("NE"); add("NW");add("OW");add("SG");add("SH");add("SO");
+        add("SZ"); add("TG");add("TI");add("UR");add("VD");add("VS");
+        add("ZG"); add("ZH");add("CD");
+    }};
 
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
@@ -88,7 +97,8 @@ public class TravelCreateFragment extends Fragment {
                     return;
                 }
 
-                if (TextUtils.isEmpty(inputPlateNumberSate.getText())) {
+                //Check if the state entered is valid
+                if (!states.contains(inputPlateNumberSate.getText().toString())) {
                     Toast.makeText(getActivity(), R.string.enter_state, Toast.LENGTH_SHORT).show();
                     inputPlateNumberSate.requestFocus();
                     return;
