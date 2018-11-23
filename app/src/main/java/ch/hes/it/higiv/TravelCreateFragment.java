@@ -10,6 +10,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.NumberPicker;
@@ -19,12 +20,17 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.UUID;
 
+import ch.hes.it.higiv.Model.State;
 import ch.hes.it.higiv.Model.Travel;
 
 
@@ -37,21 +43,16 @@ public class TravelCreateFragment extends Fragment {
     private EditText inputDestination, inputPlateNumberSate, inputPlateNumber;
     private NumberPicker inputNbPersons;
     private Button btnBeginTravel, btnStopTravel, btnSendAlert;
-    //Object Travel to save into Firebase
+    //Object Travel to save into FireBase
     private Travel travel;
-    //States possible in Switzerland
-    private final ArrayList<String> states = new ArrayList<String>() {{
-        add("AG"); add("AI");add("AR");add("BE");add("BL");add("BS");
-        add("FR"); add("GE");add("GL");add("GR");add("JU");add("LU");
-        add("NE"); add("NW");add("OW");add("SG");add("SH");add("SO");
-        add("SZ"); add("TG");add("TI");add("UR");add("VD");add("VS");
-        add("ZG"); add("ZH");add("CD");
-    }};
+    //States possible entered in FireBase
+    private ArrayList<String> states;
     private int nbPerson;
 
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
+
 
         final View rootView = inflater.inflate(R.layout.fragment_travel_create, container, false);
 
@@ -103,6 +104,24 @@ public class TravelCreateFragment extends Fragment {
 
         });
 
+        //Acess the states node to retrieve all states possible when we create a travel
+        mDatabaseReference.child("states").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                states = new ArrayList<String>();
+
+                for (DataSnapshot ds : dataSnapshot.getChildren())
+                {
+                    states.add(ds.getValue(State.class).getName());
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println(databaseError.getMessage());
+            }
+        });
+
         //Listener used to react to the button click
         btnBeginTravel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,18 +146,11 @@ public class TravelCreateFragment extends Fragment {
                     inputPlateNumber.requestFocus();
                     return;
                 }
-/*
-                if (TextUtils.isEmpty(inputNbPersons.getText())) {
-                    Toast.makeText(getActivity(), R.string.enter_nb_person, Toast.LENGTH_SHORT).show();
-                    inputNbPersons.requestFocus();
-                    return;
-                }
-*/
+
                 //Creation of the object Travel
                 travel = new Travel(inputDestination.getText().toString(),
                         inputPlateNumberSate.getText().toString(),
                         Integer.parseInt(inputPlateNumber.getText().toString()),
-                        //Integer.parseInt(inputNbPersons.getText().toString()),
                         nbPerson,
                         user.getUid()
                 );
