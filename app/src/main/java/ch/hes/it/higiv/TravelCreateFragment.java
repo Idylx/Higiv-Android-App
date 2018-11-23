@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.NumberPicker;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -33,18 +34,20 @@ public class TravelCreateFragment extends Fragment {
     private DatabaseReference mDatabaseReference = FirebaseDatabase.getInstance().getReference();
     //Access the current user
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-    private EditText inputDestination, inputPlateNumberSate, inputPlateNumber, inputNbPersons;
+    private EditText inputDestination, inputPlateNumberSate, inputPlateNumber;
+    private NumberPicker inputNbPersons;
     private Button btnBeginTravel, btnStopTravel, btnSendAlert;
     //Object Travel to save into Firebase
     private Travel travel;
     //States possible in Switzerland
-    private ArrayList<String> states = new ArrayList<String>(){{
+    private final ArrayList<String> states = new ArrayList<String>() {{
         add("AG"); add("AI");add("AR");add("BE");add("BL");add("BS");
         add("FR"); add("GE");add("GL");add("GR");add("JU");add("LU");
         add("NE"); add("NW");add("OW");add("SG");add("SH");add("SO");
         add("SZ"); add("TG");add("TI");add("UR");add("VD");add("VS");
         add("ZG"); add("ZH");add("CD");
     }};
+    private int nbPerson;
 
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
@@ -55,10 +58,25 @@ public class TravelCreateFragment extends Fragment {
         inputDestination = (EditText) rootView.findViewById(R.id.destination);
         inputPlateNumberSate = (EditText) rootView.findViewById(R.id.plate_number_state);
         inputPlateNumber = (EditText) rootView.findViewById(R.id.plate_number);
-        inputNbPersons = (EditText) rootView.findViewById(R.id.number_of_places);
+        //inputNbPersons = (EditText) rootView.findViewById(R.id.number_of_places);
+        inputNbPersons = (NumberPicker) rootView.findViewById(R.id.number_of_places);
         btnBeginTravel = (Button) rootView.findViewById(R.id.btn_begin_travel);
         btnStopTravel = (Button) rootView.findViewById(R.id.btn_stop_travel);
         btnSendAlert = (Button) rootView.findViewById(R.id.btn_send_alert);
+
+        //Set min max values for the NumberPicker
+        inputNbPersons.setMinValue(1);
+        inputNbPersons.setMaxValue(9);
+        inputNbPersons.setWrapSelectorWheel(true);
+
+        //Set a value change listener for NumberPicker
+        inputNbPersons.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+            @Override
+            public void onValueChange(NumberPicker picker, int oldVal, int newVal){
+                //Get the newly selected number from picker
+                nbPerson = newVal ;
+            }
+        });
 
         //Hide the send alert button when we launch the fragment
         btnSendAlert.setVisibility(View.GONE);
@@ -109,18 +127,19 @@ public class TravelCreateFragment extends Fragment {
                     inputPlateNumber.requestFocus();
                     return;
                 }
-
+/*
                 if (TextUtils.isEmpty(inputNbPersons.getText())) {
                     Toast.makeText(getActivity(), R.string.enter_nb_person, Toast.LENGTH_SHORT).show();
                     inputNbPersons.requestFocus();
                     return;
                 }
-
+*/
                 //Creation of the object Travel
                 travel = new Travel(inputDestination.getText().toString(),
                         inputPlateNumberSate.getText().toString(),
                         Integer.parseInt(inputPlateNumber.getText().toString()),
-                        Integer.parseInt(inputNbPersons.getText().toString()),
+                        //Integer.parseInt(inputNbPersons.getText().toString()),
+                        nbPerson,
                         user.getUid()
                 );
 

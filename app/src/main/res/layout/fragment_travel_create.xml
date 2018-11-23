@@ -8,7 +8,6 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="489dp"
-        android:layout_marginTop="30dp"
         android:gravity="center"
         android:orientation="vertical"
         android:padding="@dimen/activity_horizontal_margin">
@@ -25,23 +24,6 @@
                 android:layout_marginBottom="10dp"
                 android:hint="@string/destination"
                 android:inputType="textCapSentences"
-                android:textColor="@android:color/black"
-                android:textColorHint="@android:color/darker_gray" />
-
-        </android.support.design.widget.TextInputLayout>
-
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <EditText
-                android:id="@+id/number_of_places"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="10dp"
-                android:hint="@string/number_of_person"
-                android:inputType="number"
                 android:textColor="@android:color/black"
                 android:textColorHint="@android:color/darker_gray" />
 
@@ -74,7 +56,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:layout_marginBottom="10dp"
                 android:maxLength="6"
                 android:hint="@string/plate_number"
                 android:inputType="number"
@@ -83,10 +64,43 @@
 
         </LinearLayout>
 
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!--
+                        <EditText
+                            android:id="@+id/number_of_places"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginBottom="10dp"
+                            android:hint="@string/number_of_person"
+                            android:inputType="number"
+                            android:textColor="@android:color/black"
+                            android:textColorHint="@android:color/darker_gray" />
+            -->
+
+            <TextView
+                android:id="@+id/tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:text="Select a number..."
+                />
+
+            <NumberPicker
+                android:id="@+id/number_of_places"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+
+        </android.support.design.widget.TextInputLayout>
+
         <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="35dp"
+            android:layout_marginTop="5dp"
             android:orientation="horizontal" >
 
             <Button
