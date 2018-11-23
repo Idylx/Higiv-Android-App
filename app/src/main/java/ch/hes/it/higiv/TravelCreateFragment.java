@@ -81,24 +81,28 @@ public class TravelCreateFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                //Checking if there isn't empty fields
+                //Checking if there isn't empty fields, and if it's the case set the focus on the empty field
                 if (TextUtils.isEmpty(inputDestination.getText())) {
-                    Toast.makeText(getActivity(), "Enter destination!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), R.string.enter_destination, Toast.LENGTH_SHORT).show();
+                    inputDestination.requestFocus();
                     return;
                 }
 
                 if (TextUtils.isEmpty(inputPlateNumberSate.getText())) {
-                    Toast.makeText(getActivity(), "Enter state!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), R.string.enter_state, Toast.LENGTH_SHORT).show();
+                    inputPlateNumberSate.requestFocus();
                     return;
                 }
 
                 if (TextUtils.isEmpty(inputPlateNumber.getText())) {
-                    Toast.makeText(getActivity(), "Enter plate number!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), R.string.enter_plate_number, Toast.LENGTH_SHORT).show();
+                    inputPlateNumber.requestFocus();
                     return;
                 }
 
                 if (TextUtils.isEmpty(inputNbPersons.getText())) {
-                    Toast.makeText(getActivity(), "Enter number of persons", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), R.string.enter_nb_person, Toast.LENGTH_SHORT).show();
+                    inputNbPersons.requestFocus();
                     return;
                 }
 

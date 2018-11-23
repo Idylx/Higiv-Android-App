@@ -51,4 +51,8 @@
     <string name="btn_begin_travel">Begin</string>
     <string name="btn_stop_travel">Stop</string>
     <string name="btn_send_alert">Send alert</string>
+    <string name="enter_destination">Enter destination please</string>
+    <string name="enter_state">Enter state please !</string>
+    <string name="enter_plate_number">Enter your plate number please !</string>
+    <string name="enter_nb_person">Enter how many person you are please !</string>
 </resources>
