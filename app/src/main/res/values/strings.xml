@@ -52,4 +52,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="EmailDetailProfil">Email:</string>
+    <string name="GenderDetailProfil">Gender:</string>
+    <string name="EditButtonDetailProfile">Edit Profile</string>
 </resources>

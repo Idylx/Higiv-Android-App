@@ -20,7 +20,7 @@ android:layout_height="match_parent">
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.8"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/NameTxt"
+        app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
 
     <TextView
@@ -32,7 +32,7 @@ android:layout_height="match_parent">
         android:text="@string/FirstnameEditPage"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/NameTxt"
+        app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
 
     <TextView
@@ -117,29 +117,19 @@ android:layout_height="match_parent">
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
 
-    <TextView
-        android:id="@+id/NameTxt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Name"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="16dp"
-        tools:ignore="MissingConstraints" />
-
     <Button
         android:id="@+id/EditButton"
-        android:layout_width="253dp"
+        android:layout_width="250dp"
         android:layout_height="0dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="20dp"
         android:background="@color/colorPrimary"
         android:text="@string/EditButtonEditPage"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/PasswordLabel" />
 
