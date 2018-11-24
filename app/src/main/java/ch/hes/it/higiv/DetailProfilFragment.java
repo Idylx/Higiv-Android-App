@@ -8,8 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class DetailProfilFragment extends Fragment {
+    private TextView NameLabel;
+    private TextView EmailLabel;
+    private TextView GenderLabel;
     private Button EditProfileButton;
 
     @Nullable
@@ -17,6 +21,9 @@ public class DetailProfilFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_detail_profil, container, false);
 
+        NameLabel = (TextView) view.findViewById(R.id.NameLabel);
+        EmailLabel = (TextView) view.findViewById(R.id.EmailLabel);
+        GenderLabel = (TextView) view.findViewById(R.id.GenderLabel);
         EditProfileButton = (Button) view.findViewById(R.id.editProfileButton);
 
         EditProfileButton.setOnClickListener(new View.OnClickListener() {

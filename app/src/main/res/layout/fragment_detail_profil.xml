@@ -11,67 +11,69 @@
         android:id="@+id/editProfileButton"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="150dp"
         android:background="@color/colorPrimary"
         android:text="@string/EditButtonDetailProfile"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/GenderLabel"
+        app:layout_constraintTop_toBottomOf="@+id/EmailLabel"
         tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/NameLabel"
-        android:layout_width="wrap_content"
+        android:layout_width="278dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="8dp"
         android:text="Firstname Lastname"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/EmailTxt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:text="@string/EmailDetailProfil"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        app:layout_constraintTop_toBottomOf="@+id/NameLabel"
-        tools:layout_editor_absoluteX="16dp" />
+        app:layout_constraintTop_toBottomOf="@+id/GenderLabel" />
 
     <TextView
         android:id="@+id/EmailLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="50dp"
-        android:text="TextView"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:text="email@email.com"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/NameLabel" />
-
-    <TextView
-        android:id="@+id/GenderTxt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="@string/GenderDetailProfil"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        app:layout_constraintTop_toBottomOf="@+id/EmailTxt"
-        tools:layout_editor_absoluteX="16dp" />
 
     <TextView
         android:id="@+id/GenderLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="32dp"
-        android:text="TextView"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="60dp"
+        android:text="Mr. or Miss"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/EmailLabel" />
+        app:layout_constraintTop_toBottomOf="@+id/ProfileTxt" />
+
+    <TextView
+        android:id="@+id/ProfileTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:text="@string/ProfileLabelDetailProfile"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </android.support.constraint.ConstraintLayout>
