@@ -20,9 +20,6 @@ public class ActivityProfile extends AppCompatActivity {
         editStateSectionAdapter = new EditStateSectionAdapter(getSupportFragmentManager());
         viewPager = (ViewPager) findViewById(R.id.profileContainer);
 
-        Toast.makeText(this, "test", Toast.LENGTH_LONG).show();
-
-
         setUpViewPager(viewPager);
 
     }

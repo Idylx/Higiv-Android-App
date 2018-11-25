@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "1083326843822-46appmj7g0ah804c3cgu1k0b91abn6np.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ch.hes.it.higiv",
+            "certificate_hash": "c6d65737905d868fe36f07bc71c296057f09eaa5"
+          }
+        },
+        {
           "client_id": "1083326843822-6cv3pgstv6014u2etgj1qjh31uifgd2m.apps.googleusercontent.com",
           "client_type": 3
         }
