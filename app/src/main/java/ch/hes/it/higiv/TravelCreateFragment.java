@@ -10,7 +10,6 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.NumberPicker;
@@ -27,7 +26,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.UUID;
 
 import ch.hes.it.higiv.Model.State;
@@ -68,7 +66,7 @@ public class TravelCreateFragment extends Fragment {
         //Set min max values for the NumberPicker
         inputNbPersons.setMinValue(1);
         inputNbPersons.setMaxValue(9);
-        inputNbPersons.setWrapSelectorWheel(true);
+        //inputNbPersons.setWrapSelectorWheel(true);
 
         //Set a value change listener for NumberPicker
         inputNbPersons.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
