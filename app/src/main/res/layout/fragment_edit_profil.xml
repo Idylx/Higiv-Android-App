@@ -15,7 +15,7 @@ android:layout_height="match_parent">
         android:layout_marginTop="16dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="@string/FirstnameEditPage"
+        android:hint="@string/FirstnameEditPage"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.8"
@@ -53,7 +53,7 @@ android:layout_height="match_parent">
         android:layout_marginTop="12dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="@string/LastnameEditPage"
+        android:hint="@string/LastnameEditPage"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.798"
         app:layout_constraintStart_toStartOf="parent"
@@ -77,7 +77,7 @@ android:layout_height="match_parent">
         android:layout_marginTop="12dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="@string/EmailEditPage"
+        android:hint="@string/EmailEditPage"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.8"
         app:layout_constraintStart_toStartOf="parent"
@@ -149,21 +149,18 @@ android:layout_height="match_parent">
             android:id="@+id/radioMen"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="onRadioButtonClicked"
             android:text="@string/MenEditPage" />
 
         <RadioButton
             android:id="@+id/radioWomen"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="onRadioButtonClicked"
             android:text="@string/womenEditPage" />
 
         <RadioButton
             android:id="@+id/radioOther"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="onRadioButtonClicked"
             android:text="@string/otherEditPage" />
     </RadioGroup>
 </android.support.constraint.ConstraintLayout>

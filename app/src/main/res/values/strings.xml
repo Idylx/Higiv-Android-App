@@ -39,7 +39,7 @@
     <string name="lbl_forgot_password">Forgot password?</string>
     <string name="forgot_password_msg">We just need your registered Email Id to sent you password reset instructions.</string>
 
-    <!-- Edit Profile page -->
+    <!-- Edit User page -->
     <string name="FirstnameEditPage">Firstname</string>
     <string name="LastnameEditPage">Lastname</string>
     <string name="EmailEditPage">Email</string>
@@ -50,7 +50,7 @@
     <string name="womenEditPage">Women</string>
     <string name="otherEditPage">Others</string>
 
-    <!-- Detail Profile page -->
+    <!-- Detail User page -->
     <string name="EmailDetailProfil">Email:</string>
     <string name="GenderDetailProfil">Gender:</string>
     <string name="EditButtonDetailProfile">Edit Profile</string>

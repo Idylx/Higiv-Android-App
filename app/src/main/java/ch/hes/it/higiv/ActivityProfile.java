@@ -26,8 +26,8 @@ public class ActivityProfile extends AppCompatActivity {
 
     public void setUpViewPager(ViewPager viewPager) {
         EditStateSectionAdapter adapter = new EditStateSectionAdapter(getSupportFragmentManager());
-        adapter.addFragmentToList(new DetailProfilFragment(), "Detail Profile");
-        adapter.addFragmentToList(new EditProfilFragment(), "Edit Profile");
+        adapter.addFragmentToList(new DetailProfilFragment(), "Detail User");
+        adapter.addFragmentToList(new EditProfilFragment(), "Edit User");
 
         viewPager.setAdapter(adapter);
 

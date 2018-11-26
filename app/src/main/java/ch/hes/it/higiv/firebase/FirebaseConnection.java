@@ -6,15 +6,14 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class FirebaseConnection{
+public abstract class FirebaseConnection{
 
     protected FirebaseDatabase mFirebaseDatabase;
     protected DatabaseReference mDatabaseReference;
 
-    public void initFirebase(){
+    public FirebaseConnection(){
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mDatabaseReference = mFirebaseDatabase.getReference();
     }
-
 
 }
