@@ -1,5 +1,6 @@
 package ch.hes.it.higiv;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -23,10 +24,20 @@ public class MainActivity extends AppCompatActivity
 
     private FirebaseAuth auth;
     private FirebaseAuth.AuthStateListener authListener;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+
+        auth = FirebaseAuth.getInstance();
+        if (auth.getCurrentUser() != null) {
+            // User is logged in
+        }
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -73,9 +84,16 @@ public class MainActivity extends AppCompatActivity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (id){
+
+            case R.id.action_edit_profile:
+                //blabla
+                break;
+            case R.id.action_logout:
+                signOut();
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                finish();
+                break;
         }
 
         return super.onOptionsItemSelected(item);
@@ -87,23 +105,50 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
 
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        switch (id){
+            case R.id.nav_create_travel:
+                //bla bla
+                break;
+            case R.id.nav_find_spot:
+                //bla bla
+                break;
+            case R.id.nav_send_alert:
+                //bla bla
+                break;
+            case R.id.nav_settings:
+                //bla bla
+                break;
+            case R.id.nav_about:
+                //bla bla
+                break;
         }
+
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (authListener != null) {
+
+        }
     }
 
     //sign out method

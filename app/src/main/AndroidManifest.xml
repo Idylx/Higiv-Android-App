@@ -25,13 +25,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".SignupActivity" />
-        <activity
-            android:name=".MainActivity2"
-            android:parentActivityName=".LoginActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="ch.hes.it.higiv.LoginActivity" />
-        </activity>
         <activity android:name=".ResetPasswordActivity" />
         <activity
             android:name=".MainActivity"
