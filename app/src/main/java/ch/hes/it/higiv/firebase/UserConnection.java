@@ -28,36 +28,17 @@ public class UserConnection extends  FirebaseConnection{
 
         final User user;
 
-        mReadDataOnce(uid, new OnGetDataListener() {
-            @Override
-            public void onStart() {
-            }
-
-            @Override
-            public void onSuccess(DataSnapshot data) {
-                user = (User) data.getValue(User.class);
-            }
-
-            @Override
-            public void onFailed(DatabaseError databaseError) {
-            }
-        });
-        return null;
-    }
-
-    public void mReadDataOnce(String uid, final OnGetDataListener listener) {
-        listener.onStart();
         mDatabaseReference.child("users").child(uid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                listener.onSuccess(dataSnapshot);
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                listener.onFailed(databaseError);
             }
         });
+
+        return null;
     }
 
 
