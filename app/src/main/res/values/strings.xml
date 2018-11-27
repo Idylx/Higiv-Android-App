@@ -55,4 +55,5 @@
     <string name="enter_state">Enter state please !</string>
     <string name="enter_plate_number">Enter your plate number please !</string>
     <string name="enter_nb_person">Enter how many person you are please !</string>
+    <string name="title_activity_travel">TravelActivity</string>
 </resources>

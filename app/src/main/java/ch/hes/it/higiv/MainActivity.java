@@ -45,11 +45,7 @@ public class MainActivity extends Activity {
         btnCreateTravel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentManager fragmentManager = getFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                TravelCreateFragment tcf = new TravelCreateFragment();
-                fragmentTransaction.add(R.id.fragment_container, tcf);
-                fragmentTransaction.commit();
+                startActivity(new Intent(MainActivity.this, TravelActivity.class));
             }
         });
 

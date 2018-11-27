@@ -3,7 +3,7 @@ package ch.hes.it.higiv;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -40,7 +40,7 @@ public class TravelCreateFragment extends Fragment {
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private EditText inputDestination, inputPlateNumberSate, inputPlateNumber;
     private NumberPicker inputNbPersons;
-    private Button btnBeginTravel, btnStopTravel, btnSendAlert;
+    private Button btnBeginTravel, btnStopTravel;
     //Object Travel to save into FireBase
     private Travel travel;
     //States possible entered in FireBase
@@ -61,7 +61,6 @@ public class TravelCreateFragment extends Fragment {
         inputNbPersons = (NumberPicker) rootView.findViewById(R.id.number_of_places);
         btnBeginTravel = (Button) rootView.findViewById(R.id.btn_begin_travel);
         btnStopTravel = (Button) rootView.findViewById(R.id.btn_stop_travel);
-        btnSendAlert = (Button) rootView.findViewById(R.id.btn_send_alert);
 
         //Set min max values for the NumberPicker
         inputNbPersons.setMinValue(1);
@@ -76,9 +75,6 @@ public class TravelCreateFragment extends Fragment {
                 nbPerson = newVal ;
             }
         });
-
-        //Hide the send alert button when we launch the fragment
-        btnSendAlert.setVisibility(View.GONE);
 
         //Disable stop travel button
         btnStopTravel.setEnabled(false);
@@ -159,9 +155,6 @@ public class TravelCreateFragment extends Fragment {
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful())
                         {
-                            //Show the button Send alert
-                            btnSendAlert.setVisibility(View.VISIBLE);
-
                             //Enable the button stop travel
                             btnStopTravel.setEnabled(true);
                             btnStopTravel.setBackground(getActivity().getResources().getDrawable(R.color.colorPrimary));
@@ -179,6 +172,7 @@ public class TravelCreateFragment extends Fragment {
                         }
                     }
                 });
+                ((TravelActivity)getActivity()).setViewPager(1);
             }
         });
         return rootView;
