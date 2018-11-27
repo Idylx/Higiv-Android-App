@@ -13,11 +13,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+
+
 
     private FirebaseAuth auth;
     private FirebaseAuth.AuthStateListener authListener;
@@ -28,32 +33,57 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        auth = FirebaseAuth.getInstance();
-        if (auth.getCurrentUser() != null) {
-            // User is logged in
-        }
 
+        // get the instance of firebase auhtentifcation
+        auth = FirebaseAuth.getInstance();
+
+        /*
+        if (auth.getCurrentUser() != null) {
+
+        }
+        */
+
+        //get the toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
+        //floating button logic
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                //add snackbar to main CAN BE REMOVED VERY SOON
+                Snackbar.make(view, "Create a new Travel", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
 
+        //drawer layout and logic
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+
+        // add navigation view
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        //get view header
+        View header =navigationView.getHeaderView(0);
+
+        //modifying textView to see login email
+        TextView emailUser = header.findViewById(R.id.textView_navbar_emailUser);
+        emailUser.setText(auth.getCurrentUser().getEmail());
+
+        //modifying textView to see login email
+        TextView userName = header.findViewById(R.id.textView_navbar_nameUser);
+        userName.setText(auth.getCurrentUser().getDisplayName());
+
     }
+
 
     @Override
     public void onBackPressed() {
@@ -85,7 +115,10 @@ public class MainActivity extends AppCompatActivity
                 //blabla
                 break;
             case R.id.action_logout:
+                //logout logic
                 signOut();
+
+                //return on login
                 startActivity(new Intent(MainActivity.this, LoginActivity.class));
                 finish();
                 break;
@@ -112,7 +145,7 @@ public class MainActivity extends AppCompatActivity
                 //bla bla
                 break;
             case R.id.nav_settings:
-                //bla bla
+                // bla bla
                 break;
             case R.id.nav_about:
                 //bla bla
