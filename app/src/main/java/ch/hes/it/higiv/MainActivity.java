@@ -19,9 +19,6 @@ import com.google.firebase.auth.FirebaseAuth;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-
-
-
     private FirebaseAuth auth;
     private FirebaseAuth.AuthStateListener authListener;
 
@@ -30,8 +27,6 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
 
         auth = FirebaseAuth.getInstance();
         if (auth.getCurrentUser() != null) {
