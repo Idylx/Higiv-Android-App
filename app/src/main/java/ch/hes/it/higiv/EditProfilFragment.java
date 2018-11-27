@@ -65,7 +65,7 @@ public class EditProfilFragment extends Fragment {
                 }
             }
         });
-        
+
         EditButton = (Button) view.findViewById(R.id.EditButton);
 
         EditButton.setOnClickListener(new View.OnClickListener() {
