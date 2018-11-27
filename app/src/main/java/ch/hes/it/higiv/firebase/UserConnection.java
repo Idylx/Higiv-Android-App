@@ -1,7 +1,5 @@
 package ch.hes.it.higiv.firebase;
 
-import android.util.Log;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -24,22 +22,16 @@ public class UserConnection extends  FirebaseConnection{
     }
 
     //Method called from any activity to retrieve specific information from a user
-    public static User getUser(String uid){
-        user = new User();
+    public User getUser(String uid){
         mDatabaseReference.child("users").child(uid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    user = (User) dataSnapshot.getValue();
-                }
-
+                user = dataSnapshot.getValue(User.class);
             }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
             }
         });
-
         return user;
     }
 

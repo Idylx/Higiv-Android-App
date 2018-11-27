@@ -30,14 +30,16 @@ public class DetailProfilFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_detail_profil, container, false);
 
+
+
         NameLabel = (TextView) view.findViewById(R.id.NameLabel);
         EmailLabel = (TextView) view.findViewById(R.id.EmailLabel);
         GenderLabel = (TextView) view.findViewById(R.id.GenderLabel);
         EditProfileButton = (Button) view.findViewById(R.id.editProfileButton);
 
         FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser() ;
-        FirebaseConnection userConnection = new UserConnection();
-        user = userConnection.getUser((String)currentFirebaseUser.getUid());
+        UserConnection userConnection = new UserConnection();
+        user = userConnection.getUser(currentFirebaseUser.getUid());
         EmailLabel.setText(user.getEmail());
 
 
