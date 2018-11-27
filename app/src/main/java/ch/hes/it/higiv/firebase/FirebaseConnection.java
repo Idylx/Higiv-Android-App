@@ -9,7 +9,7 @@ import com.google.firebase.database.FirebaseDatabase;
 public abstract class FirebaseConnection{
 
     protected FirebaseDatabase mFirebaseDatabase;
-    protected DatabaseReference mDatabaseReference;
+    protected static DatabaseReference mDatabaseReference;
 
     public FirebaseConnection(){
         mFirebaseDatabase = FirebaseDatabase.getInstance();

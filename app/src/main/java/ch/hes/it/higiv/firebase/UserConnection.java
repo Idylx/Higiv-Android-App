@@ -10,7 +10,7 @@ import com.google.firebase.database.ValueEventListener;
 import ch.hes.it.higiv.Model.User;
 
 public class UserConnection extends  FirebaseConnection{
-
+    private static User user;
     public UserConnection(){
         super();
     }
@@ -24,14 +24,14 @@ public class UserConnection extends  FirebaseConnection{
     }
 
     //Method called from any activity to retrieve specific information from a user
-    public User getUser(String uid){
-
-        final User user;
-
+    public static User getUser(String uid){
+        user = new User();
         mDatabaseReference.child("users").child(uid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                user = (User) dataSnapshot.getValue();
+                if (dataSnapshot.exists()) {
+                    user = (User) dataSnapshot.getValue();
+                }
 
             }
 
@@ -40,7 +40,7 @@ public class UserConnection extends  FirebaseConnection{
             }
         });
 
-        return null;
+        return user;
     }
 
 

@@ -10,11 +10,20 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+import ch.hes.it.higiv.Model.User;
+import ch.hes.it.higiv.firebase.FirebaseConnection;
+import ch.hes.it.higiv.firebase.UserConnection;
+
 public class DetailProfilFragment extends Fragment {
     private TextView NameLabel;
     private TextView EmailLabel;
     private TextView GenderLabel;
     private Button EditProfileButton;
+
+    private User user;
 
     @Nullable
     @Override
@@ -25,6 +34,12 @@ public class DetailProfilFragment extends Fragment {
         EmailLabel = (TextView) view.findViewById(R.id.EmailLabel);
         GenderLabel = (TextView) view.findViewById(R.id.GenderLabel);
         EditProfileButton = (Button) view.findViewById(R.id.editProfileButton);
+
+        FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser() ;
+        FirebaseConnection userConnection = new UserConnection();
+        user = userConnection.getUser((String)currentFirebaseUser.getUid());
+        EmailLabel.setText(user.getEmail());
+
 
         EditProfileButton.setOnClickListener(new View.OnClickListener() {
             @Override
