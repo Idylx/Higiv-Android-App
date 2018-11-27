@@ -21,6 +21,7 @@ public class TravelActivity extends AppCompatActivity {
         TravelStateSectionAdapter adapter = new TravelStateSectionAdapter(getSupportFragmentManager());
         adapter.addFragmentToTravelFragmentList(new TravelCreateFragment());
         adapter.addFragmentToTravelFragmentList(new TravelOnGoing());
+        adapter.addFragmentToTravelFragmentList(new TravelSafeFinished());
 
         viewPager.setAdapter(adapter);
 
