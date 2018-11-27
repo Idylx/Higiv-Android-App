@@ -31,6 +31,8 @@ public class UserConnection extends  FirebaseConnection{
         mDatabaseReference.child("users").child(uid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                user = (User) dataSnapshot.getValue();
+
             }
 
             @Override
