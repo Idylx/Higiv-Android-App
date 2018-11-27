@@ -28,9 +28,10 @@
                         </option>
                         <option name="values">
                           <map>
+                            <entry key="assetSourceType" value="FILE" />
                             <entry key="color" value="ffffff" />
-                            <entry key="outputName" value="ic_directions_car_white_24dp" />
-                            <entry key="sourceFile" value="C:\Users\Célia Ahmad" />
+                            <entry key="outputName" value="ic_logo_blanc" />
+                            <entry key="sourceFile" value="C:\Users\Célia Ahmad\Documents\HES\Semestre5\VLADO\semestre5\645 - projects\645-2\logo_blanc.svg" />
                           </map>
                         </option>
                       </PersistentState>
