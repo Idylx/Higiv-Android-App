@@ -56,4 +56,7 @@
     <string name="enter_plate_number">Enter your plate number please !</string>
     <string name="enter_nb_person">Enter how many person you are please !</string>
     <string name="title_activity_travel">TravelActivity</string>
+    <string name="btn_cancel_travel">Cancel</string>
+    <string name="travel_overview">Travel overview</string>
+    <string name="car_plate">Car plate</string>
 </resources>

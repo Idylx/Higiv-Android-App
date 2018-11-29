@@ -6,7 +6,10 @@ import android.os.Bundle;
 
 public class TravelActivity extends AppCompatActivity {
 
-    private ViewPager viewPager;
+    ViewPager viewPager;
+    private String uuid = "";
+    TravelStateSectionAdapter adapter = new TravelStateSectionAdapter(getSupportFragmentManager());
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,10 +21,9 @@ public class TravelActivity extends AppCompatActivity {
     }
 
     public void setUpViewPager(ViewPager viewPager) {
-        TravelStateSectionAdapter adapter = new TravelStateSectionAdapter(getSupportFragmentManager());
         adapter.addFragmentToTravelFragmentList(new TravelCreateFragment());
-        adapter.addFragmentToTravelFragmentList(new TravelOnGoing());
-        adapter.addFragmentToTravelFragmentList(new TravelSafeFinished());
+        //adapter.addFragmentToTravelFragmentList(new TravelOnGoing());
+        //adapter.addFragmentToTravelFragmentList(new TravelSafeFinished());
 
         viewPager.setAdapter(adapter);
 
@@ -31,5 +33,13 @@ public class TravelActivity extends AppCompatActivity {
         viewPager.setCurrentItem(fragmentNumber);
     }
 
+    public void setUUID_travel (String uuid_travel)
+    {
+        uuid = uuid_travel;
+    }
 
+    public String getUUID_travel ()
+    {
+        return uuid;
+    }
 }
