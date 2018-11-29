@@ -52,4 +52,26 @@
     <string name="nav_application">Application</string>
     <string name="nav_about">About</string>
     <string name="edit_profil">Edit profil</string>
+
+    <!-- Edit User page -->
+    <string name="FirstnameEditPage">Firstname</string>
+    <string name="LastnameEditPage">Lastname</string>
+    <string name="EmailEditPage">Email</string>
+    <string name="GenderEditPage">Gender</string>
+    <string name="PasswordEditPage">Password</string>
+    <string name="EditButtonEditPage">Save</string>
+    <string name="MenEditPage">Men</string>
+    <string name="womenEditPage">Women</string>
+    <string name="otherEditPage">Others</string>
+
+    <!-- Detail User page -->
+    <string name="EmailDetailProfil">Email:</string>
+    <string name="GenderDetailProfil">Gender:</string>
+    <string name="EditButtonDetailProfile">Edit Profile</string>
+    <string name="ProfileLabelDetailProfile">Profile</string>
+    <string name="ResetPwdButton">Reset Password</string>
+    <string name="GenderMale">Mr.</string>
+    <string name="GenderFemale">Ms.</string>
+    <string name="GenderOther">Other</string>
+
 </resources>

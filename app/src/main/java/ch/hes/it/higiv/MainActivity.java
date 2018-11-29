@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity
     private FirebaseAuth auth;
     private FirebaseAuth.AuthStateListener authListener;
 
+    private Button btnSignout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
