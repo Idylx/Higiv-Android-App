@@ -64,7 +64,10 @@ public class TravelOnGoing extends Fragment {
             @Override
             public void onClick(View v) {
                 //Go to Edit profile fragment
-                ((TravelActivity)getActivity()).setViewPager(2);
+                ((TravelActivity)getActivity()).getIntent().putExtra("Plate", CarPlateTv.getText().toString());
+                ((TravelActivity)getActivity()).adapter.addFragmentToTravelFragmentList(new TravelOnGoing());
+                ((TravelActivity)getActivity()).viewPager.setAdapter(((TravelActivity)getActivity()).adapter);
+                ((TravelActivity)getActivity()).setViewPager(3);
             }
         });
 
@@ -73,7 +76,7 @@ public class TravelOnGoing extends Fragment {
             @Override
             public void onClick(View v) {
                 //Go to Edit profile fragment
-                //((TravelActivity)getActivity()).setViewPager(?);
+              //  ((TravelActivity)getActivity()).setViewPager(?);
             }
         });
 

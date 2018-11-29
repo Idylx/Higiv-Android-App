@@ -31,6 +31,7 @@ import java.util.UUID;
 
 import ch.hes.it.higiv.Model.State;
 import ch.hes.it.higiv.Model.Travel;
+import ch.hes.it.higiv.Model.Plate;
 
 
 public class TravelCreateFragment extends Fragment {
@@ -42,11 +43,18 @@ public class TravelCreateFragment extends Fragment {
     private EditText inputDestination, inputPlateNumberSate, inputPlateNumber;
     private NumberPicker inputNbPersons;
     private Button btnBeginTravel, btnStopTravel;
-    //Object Travel to save into FireBase
+    //Objects to save into FireBase
     private Travel travel;
+    private Plate plate;
     //States possible entered in FireBase
     private ArrayList<String> states;
     private int nbPerson = 1;
+
+    private DataPassListener mCallback;
+
+    public interface DataPassListener{
+        public void passData(String data);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
@@ -177,11 +185,30 @@ public class TravelCreateFragment extends Fragment {
                     }
                 });
 
+                //Creation of new plate
+                String numberPlate = inputPlateNumberSate.getText().toString() + inputPlateNumber.getText().toString();
+                plate = new Plate(numberPlate);
+
+                //Insertion of the object Plate in firebase
+                mDatabaseReference.child("plates").child(UUID.randomUUID().toString()).setValue(plate).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+//                        if (task.isSuccessful())
+//                        {
+//                            //Display a message success
+//                            Toast.makeText(getActivity(), R.string.CreationTravelSuccessful, Toast.LENGTH_LONG).show();
+//                        }
+//                        else {
+//                            //Display a message error
+//                            Toast.makeText(getActivity(), R.string.CreationTravelFailed, Toast.LENGTH_LONG).show();
+//                        }
+                    }
+                });
                 ((TravelActivity)getActivity()).setUUID_travel(uuid);
                 ((TravelActivity)getActivity()).adapter.addFragmentToTravelFragmentList(new TravelOnGoing());
                 ((TravelActivity)getActivity()).viewPager.setAdapter(((TravelActivity)getActivity()).adapter);
                 ((TravelActivity)getActivity()).setViewPager(1);
-            }
+ }
         });
         return rootView;
     }
