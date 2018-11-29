@@ -8,6 +8,9 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public abstract class FirebaseConnection{
 
+    //Mother class called for Firebase connection manager.
+    //handles the Firebase singleton
+
     protected FirebaseDatabase mFirebaseDatabase;
     protected static DatabaseReference mDatabaseReference;
 

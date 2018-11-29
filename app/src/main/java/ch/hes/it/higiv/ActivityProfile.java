@@ -9,7 +9,6 @@ import android.widget.Toast;
 
 public class ActivityProfile extends AppCompatActivity {
 
-    private EditStateSectionAdapter editStateSectionAdapter;
     private ViewPager viewPager;
 
     @Override
@@ -17,22 +16,25 @@ public class ActivityProfile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        editStateSectionAdapter = new EditStateSectionAdapter(getSupportFragmentManager());
+        //Main view Pager on the activity
+        //Needed to manage the fragments presented on the activity
         viewPager = (ViewPager) findViewById(R.id.profileContainer);
 
         setUpViewPager(viewPager);
 
     }
 
+    //Link the fragments with the adapter
+    //Sets the adapter to the viewpager.
     public void setUpViewPager(ViewPager viewPager) {
         EditStateSectionAdapter adapter = new EditStateSectionAdapter(getSupportFragmentManager());
-        adapter.addFragmentToList(new DetailProfilFragment(), "Detail User");
-        adapter.addFragmentToList(new EditProfilFragment(), "Edit User");
+        adapter.addFragmentToList(new DetailProfilFragment());
+        adapter.addFragmentToList(new EditProfilFragment());
 
         viewPager.setAdapter(adapter);
 
     }
-
+    //Method called to change the fragment shown on the activity
     public void setViewPager(int fragmentNumber){
         viewPager.setCurrentItem(fragmentNumber);
     }

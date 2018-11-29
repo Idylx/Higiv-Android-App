@@ -33,15 +33,14 @@ public class DetailProfilFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_detail_profil, container, false);
 
-
-
         NameLabel = (TextView) view.findViewById(R.id.NameLabel);
         EmailLabel = (TextView) view.findViewById(R.id.EmailLabel);
         GenderLabel = (TextView) view.findViewById(R.id.GenderLabel);
         EditProfileButton = (Button) view.findViewById(R.id.editProfileButton);
 
+        //Calls the Firebase Manager --> link to Firebase
         UserConnection userConnection = new UserConnection();
-
+        //Calls the getUser methode from the manager and wait for the callback
         userConnection.getUser(FirebaseAuth.getInstance().getUid(), new FirebaseCallBack() {
             @Override
             public void onCallBack(Object o) {
@@ -60,8 +59,10 @@ public class DetailProfilFragment extends Fragment {
 
             }
         });
+        //Retrieve the email from Firebase account (Authentication)
         EmailLabel.setText(FirebaseAuth.getInstance().getCurrentUser().getEmail());
 
+        //Go to the next fragment --> Edit profile fragment
         EditProfileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -7,6 +7,9 @@ import com.google.firebase.database.ValueEventListener;
 
 import ch.hes.it.higiv.Model.User;
 
+//Class that handles all queries to Firebase concerning the Users
+//edit method only needs a user as input
+//getUser needs an instance of the FirebaseCallBack interface to make a callback for async methods from Firebase --> wait until data is fetched from users from Firebase
 public class UserConnection extends  FirebaseConnection{
 
     private User userToBeReturned = new User();

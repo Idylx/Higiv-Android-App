@@ -70,8 +70,9 @@ public class EditProfilFragment extends Fragment {
 
         ResetButton = view.findViewById(R.id.resetButton);
 
+        //Manager for Firebase Called
         UserConnection userConnection = new UserConnection();
-
+        //Method from manager to retrieve the user
         userConnection.getUser(FirebaseAuth.getInstance().getUid(), new FirebaseCallBack() {
             @Override
             public void onCallBack(Object o) {
@@ -96,6 +97,7 @@ public class EditProfilFragment extends Fragment {
             }
         });
 
+        //Retrieve which radiobutton was chosen
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -117,16 +119,18 @@ public class EditProfilFragment extends Fragment {
         EditButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Firebase
+                //Update Email in Firebase
                 userAuth.updateEmail(EmailLabel.getText().toString());
                 final User theUser = getUserFromFragment(FirstnameLabel.getText().toString(), LastnameLabel.getText().toString(), gender);
+                //calls the edit method from the manager of Firebase
                 connectionDatabase.editUser(theUser);
                 //Go back to profile fragment
                 ((ActivityProfile)getActivity()).setViewPager(0);
             }
         });
 
-
+        //Reset button
+        //Calls the FirebaseAuthentication manager for the reset method and blocks the screen with progress bar until finished with password reset. (sends an email for reset)
         ResetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
