@@ -21,9 +21,6 @@ import com.google.firebase.auth.FirebaseAuth;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-
-
-
     private FirebaseAuth auth;
     private FirebaseAuth.AuthStateListener authListener;
 
@@ -37,11 +34,7 @@ public class MainActivity extends AppCompatActivity
         // get the instance of firebase auhtentifcation
         auth = FirebaseAuth.getInstance();
 
-        /*
-        if (auth.getCurrentUser() != null) {
 
-        }
-        */
 
         //get the toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -85,6 +78,8 @@ public class MainActivity extends AppCompatActivity
     }
 
 
+
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -116,10 +111,11 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.action_logout:
                 //logout logic
-                signOut();
+                auth.signOut();
 
                 //return on login
                 startActivity(new Intent(MainActivity.this, LoginActivity.class));
+
                 finish();
                 break;
         }
@@ -153,7 +149,6 @@ public class MainActivity extends AppCompatActivity
         }
 
 
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -174,13 +169,10 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onStop() {
         super.onStop();
-        if (authListener != null) {
 
-        }
     }
 
-    //sign out method
-    public void signOut() {
-        auth.signOut();
-    }
+
+
+
 }
