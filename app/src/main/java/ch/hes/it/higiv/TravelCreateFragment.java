@@ -4,6 +4,7 @@ package ch.hes.it.higiv;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.SupportActivity;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -45,7 +46,7 @@ public class TravelCreateFragment extends Fragment {
     private Travel travel;
     //States possible entered in FireBase
     private ArrayList<String> states;
-    private int nbPerson;
+    private int nbPerson = 1;
 
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
@@ -60,12 +61,12 @@ public class TravelCreateFragment extends Fragment {
         //inputNbPersons = (EditText) rootView.findViewById(R.id.number_of_places);
         inputNbPersons = (NumberPicker) rootView.findViewById(R.id.number_of_places);
         btnBeginTravel = (Button) rootView.findViewById(R.id.btn_begin_travel);
-        btnStopTravel = (Button) rootView.findViewById(R.id.btn_stop_travel);
+        btnStopTravel = (Button) rootView.findViewById(R.id.btn_cancel_travel);
 
         //Set min max values for the NumberPicker
         inputNbPersons.setMinValue(1);
         inputNbPersons.setMaxValue(9);
-        //inputNbPersons.setWrapSelectorWheel(true);
+        inputNbPersons.setWrapSelectorWheel(true);
 
         //Set a value change listener for NumberPicker
         inputNbPersons.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
@@ -149,8 +150,11 @@ public class TravelCreateFragment extends Fragment {
                         user.getUid()
                 );
 
+                String uuid = UUID.randomUUID().toString();
+
+
                 //Insertion of the object Travel in firebase
-                mDatabaseReference.child("travels").child(UUID.randomUUID().toString()).setValue(travel).addOnCompleteListener(new OnCompleteListener<Void>() {
+                mDatabaseReference.child("travels").child(uuid).setValue(travel).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful())
@@ -172,6 +176,10 @@ public class TravelCreateFragment extends Fragment {
                         }
                     }
                 });
+
+                ((TravelActivity)getActivity()).setUUID_travel(uuid);
+                ((TravelActivity)getActivity()).adapter.addFragmentToTravelFragmentList(new TravelOnGoing());
+                ((TravelActivity)getActivity()).viewPager.setAdapter(((TravelActivity)getActivity()).adapter);
                 ((TravelActivity)getActivity()).setViewPager(1);
             }
         });

@@ -81,7 +81,7 @@
         android:layout_height="27dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:text="How many hitchhikers"
+        android:text="@string/number_of_person"
         android:textSize="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -113,14 +113,14 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/btn_stop_travel"
+        android:id="@+id/btn_cancel_travel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="40dp"
         android:background="@color/colorPrimary"
-        android:text="@string/btn_stop_travel"
+        android:text="@string/btn_cancel_travel"
         android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
