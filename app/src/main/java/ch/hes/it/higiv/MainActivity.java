@@ -22,9 +22,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private FirebaseAuth auth;
-    private FirebaseAuth.AuthStateListener authListener;
 
-    private Button btnSignout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,7 +106,7 @@ public class MainActivity extends AppCompatActivity
         switch (id){
 
             case R.id.action_edit_profile:
-                //blabla
+                startActivity(new Intent(MainActivity.this, ActivityProfile.class));
                 break;
             case R.id.action_logout:
                 //logout logic

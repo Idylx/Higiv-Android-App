@@ -26,6 +26,7 @@
         </activity>
         <activity android:name=".SignupActivity" />
         <activity android:name=".ResetPasswordActivity" />
+        <activity android:name=".ActivityProfile"/>
         <activity
             android:name=".MainActivity"
             android:label="@string/title_activity_main"
