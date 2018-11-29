@@ -18,6 +18,8 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+import ch.hes.it.higiv.Model.Travel;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -45,9 +47,10 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, TravelActivity.class));
                 //add snackbar to main CAN BE REMOVED VERY SOON
-                Snackbar.make(view, "Create a new Travel", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+//                Snackbar.make(view, "Create a new Travel", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
             }
         });
 
@@ -131,7 +134,7 @@ public class MainActivity extends AppCompatActivity
 
         switch (id){
             case R.id.nav_create_travel:
-                //bla bla
+                startActivity(new Intent(MainActivity.this, TravelActivity.class));
                 break;
             case R.id.nav_find_spot:
                 //bla bla
