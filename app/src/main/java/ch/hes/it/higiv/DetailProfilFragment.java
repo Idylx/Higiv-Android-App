@@ -48,7 +48,14 @@ public class DetailProfilFragment extends Fragment {
                 user = (User)o;
                 if(user != null){
                     NameLabel.setText(user.getFirstname() + " " + user.getLastname());
-                    GenderLabel.setText(user.getGender());
+                    switch (user.getGender()){
+                        case "Male": GenderLabel.setText(R.string.GenderMale);
+                            break;
+                        case "Female": GenderLabel.setText(R.string.GenderFemale);
+                            break;
+                        case "Others": GenderLabel.setText(R.string.GenderOther);
+                            break;
+                    }
                 }
 
             }

@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -19,6 +20,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import ch.hes.it.higiv.Model.User;
+import ch.hes.it.higiv.firebase.FirebaseAuthentication;
 import ch.hes.it.higiv.firebase.FirebaseCallBack;
 import ch.hes.it.higiv.firebase.FirebaseConnection;
 import ch.hes.it.higiv.firebase.UserConnection;
@@ -28,8 +30,8 @@ public class EditProfilFragment extends Fragment {
     private EditText FirstnameLabel;
     private EditText LastnameLabel;
     private EditText EmailLabel;
-    private EditText PasswordLabel;
 
+    private Button ResetButton;
     private Button EditButton;
 
     private RadioButton RadioMen;
@@ -37,6 +39,10 @@ public class EditProfilFragment extends Fragment {
     private RadioButton RadioOther;
 
     private UserConnection connectionDatabase = new UserConnection();
+    private FirebaseAuthentication firebaseAuthentication = new FirebaseAuthentication();
+    private FirebaseUser userAuth = FirebaseAuth.getInstance().getCurrentUser();
+
+    private ProgressBar progressBar;
 
     private String gender;
     private User user;
@@ -49,7 +55,6 @@ public class EditProfilFragment extends Fragment {
         FirstnameLabel = (EditText) view.findViewById(R.id.FirstnameLabel);
         LastnameLabel = (EditText) view.findViewById(R.id.LastnameLabel);
         EmailLabel = (EditText) view.findViewById(R.id.EmailLabel);
-        PasswordLabel = (EditText) view.findViewById(R.id.PasswordLabel);
 
         EmailLabel.setText(FirebaseAuth.getInstance().getCurrentUser().getEmail());
 
@@ -57,7 +62,13 @@ public class EditProfilFragment extends Fragment {
         RadioWomen = (RadioButton) view.findViewById(R.id.radioWomen);
         RadioOther = (RadioButton) view.findViewById(R.id.radioOther);
 
+        progressBar = (ProgressBar) view.findViewById(R.id.progressBarEdit);
+
         RadioGroup radioGroup = (RadioGroup) view .findViewById(R.id.radioGroup);
+
+        EditButton = (Button) view.findViewById(R.id.EditButton);
+
+        ResetButton = view.findViewById(R.id.resetButton);
 
         UserConnection userConnection = new UserConnection();
 
@@ -68,6 +79,18 @@ public class EditProfilFragment extends Fragment {
                 if(user != null){
                     FirstnameLabel.setText(user.getFirstname());
                     LastnameLabel.setText(user.getLastname());
+                    gender= user.getGender();
+                    switch(gender) {
+                        case "Male":
+                            RadioMen.setChecked(true);
+                            break;
+                        case "Female":
+                            RadioWomen.setChecked(true);
+                            break;
+                        case "Others":
+                            RadioOther.setChecked(true);
+                            break;
+                    }
                 }
 
             }
@@ -90,13 +113,11 @@ public class EditProfilFragment extends Fragment {
             }
         });
 
-        EditButton = (Button) view.findViewById(R.id.EditButton);
 
         EditButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Firebase
-                FirebaseUser userAuth = FirebaseAuth.getInstance().getCurrentUser();
                 userAuth.updateEmail(EmailLabel.getText().toString());
                 final User theUser = getUserFromFragment(FirstnameLabel.getText().toString(), LastnameLabel.getText().toString(), gender);
                 connectionDatabase.editUser(theUser);
@@ -104,6 +125,28 @@ public class EditProfilFragment extends Fragment {
                 ((ActivityProfile)getActivity()).setViewPager(0);
             }
         });
+
+
+        ResetButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                progressBar.setVisibility(View.VISIBLE);
+                firebaseAuthentication.resetPassword(userAuth.getEmail(), new FirebaseCallBack() {
+                    @Override
+                    public void onCallBack(Object o) {
+                        Task task = (Task)o;
+                        if (task.isSuccessful()) {
+                            Toast.makeText(getActivity(), "We have sent you instructions to reset your password!", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getActivity(), "Failed to send reset email!", Toast.LENGTH_SHORT).show();
+                        }
+
+                        progressBar.setVisibility(View.GONE);
+                    }
+                });
+            }
+        });
+
 
 
         return  view;

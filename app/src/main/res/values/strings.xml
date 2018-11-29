@@ -55,4 +55,9 @@
     <string name="GenderDetailProfil">Gender:</string>
     <string name="EditButtonDetailProfile">Edit Profile</string>
     <string name="ProfileLabelDetailProfile">Profile</string>
+    <string name="ResetPwdButton">Reset Password</string>
+    <string name="GenderMale">Mr.</string>
+    <string name="GenderFemale">Ms.</string>
+    <string name="GenderOther">Other</string>
+
 </resources>
