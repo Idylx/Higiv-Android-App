@@ -40,7 +40,8 @@ public class DetailProfilFragment extends Fragment {
         FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser() ;
         UserConnection userConnection = new UserConnection();
         user = userConnection.getUser(currentFirebaseUser.getUid());
-        EmailLabel.setText(user.getEmail());
+        if(user.getEmail() == null)
+            EmailLabel.setText("");
 
 
         EditProfileButton.setOnClickListener(new View.OnClickListener() {
