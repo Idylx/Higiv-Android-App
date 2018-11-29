@@ -11,6 +11,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import ch.hes.it.higiv.Model.User;
 import ch.hes.it.higiv.firebase.FirebaseConnection;
@@ -43,6 +49,8 @@ public class EditProfilFragment extends Fragment {
         EmailLabel = (EditText) view.findViewById(R.id.EmailLabel);
         PasswordLabel = (EditText) view.findViewById(R.id.PasswordLabel);
 
+        EmailLabel.setText(FirebaseAuth.getInstance().getCurrentUser().getEmail());
+
         RadioMen = (RadioButton) view.findViewById(R.id.radioMen);
         RadioWomen = (RadioButton) view.findViewById(R.id.radioWomen);
         RadioOther = (RadioButton) view.findViewById(R.id.radioOther);
@@ -72,6 +80,8 @@ public class EditProfilFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 //Firebase
+                FirebaseUser userAuth = FirebaseAuth.getInstance().getCurrentUser();
+                userAuth.updateEmail(EmailLabel.getText().toString());
                 final User theUser = getUserFromFragment(FirstnameLabel.getText().toString(), LastnameLabel.getText().toString(), gender);
                 connectionDatabase.editUser(theUser);
                 //Go back to profile fragment

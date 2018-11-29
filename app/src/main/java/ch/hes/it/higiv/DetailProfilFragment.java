@@ -13,7 +13,10 @@ import android.widget.TextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.jar.Attributes;
+
 import ch.hes.it.higiv.Model.User;
+import ch.hes.it.higiv.firebase.FirebaseCallBack;
 import ch.hes.it.higiv.firebase.FirebaseConnection;
 import ch.hes.it.higiv.firebase.UserConnection;
 
@@ -37,12 +40,20 @@ public class DetailProfilFragment extends Fragment {
         GenderLabel = (TextView) view.findViewById(R.id.GenderLabel);
         EditProfileButton = (Button) view.findViewById(R.id.editProfileButton);
 
-        FirebaseUser currentFirebaseUser = FirebaseAuth.getInstance().getCurrentUser() ;
         UserConnection userConnection = new UserConnection();
-        user = userConnection.getUser(currentFirebaseUser.getUid());
-        if(user.getEmail() == null)
-            EmailLabel.setText("");
 
+        userConnection.getUser(FirebaseAuth.getInstance().getUid(), new FirebaseCallBack() {
+            @Override
+            public void onCallBack(Object o) {
+                user = (User)o;
+                if(user != null){
+                    NameLabel.setText(user.getFirstname() + " " + user.getLastname());
+                    GenderLabel.setText(user.getGender());
+                }
+
+            }
+        });
+        EmailLabel.setText(FirebaseAuth.getInstance().getCurrentUser().getEmail());
 
         EditProfileButton.setOnClickListener(new View.OnClickListener() {
             @Override
