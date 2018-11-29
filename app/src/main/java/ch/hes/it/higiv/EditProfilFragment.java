@@ -19,6 +19,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import ch.hes.it.higiv.Model.User;
+import ch.hes.it.higiv.firebase.FirebaseCallBack;
 import ch.hes.it.higiv.firebase.FirebaseConnection;
 import ch.hes.it.higiv.firebase.UserConnection;
 
@@ -38,6 +39,7 @@ public class EditProfilFragment extends Fragment {
     private UserConnection connectionDatabase = new UserConnection();
 
     private String gender;
+    private User user;
 
     @Nullable
     @Override
@@ -56,6 +58,20 @@ public class EditProfilFragment extends Fragment {
         RadioOther = (RadioButton) view.findViewById(R.id.radioOther);
 
         RadioGroup radioGroup = (RadioGroup) view .findViewById(R.id.radioGroup);
+
+        UserConnection userConnection = new UserConnection();
+
+        userConnection.getUser(FirebaseAuth.getInstance().getUid(), new FirebaseCallBack() {
+            @Override
+            public void onCallBack(Object o) {
+                user = (User)o;
+                if(user != null){
+                    FirstnameLabel.setText(user.getFirstname());
+                    LastnameLabel.setText(user.getLastname());
+                }
+
+            }
+        });
 
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
