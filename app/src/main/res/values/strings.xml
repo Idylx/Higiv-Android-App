@@ -74,4 +74,25 @@
     <string name="GenderFemale">Ms.</string>
     <string name="GenderOther">Other</string>
 
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="destination">Destination</string>
+    <string name="plate_number">Number plate</string>
+    <string name="btn_create_travel">Create a travel</string>
+    <string name="plate_number_state">VS</string>
+    <string name="number_of_person">Number of person</string>
+    <string name="CreationTravelSuccessful">Travel created !</string>
+    <string name="CreationTravelFailed">Travel creation failed !</string>
+    <string name="btn_begin_travel">Begin</string>
+    <string name="btn_stop_travel">Stop</string>
+    <string name="btn_send_alert">Send alert</string>
+    <string name="enter_destination">Enter destination please</string>
+    <string name="enter_state">Enter state please !</string>
+    <string name="enter_plate_number">Enter your plate number please !</string>
+    <string name="enter_nb_person">Enter how many person you are please !</string>
+    <string name="title_activity_travel">TravelActivity</string>
+    <string name="btn_cancel_travel">Cancel</string>
+    <string name="travel_overview">Travel overview</string>
+    <string name="car_plate">Car plate</string>
 </resources>
