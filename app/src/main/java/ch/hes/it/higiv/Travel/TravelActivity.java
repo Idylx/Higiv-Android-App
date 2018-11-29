@@ -27,8 +27,8 @@ public class TravelActivity extends AppCompatActivity {
 
     public void setUpViewPager(ViewPager viewPager) {
         adapter.addFragmentToTravelFragmentList(new TravelCreateFragment());
-        //adapter.addFragmentToTravelFragmentList(new TravelOnGoing());
-        //adapter.addFragmentToTravelFragmentList(new TravelSafeFinished());
+       // adapter.addFragmentToTravelFragmentList(new TravelOnGoing());
+        // adapter.addFragmentToTravelFragmentList(new TravelSafeFinished());
 
         viewPager.setAdapter(adapter);
 

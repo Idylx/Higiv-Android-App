@@ -7,7 +7,6 @@ public class State {
     @NonNull
     private String name;
 
-
     public State () {}
 
     public State(String name) {
