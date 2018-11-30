@@ -73,12 +73,12 @@ public class LoginActivity extends AppCompatActivity {
                 final String password = inputPassword.getText().toString();
 
                 if (TextUtils.isEmpty(email)) {
-                    Toast.makeText(getApplicationContext(), "Enter email address!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), R.string.SignUp_EnterEmail, Toast.LENGTH_SHORT).show();
                     return;
                 }
 
                 if (TextUtils.isEmpty(password)) {
-                    Toast.makeText(getApplicationContext(), "Enter password!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), R.string.SignUp_EnterPwd, Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -96,9 +96,9 @@ public class LoginActivity extends AppCompatActivity {
                                 if (!task.isSuccessful()) {
                                     // there was an error
                                     if (password.length() < 6) {
-                                        inputPassword.setError(getString(R.string.minimum_password));
+                                        inputPassword.setError("Password too short, enter at least 6 characters!");
                                     } else {
-                                        Toast.makeText(LoginActivity.this, getString(R.string.auth_failed), Toast.LENGTH_LONG).show();
+                                        Toast.makeText(LoginActivity.this, R.string.SignUp_AuthFailed, Toast.LENGTH_LONG).show();
                                     }
                                 } else {
                                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);

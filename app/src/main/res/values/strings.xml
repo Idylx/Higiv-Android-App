@@ -52,12 +52,6 @@
     <string name="nav_about">About</string>
     <string name="edit_profil">Edit profil</string>
 
-    <!-- Sign up -->
-    <string name="SignUp_EnterEmail">Enter email adress!</string>
-    <string name="SignUp_EnterPwd">Enter password!</string>
-    <string name="SignUp_WrongPwd">Password too short, enter at least 6 characters!</string>
-    <string name="SignUp_SuccessfulCreation">Account successfully created!</string>
-    <string name="SignUp_AuthFailed">Authentification failed! </string>
 
     <!-- Edit User page -->
     <string name="FirstnameEditPage">Firstname</string>
@@ -103,7 +97,11 @@
     <string name="travel_overview">Travel overview</string>
     <string name="car_plate">Car plate</string>
 
-
-
+    <!-- Sign Up -->
+    <string name="SignUp_EnterEmail">Enter email address!</string>
+    <string name="SignUp_EnterPwd">Enter password!</string>
+    <string name="SignUp_WrongPwd">Password too short, enter at least 6 characters!</string>
+    <string name="SignUp_SuccessfulCreation">Account successfully created!</string>
+    <string name="SignUp_AuthFailed">Authentification failed!</string>
 
 </resources>
