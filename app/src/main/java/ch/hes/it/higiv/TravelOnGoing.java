@@ -9,17 +9,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import ch.hes.it.higiv.Model.Plate;
 import ch.hes.it.higiv.Model.Travel;
+import ch.hes.it.higiv.firebase.FirebaseCallBack;
+import ch.hes.it.higiv.firebase.PlateConnection;
+
 
 public class TravelOnGoing extends Fragment {
 
@@ -29,6 +30,7 @@ public class TravelOnGoing extends Fragment {
     private TextView DestinationTv, CarPlateTv, NumberOfPersonTv;
     //Object Travel to retrieve from firebase
     private Travel travel;
+    private String plateString = "";
 
     @Nullable
     @Override
@@ -42,6 +44,8 @@ public class TravelOnGoing extends Fragment {
         DestinationTv = (TextView) view.findViewById(R.id.destination_tv);
         CarPlateTv = (TextView) view.findViewById(R.id.car_plate_tv);
         NumberOfPersonTv = (TextView) view.findViewById(R.id.number_persons_tv);
+        plateString = ((TravelActivity)getActivity()).getIntent().getExtras().getString("Plate");
+
 
         mDatabaseReference.child("travels").child(((TravelActivity)getActivity()).getUUID_travel()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -51,7 +55,7 @@ public class TravelOnGoing extends Fragment {
 
                 //GET THE VALUES OF THE travel AND PUT THEM IT INTO THE EDITTEXTS
                 DestinationTv.setText(travel.getDestination());
-                CarPlateTv.setText(String.valueOf(travel.getState()) + " " + String.valueOf(travel.getNumberPlate()));
+                CarPlateTv.setText(plateString);
                 NumberOfPersonTv.setText(String.valueOf(travel.getNumberOfPerson()));
             }
             @Override
@@ -63,7 +67,10 @@ public class TravelOnGoing extends Fragment {
         StopButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Go to Edit profile fragment
+                //Go to safe finished fragment
+
+                ((TravelActivity)getActivity()).adapter.addFragmentToTravelFragmentList(new TravelSafeFinished());
+                ((TravelActivity)getActivity()).viewPager.setAdapter(((TravelActivity)getActivity()).adapter);
                 ((TravelActivity)getActivity()).setViewPager(2);
             }
         });
@@ -72,8 +79,8 @@ public class TravelOnGoing extends Fragment {
         AlertButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Go to Edit profile fragment
-                //((TravelActivity)getActivity()).setViewPager(?);
+                //Go to send alert fragment
+                //  ((TravelActivity)getActivity()).setViewPager(?);
             }
         });
 

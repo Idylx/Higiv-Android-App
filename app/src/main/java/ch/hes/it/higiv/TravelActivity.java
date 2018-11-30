@@ -4,11 +4,15 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+
+
 public class TravelActivity extends AppCompatActivity {
 
     ViewPager viewPager;
     private String uuid = "";
+    private String uuidPlate = "";
     TravelStateSectionAdapter adapter = new TravelStateSectionAdapter(getSupportFragmentManager());
+
 
 
     @Override
@@ -37,9 +41,17 @@ public class TravelActivity extends AppCompatActivity {
     {
         uuid = uuid_travel;
     }
+    public void setUUID_plate (String uuidPlate)
+    {
+        uuidPlate = uuidPlate;
+    }
 
     public String getUUID_travel ()
     {
         return uuid;
+    }
+    public String getUUID_plate ()
+    {
+        return uuidPlate;
     }
 }

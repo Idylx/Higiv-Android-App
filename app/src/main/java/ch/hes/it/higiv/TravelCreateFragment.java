@@ -31,6 +31,7 @@ import java.util.UUID;
 
 import ch.hes.it.higiv.Model.State;
 import ch.hes.it.higiv.Model.Travel;
+import ch.hes.it.higiv.Model.Plate;
 
 
 public class TravelCreateFragment extends Fragment {
@@ -42,11 +43,18 @@ public class TravelCreateFragment extends Fragment {
     private EditText inputDestination, inputPlateNumberSate, inputPlateNumber;
     private NumberPicker inputNbPersons;
     private Button btnBeginTravel, btnStopTravel;
-    //Object Travel to save into FireBase
+    //Objects to save into FireBase
     private Travel travel;
+    private Plate plate;
     //States possible entered in FireBase
     private ArrayList<String> states;
     private int nbPerson = 1;
+
+    private DataPassListener mCallback;
+
+    public interface DataPassListener{
+        public void passData(String data);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
@@ -142,19 +150,32 @@ public class TravelCreateFragment extends Fragment {
                     return;
                 }
 
+
+                //Creation of new plate
+                String numberPlate = inputPlateNumberSate.getText().toString() + inputPlateNumber.getText().toString();
+                plate = new Plate(numberPlate);
+                String plateUUID = UUID.randomUUID().toString();
+
+                //Insertion of the object Plate in firebase
+                mDatabaseReference.child("plates").child(plateUUID).setValue(plate).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+
+                    }
+                });
                 //Creation of the object Travel
                 travel = new Travel(inputDestination.getText().toString(),
                         inputPlateNumberSate.getText().toString(),
-                        Integer.parseInt(inputPlateNumber.getText().toString()),
+                        plateUUID,
                         nbPerson,
                         user.getUid()
                 );
 
-                String uuid = UUID.randomUUID().toString();
+                String travelUUID = UUID.randomUUID().toString();
 
 
                 //Insertion of the object Travel in firebase
-                mDatabaseReference.child("travels").child(uuid).setValue(travel).addOnCompleteListener(new OnCompleteListener<Void>() {
+                mDatabaseReference.child("travels").child(travelUUID).setValue(travel).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful())
@@ -177,7 +198,11 @@ public class TravelCreateFragment extends Fragment {
                     }
                 });
 
-                ((TravelActivity)getActivity()).setUUID_travel(uuid);
+
+                ((TravelActivity)getActivity()).setUUID_travel(travelUUID);
+                ((TravelActivity)getActivity()).setUUID_plate(plateUUID);
+
+                ((TravelActivity)getActivity()).getIntent().putExtra("Plate", plate.getNumber());
                 ((TravelActivity)getActivity()).adapter.addFragmentToTravelFragmentList(new TravelOnGoing());
                 ((TravelActivity)getActivity()).viewPager.setAdapter(((TravelActivity)getActivity()).adapter);
                 ((TravelActivity)getActivity()).setViewPager(1);
