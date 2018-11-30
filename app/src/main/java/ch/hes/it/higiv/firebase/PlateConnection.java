@@ -1,25 +1,22 @@
 package ch.hes.it.higiv.firebase;
 
-import com.google.firebase.auth.FirebaseAuth;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import ch.hes.it.higiv.Model.Plate;
-import ch.hes.it.higiv.Model.User;
 
 public class PlateConnection extends FirebaseConnection {
 
     //Method called from any activity to edit or add the user's information
-    public void goodEvaluation(Plate plate){
-        int eval = plate.getNoGoodEvaluation();
-        eval++;
+    public void setGoodEvaluation(Plate plate){
+        int eval = plate.getNoGoodEvaluation() + 1;
         mDatabaseReference.child("plates").child(plate.getUid()).child("noGoodEvaluation").setValue(eval);
     }
 
-    public void badEvaluation(Plate plate) {
-        int eval = plate.getNoBadEvaluation();
-        eval++;
+    public void setBadEvaluation(Plate plate) {
+        int eval = plate.getNoBadEvaluation() + 1;
         mDatabaseReference.child("plates").child(plate.getUid()).child("noBadEvaluation").setValue(eval);
     }
 

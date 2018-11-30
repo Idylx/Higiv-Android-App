@@ -44,7 +44,7 @@ public class TravelSafeFinished extends Fragment {
             @Override
             public void onClick(View v) {
 
-                plateConnection.goodEvaluation(plate);
+                plateConnection.setGoodEvaluation(plate);
                 //Go to main activity profile fragment
                 ((TravelActivity)getActivity()).setViewPager(0);
 
@@ -57,7 +57,7 @@ public class TravelSafeFinished extends Fragment {
             @Override
             public void onClick(View v) {
 
-                plateConnection.badEvaluation(plate);
+                plateConnection.setBadEvaluation(plate);
                 //Go to Edit profile fragment
                 ((TravelActivity)getActivity()).setViewPager(0);
             }

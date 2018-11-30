@@ -12,7 +12,6 @@ import ch.hes.it.higiv.Model.User;
 //getUser needs an instance of the FirebaseCallBack interface to make a callback for async methods from Firebase --> wait until data is fetched from users from Firebase
 public class UserConnection extends  FirebaseConnection{
 
-    private User userToBeReturned = new User();
     public UserConnection(){
         super();
     }
