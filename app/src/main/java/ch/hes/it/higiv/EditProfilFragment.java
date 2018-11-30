@@ -85,21 +85,24 @@ public class EditProfilFragment extends Fragment {
                     FirstnameLabel.setText(user.getFirstname());
                     LastnameLabel.setText(user.getLastname());
                     gender= user.getGender();
-                    switch(gender) {
-                        case "Male":
-                            RadioMen.setChecked(true);
-                            break;
-                        case "Female":
-                            RadioWomen.setChecked(true);
-                            break;
-                        case "Others":
-                            RadioOther.setChecked(true);
-                            break;
-                        default: RadioMen.setChecked(false);
-                            RadioWomen.setChecked(false);
-                            RadioOther.setChecked(false);
-                            break;
+                    if(user.getGender()!= null){
+                        switch(gender) {
+                            case "Male":
+                                RadioMen.setChecked(true);
+                                break;
+                            case "Female":
+                                RadioWomen.setChecked(true);
+                                break;
+                            case "Others":
+                                RadioOther.setChecked(true);
+                                break;
+                            default: RadioMen.setChecked(false);
+                                RadioWomen.setChecked(false);
+                                RadioOther.setChecked(false);
+                                break;
+                        }
                     }
+
                 }
 
             }
@@ -173,7 +176,7 @@ public class EditProfilFragment extends Fragment {
     }
     public boolean allInputFilled(){
         boolean isFilled=true;
-        if(FirstnameLabel.getText().toString()==""||LastnameLabel.getText().toString()==""|| radioGroup.getCheckedRadioButtonId()==-1){
+        if(FirstnameLabel.getText().toString().equals("")||LastnameLabel.getText().toString().equals("")|| radioGroup.getCheckedRadioButtonId()==-1){
             isFilled=false;
         }
        return isFilled;
