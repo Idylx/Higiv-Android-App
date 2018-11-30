@@ -1,10 +1,9 @@
-package ch.hes.it.higiv;
+package ch.hes.it.higiv.Travel;
 
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.SupportActivity;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -32,6 +31,7 @@ import java.util.UUID;
 import ch.hes.it.higiv.Model.State;
 import ch.hes.it.higiv.Model.Travel;
 import ch.hes.it.higiv.Model.Plate;
+import ch.hes.it.higiv.R;
 
 
 public class TravelCreateFragment extends Fragment {

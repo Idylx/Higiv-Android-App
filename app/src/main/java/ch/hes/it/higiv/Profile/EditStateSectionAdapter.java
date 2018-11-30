@@ -1,4 +1,4 @@
-package ch.hes.it.higiv;
+package ch.hes.it.higiv.Profile;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

@@ -1,4 +1,4 @@
-package ch.hes.it.higiv;
+package ch.hes.it.higiv.Profile;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,15 +14,14 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import ch.hes.it.higiv.Model.User;
+import ch.hes.it.higiv.R;
 import ch.hes.it.higiv.firebase.FirebaseAuthentication;
 import ch.hes.it.higiv.firebase.FirebaseCallBack;
-import ch.hes.it.higiv.firebase.FirebaseConnection;
 import ch.hes.it.higiv.firebase.UserConnection;
 
 

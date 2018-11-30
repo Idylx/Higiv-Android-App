@@ -1,4 +1,4 @@
-package ch.hes.it.higiv;
+package ch.hes.it.higiv.Travel;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -16,10 +16,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import ch.hes.it.higiv.Model.Plate;
 import ch.hes.it.higiv.Model.Travel;
-import ch.hes.it.higiv.firebase.FirebaseCallBack;
-import ch.hes.it.higiv.firebase.PlateConnection;
+import ch.hes.it.higiv.R;
 
 
 public class TravelOnGoing extends Fragment {

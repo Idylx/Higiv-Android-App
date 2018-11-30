@@ -1,11 +1,10 @@
-package ch.hes.it.higiv;
+package ch.hes.it.higiv.Profile;
 
 import android.os.Bundle;
-import android.os.PersistableBundle;
-import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.Toast;
+
+import ch.hes.it.higiv.R;
 
 public class ActivityProfile extends AppCompatActivity {
 

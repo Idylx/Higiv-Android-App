@@ -1,4 +1,4 @@
-package ch.hes.it.higiv;
+package ch.hes.it.higiv.Profile;
 
 
 import android.support.v4.app.Fragment;
@@ -11,13 +11,10 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-
-import java.util.jar.Attributes;
 
 import ch.hes.it.higiv.Model.User;
+import ch.hes.it.higiv.R;
 import ch.hes.it.higiv.firebase.FirebaseCallBack;
-import ch.hes.it.higiv.firebase.FirebaseConnection;
 import ch.hes.it.higiv.firebase.UserConnection;
 
 public class DetailProfilFragment extends Fragment {

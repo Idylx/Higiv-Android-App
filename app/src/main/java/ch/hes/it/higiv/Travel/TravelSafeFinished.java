@@ -1,4 +1,4 @@
-package ch.hes.it.higiv;
+package ch.hes.it.higiv.Travel;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 import ch.hes.it.higiv.Model.Plate;
+import ch.hes.it.higiv.R;
 import ch.hes.it.higiv.firebase.FirebaseCallBack;
 import ch.hes.it.higiv.firebase.PlateConnection;
 

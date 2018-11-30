@@ -1,9 +1,10 @@
-package ch.hes.it.higiv;
+package ch.hes.it.higiv.Travel;
 
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import ch.hes.it.higiv.R;
 
 
 public class TravelActivity extends AppCompatActivity {

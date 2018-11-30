@@ -24,7 +24,7 @@ public class PlateConnection extends FirebaseConnection {
     }
 
         public void getPlate(String uid, final FirebaseCallBack firebaseCallBack){
-        mDatabaseReference.child("plate").child(uid).addValueEventListener(new ValueEventListener() {
+        mDatabaseReference.child("plates").child(uid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Plate plate = dataSnapshot.getValue(Plate.class);

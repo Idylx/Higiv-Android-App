@@ -1,4 +1,4 @@
-package ch.hes.it.higiv;
+package ch.hes.it.higiv.Account;
 
 
 import android.content.Intent;
@@ -25,6 +25,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
+import ch.hes.it.higiv.MainActivity;
+import ch.hes.it.higiv.R;
 
 
 /**
