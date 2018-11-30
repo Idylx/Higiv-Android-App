@@ -34,6 +34,7 @@ public class EditProfilFragment extends Fragment {
     private Button ResetButton;
     private Button EditButton;
 
+    private RadioGroup radioGroup;
     private RadioButton RadioMen;
     private RadioButton RadioWomen;
     private RadioButton RadioOther;
@@ -64,11 +65,14 @@ public class EditProfilFragment extends Fragment {
 
         progressBar = (ProgressBar) view.findViewById(R.id.progressBarEdit);
 
-        RadioGroup radioGroup = (RadioGroup) view .findViewById(R.id.radioGroup);
+        radioGroup = (RadioGroup) view .findViewById(R.id.radioGroup);
 
         EditButton = (Button) view.findViewById(R.id.EditButton);
 
         ResetButton = view.findViewById(R.id.resetButton);
+
+        FirstnameLabel.setText("");
+        LastnameLabel.setText("");
 
         //Manager for Firebase Called
         UserConnection userConnection = new UserConnection();
@@ -91,6 +95,10 @@ public class EditProfilFragment extends Fragment {
                         case "Others":
                             RadioOther.setChecked(true);
                             break;
+                        default: RadioMen.setChecked(false);
+                            RadioWomen.setChecked(false);
+                            RadioOther.setChecked(false);
+                            break;
                     }
                 }
 
@@ -111,6 +119,9 @@ public class EditProfilFragment extends Fragment {
                     case R.id.radioOther:
                         gender = "Others";
                         break;
+                    default:
+                        gender = "";
+                        break;
                 }
             }
         });
@@ -119,13 +130,18 @@ public class EditProfilFragment extends Fragment {
         EditButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Update Email in Firebase
-                userAuth.updateEmail(EmailLabel.getText().toString());
-                final User theUser = getUserFromFragment(FirstnameLabel.getText().toString(), LastnameLabel.getText().toString(), gender);
-                //calls the edit method from the manager of Firebase
-                connectionDatabase.editUser(theUser);
-                //Go back to profile fragment
-                ((ActivityProfile)getActivity()).setViewPager(0);
+                if(allInputFilled()){
+                    //Update Email in Firebase
+                    userAuth.updateEmail(EmailLabel.getText().toString());
+                    final User theUser = getUserFromFragment(FirstnameLabel.getText().toString(), LastnameLabel.getText().toString(), gender);
+                    //calls the edit method from the manager of Firebase
+                    connectionDatabase.editUser(theUser);
+                    //Go back to profile fragment
+                    ((ActivityProfile)getActivity()).setViewPager(0);
+                }
+                else{
+                    Toast.makeText(getActivity(), R.string.ProfilVerificationToast, Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -154,6 +170,13 @@ public class EditProfilFragment extends Fragment {
 
 
         return  view;
+    }
+    public boolean allInputFilled(){
+        boolean isFilled=true;
+        if(FirstnameLabel.getText().toString()==""||LastnameLabel.getText().toString()==""|| radioGroup.getCheckedRadioButtonId()==-1){
+            isFilled=false;
+        }
+       return isFilled;
     }
 
     public User getUserFromFragment(String firstname, String lastname, String gender){

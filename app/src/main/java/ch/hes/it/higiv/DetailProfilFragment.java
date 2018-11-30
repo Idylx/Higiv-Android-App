@@ -54,6 +54,8 @@ public class DetailProfilFragment extends Fragment {
                             break;
                         case "Others": GenderLabel.setText(R.string.GenderOther);
                             break;
+                        default: GenderLabel.setText("");
+                            break;
                     }
                 }
 
@@ -67,6 +69,7 @@ public class DetailProfilFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 //Go to Edit profile fragment
+
                 ((ActivityProfile)getActivity()).setViewPager(1);
             }
         });

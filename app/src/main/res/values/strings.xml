@@ -95,4 +95,5 @@
     <string name="btn_cancel_travel">Cancel</string>
     <string name="travel_overview">Travel overview</string>
     <string name="car_plate">Car plate</string>
+    <string name="ProfilVerificationToast">Please fill up all fields!</string>
 </resources>
