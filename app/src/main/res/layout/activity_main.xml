@@ -8,6 +8,20 @@
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
 
+ <LinearLayout
+     android:layout_width="match_parent"
+     android:layout_height="match_parent">
+     <TextView
+         android:layout_width="351dp"
+         android:layout_height="wrap_content"
+         android:layout_gravity="start"
+         android:layout_marginBottom="20dp"
+         android:text="@string/lbl_forgot_password"
+         android:textColor="@color/colorPrimaryDark"
+         android:textSize="20dp" />
+ </LinearLayout>
+
+
     <include
         layout="@layout/app_bar_main"
         android:layout_width="match_parent"
@@ -21,5 +35,6 @@
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header_main"
         app:menu="@menu/activity_main_drawer" />
+
 
 </android.support.v4.widget.DrawerLayout>
