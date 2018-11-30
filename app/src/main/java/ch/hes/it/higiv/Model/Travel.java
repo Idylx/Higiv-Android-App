@@ -66,12 +66,4 @@ public class Travel {
         this.idUser = idUser;
     }
 
-
-    public String toString() {
-        return "Description: "  + destination +
-                "State: "  + state +
-                "Number plate: "  + numberPlate +
-                "Number of person: "  + numberOfPerson +
-                "\n"+ "IdUser: " + idUser;
-    }
 }
