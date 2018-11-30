@@ -44,7 +44,7 @@ public class TravelActivity extends AppCompatActivity {
     }
     public void setUUID_plate (String uuidPlate)
     {
-        uuidPlate = uuidPlate;
+        this.uuidPlate = uuidPlate;
     }
 
     public String getUUID_travel ()
