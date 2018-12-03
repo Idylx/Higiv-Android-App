@@ -66,6 +66,7 @@
     <string name="ProfilVerificationToast">Please fill up all the fields</string>
     <string name="DeleteProfil">deleted profile</string>
     <string name="DeleteUserButton">Delete User</string>
+    <string name="PhoneEditPage">Emergency phone</string>
 
     <!-- Detail User page -->
     <string name="EmailDetailProfil">Email:</string>
@@ -105,6 +106,7 @@
     <string name="SignUp_WrongPwd">Password too short, enter at least 6 characters!</string>
     <string name="SignUp_SuccessfulCreation">Account successfully created!</string>
     <string name="SignUp_AuthFailed">Authentification failed!</string>
+
 
 
 </resources>
