@@ -6,6 +6,7 @@ public class User {
     private String firstname;
     private String lastname;
     private String gender;
+    private String emergencyPhone;
 
     public String getFirstname() {
         return firstname;
@@ -30,5 +31,9 @@ public class User {
     public void setGender(String gender) {
         this.gender = gender;
     }
+
+    public String getEmergencyPhone(){return emergencyPhone;}
+
+    public void setEmergencyPhone(String emergencyPhone){this.emergencyPhone = emergencyPhone;}
 
 }

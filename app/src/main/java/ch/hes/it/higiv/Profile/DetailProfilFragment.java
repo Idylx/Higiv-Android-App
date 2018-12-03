@@ -21,6 +21,7 @@ public class DetailProfilFragment extends Fragment {
     private TextView NameLabel;
     private TextView EmailLabel;
     private TextView GenderLabel;
+    private TextView PhoneLabel;
     private Button EditProfileButton;
 
     private User user;
@@ -33,6 +34,7 @@ public class DetailProfilFragment extends Fragment {
         NameLabel = (TextView) view.findViewById(R.id.NameLabel);
         EmailLabel = (TextView) view.findViewById(R.id.EmailLabel);
         GenderLabel = (TextView) view.findViewById(R.id.GenderLabel);
+        PhoneLabel = (TextView) view.findViewById(R.id.PhoneLabel);
         EditProfileButton = (Button) view.findViewById(R.id.editProfileButton);
 
         //Calls the Firebase Manager --> link to Firebase
@@ -44,6 +46,7 @@ public class DetailProfilFragment extends Fragment {
                 user = (User)o;
                 if(user != null){
                     NameLabel.setText(user.getFirstname() + " " + user.getLastname());
+                    PhoneLabel.setText(user.getEmergencyPhone());
                     if(user.getGender() != null){
                         switch (user.getGender()){
                             case "Male": GenderLabel.setText(R.string.GenderMale);
@@ -73,6 +76,7 @@ public class DetailProfilFragment extends Fragment {
                 ((ActivityProfile)getActivity()).setViewPager(1);
             }
         });
+
 
 
         return view;

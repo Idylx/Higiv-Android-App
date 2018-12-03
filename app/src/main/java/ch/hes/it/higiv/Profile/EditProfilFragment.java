@@ -29,6 +29,7 @@ public class EditProfilFragment extends Fragment {
     private EditText FirstnameLabel;
     private EditText LastnameLabel;
     private EditText EmailLabel;
+    private EditText PhoneLabel;
 
     private Button ResetButton;
     private Button EditButton;
@@ -58,6 +59,7 @@ public class EditProfilFragment extends Fragment {
         FirstnameLabel = (EditText) view.findViewById(R.id.FirstnameLabel);
         LastnameLabel = (EditText) view.findViewById(R.id.LastnameLabel);
         EmailLabel = (EditText) view.findViewById(R.id.EmailLabel);
+        PhoneLabel = (EditText) view.findViewById(R.id.PhoneLabel);
 
         EmailLabel.setText(FirebaseAuth.getInstance().getCurrentUser().getEmail());
 
@@ -77,6 +79,7 @@ public class EditProfilFragment extends Fragment {
 
         FirstnameLabel.setText("");
         LastnameLabel.setText("");
+        PhoneLabel.setText("");
 
         //Manager for Firebase Called
         final UserConnection userConnection = new UserConnection();
@@ -88,6 +91,7 @@ public class EditProfilFragment extends Fragment {
                 if(user != null){
                     FirstnameLabel.setText(user.getFirstname());
                     LastnameLabel.setText(user.getLastname());
+                    PhoneLabel.setText(user.getEmergencyPhone());
                     gender= user.getGender();
                     if(user.getGender()!= null){
                         switch(gender) {
@@ -144,18 +148,20 @@ public class EditProfilFragment extends Fragment {
         EditButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(allInputFilled()){
+                //if(allInputFilled()){
                     //Update Email in Firebase
                     userAuth.updateEmail(EmailLabel.getText().toString());
-                    final User theUser = getUserFromFragment(FirstnameLabel.getText().toString(), LastnameLabel.getText().toString(), gender);
+                    final User theUser = getUserFromFragment(FirstnameLabel.getText().toString(), LastnameLabel.getText().toString(),PhoneLabel.getText().toString(), gender);
                     //calls the edit method from the manager of Firebase
                     connectionDatabase.editUser(theUser);
+
                     //Go back to profile fragment
                     ((ActivityProfile)getActivity()).setViewPager(0);
-                }
-                else{
-                    Toast.makeText(getActivity(), R.string.ProfilVerificationToast, Toast.LENGTH_SHORT).show();
-                }
+                    getActivity().getFragmentManager().popBackStackImmediate();
+                //}
+                //else{
+                 //   Toast.makeText(getActivity(), R.string.ProfilVerificationToast, Toast.LENGTH_SHORT).show();
+                //}
             }
         });
 
@@ -187,17 +193,19 @@ public class EditProfilFragment extends Fragment {
     }
     public boolean allInputFilled(){
         boolean isFilled=true;
-        if(FirstnameLabel.getText().toString().equals("")||LastnameLabel.getText().toString().equals("")|| radioGroup.getCheckedRadioButtonId()==-1){
+        if(FirstnameLabel.getText().toString().equals("")||LastnameLabel.getText().toString().equals("")|| PhoneLabel.getText().toString().equals("")|| radioGroup.getCheckedRadioButtonId()==-1){
             isFilled=false;
         }
        return isFilled;
     }
 
-    public User getUserFromFragment(String firstname, String lastname, String gender){
+    public User getUserFromFragment(String firstname, String lastname, String phone, String gender){
+
         User user = new User();
         user.setFirstname(firstname);
         user.setLastname(lastname);
         user.setGender(gender);
+        user.setEmergencyPhone(phone);
         return user;
     }
 

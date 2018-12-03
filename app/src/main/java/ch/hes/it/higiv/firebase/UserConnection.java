@@ -32,6 +32,7 @@ public class UserConnection extends  FirebaseConnection{
         mDatabaseReference.child("users").child(uid).child("firstname").setValue(User.getFirstname());
         mDatabaseReference.child("users").child(uid).child("lastname").setValue(User.getLastname());
         mDatabaseReference.child("users").child(uid).child("gender").setValue(User.getGender());
+        mDatabaseReference.child("users").child(uid).child("emergencyPhone").setValue(User.getEmergencyPhone());
     }
 
     public void getUser(String uid, final FirebaseCallBack firebaseCallBack){
