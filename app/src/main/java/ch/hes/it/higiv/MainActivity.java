@@ -34,7 +34,6 @@ public class MainActivity extends AppCompatActivity
 
         // get the instance of firebase auhtentifcation
         auth = FirebaseAuth.getInstance();
-
         
         //get the toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
