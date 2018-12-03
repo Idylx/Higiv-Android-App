@@ -33,6 +33,9 @@ public class EditProfilFragment extends Fragment {
     private Button ResetButton;
     private Button EditButton;
 
+    //Testing
+    private Button DeleteButton;
+
     private RadioGroup radioGroup;
     private RadioButton RadioMen;
     private RadioButton RadioWomen;
@@ -67,14 +70,16 @@ public class EditProfilFragment extends Fragment {
         radioGroup = (RadioGroup) view .findViewById(R.id.radioGroup);
 
         EditButton = (Button) view.findViewById(R.id.EditButton);
-
         ResetButton = view.findViewById(R.id.resetButton);
+
+        //Testing
+        DeleteButton = (Button) view.findViewById(R.id.deleteButton);
 
         FirstnameLabel.setText("");
         LastnameLabel.setText("");
 
         //Manager for Firebase Called
-        UserConnection userConnection = new UserConnection();
+        final UserConnection userConnection = new UserConnection();
         //Method from manager to retrieve the user
         userConnection.getUser(FirebaseAuth.getInstance().getUid(), new FirebaseCallBack() {
             @Override
@@ -125,6 +130,13 @@ public class EditProfilFragment extends Fragment {
                         gender = "";
                         break;
                 }
+            }
+        });
+
+        DeleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                userConnection.deleteUser(getActivity(), userAuth);
             }
         });
 

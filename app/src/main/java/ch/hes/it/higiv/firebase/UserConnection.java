@@ -1,11 +1,21 @@
 package ch.hes.it.higiv.firebase;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
+import ch.hes.it.higiv.Account.LoginActivity;
 import ch.hes.it.higiv.Model.User;
+import ch.hes.it.higiv.R;
 
 //Class that handles all queries to Firebase concerning the Users
 //edit method only needs a user as input
@@ -37,7 +47,24 @@ public class UserConnection extends  FirebaseConnection{
         });
     }
 
-    
+    public void deleteUser(final Activity thisActivity, FirebaseUser user){
+        String uid = user.getUid();
+        mDatabaseReference.child("users").child(uid).removeValue();
+
+        user.delete()
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Intent intent = new Intent(thisActivity, LoginActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            thisActivity.startActivity(intent);
+                            Toast.makeText(thisActivity, "test", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+    }
 
 
 
