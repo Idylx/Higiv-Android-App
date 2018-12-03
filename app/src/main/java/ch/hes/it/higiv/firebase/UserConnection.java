@@ -59,7 +59,7 @@ public class UserConnection extends  FirebaseConnection{
                             Intent intent = new Intent(thisActivity, LoginActivity.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             thisActivity.startActivity(intent);
-                            Toast.makeText(thisActivity, "test", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(thisActivity, R.string.DeleteProfil, Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
