@@ -158,6 +158,7 @@ public class EditProfilFragment extends Fragment {
                     //Go back to profile fragment
                     ((ActivityProfile)getActivity()).setViewPager(0);
                     getActivity().getFragmentManager().popBackStackImmediate();
+                Toast.makeText(getActivity(), "Saved!", Toast.LENGTH_SHORT).show();
                 //}
                 //else{
                  //   Toast.makeText(getActivity(), R.string.ProfilVerificationToast, Toast.LENGTH_SHORT).show();
