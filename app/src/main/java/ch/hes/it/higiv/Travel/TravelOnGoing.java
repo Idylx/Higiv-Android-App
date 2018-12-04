@@ -1,15 +1,25 @@
 package ch.hes.it.higiv.Travel;
 
+import android.Manifest;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.telephony.SmsManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -17,7 +27,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import ch.hes.it.higiv.Model.Travel;
+import ch.hes.it.higiv.Model.User;
 import ch.hes.it.higiv.R;
+import ch.hes.it.higiv.firebase.FirebaseCallBack;
+import ch.hes.it.higiv.firebase.UserConnection;
 
 
 public class TravelOnGoing extends Fragment {
@@ -29,6 +42,10 @@ public class TravelOnGoing extends Fragment {
     //Object Travel to retrieve from firebase
     private Travel travel;
     private String plateString = "";
+
+    private User user;
+
+    private String phoneNumber;
 
     @Nullable
     @Override
@@ -44,6 +61,20 @@ public class TravelOnGoing extends Fragment {
         NumberOfPersonTv = (TextView) view.findViewById(R.id.number_persons_tv);
         plateString = ((TravelActivity)getActivity()).getIntent().getExtras().getString("Plate");
 
+        //Calls the Firebase Manager --> link to Firebase
+        UserConnection userConnection = new UserConnection();
+
+        //Calls the getUser methode from the manager and wait for the callback
+        userConnection.getUser(FirebaseAuth.getInstance().getUid(), new FirebaseCallBack() {
+            @Override
+            public void onCallBack(Object o) {
+                user = (User)o;
+                if(user != null){
+                    phoneNumber = user.getEmergencyPhone();
+                }
+
+            }
+        });
 
         mDatabaseReference.child("travels").child(((TravelActivity)getActivity()).getUUID_travel()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -77,11 +108,49 @@ public class TravelOnGoing extends Fragment {
         AlertButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (Build.VERSION.SDK_INT >= 23) {
+                    if (!checkPermission()) {
+                        requestPermission();
+                    }
+                }
+                onCreateDialog().show();
                 //Go to send alert fragment
                 //  ((TravelActivity)getActivity()).setViewPager(?);
+
             }
         });
 
         return  view;
+    }
+    public Dialog onCreateDialog() {
+        // Use the Builder class for convenient dialog construction
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage(R.string.dialogSendMessage)
+                .setPositiveButton(R.string.dialogYes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //SmsManager.getDefault().sendTextMessage(phoneNumber, null, "Coucou", null, null);
+                    }
+                })
+                .setNegativeButton(R.string.dialogCancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User cancelled the dialog
+                    }
+                });
+        // Create the AlertDialog object and return it
+        return builder.create();
+    }
+
+    private boolean checkPermission() {
+        int result = ContextCompat.checkSelfPermission(getActivity().getApplicationContext(), Manifest.permission.SEND_SMS);
+        if (result == PackageManager.PERMISSION_GRANTED) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private void requestPermission() {
+        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.SEND_SMS}, 1);
+
     }
 }

@@ -99,6 +99,10 @@
     <string name="btn_cancel_travel">Cancel</string>
     <string name="travel_overview">Travel overview</string>
     <string name="car_plate">Car plate</string>
+    <string name="dialogSendMessage">Do you really want to send an alert message?</string>
+    <string name="dialogYes">Yes</string>
+    <string name="dialogCancel">Cancel</string>
+
 
     <!-- Sign Up -->
     <string name="SignUp_EnterEmail">Enter email address!</string>
