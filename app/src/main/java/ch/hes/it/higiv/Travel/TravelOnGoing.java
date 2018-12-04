@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,11 +14,14 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.telephony.SmsManager;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -61,6 +65,7 @@ public class TravelOnGoing extends Fragment {
         NumberOfPersonTv = (TextView) view.findViewById(R.id.number_persons_tv);
         plateString = ((TravelActivity)getActivity()).getIntent().getExtras().getString("Plate");
 
+
         //Calls the Firebase Manager --> link to Firebase
         UserConnection userConnection = new UserConnection();
 
@@ -70,7 +75,11 @@ public class TravelOnGoing extends Fragment {
             public void onCallBack(Object o) {
                 user = (User)o;
                 if(user != null){
-                    phoneNumber = user.getEmergencyPhone();
+                    if(user.getEmergencyPhone().isEmpty()){
+                        AlertButton.setEnabled(false);
+                    }else{
+                        phoneNumber = user.getEmergencyPhone();
+                    }
                 }
 
             }
@@ -128,7 +137,8 @@ public class TravelOnGoing extends Fragment {
         builder.setMessage(R.string.dialogSendMessage)
                 .setPositiveButton(R.string.dialogYes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        //SmsManager.getDefault().sendTextMessage(phoneNumber, null, "Coucou", null, null);
+                        SmsManager.getDefault().sendTextMessage(phoneNumber, null, getString(R.string.messageContain), null, null);
+                        Toast.makeText(getActivity().getApplicationContext(), R.string.messageSendToast, Toast.LENGTH_SHORT).show();
                     }
                 })
                 .setNegativeButton(R.string.dialogCancel, new DialogInterface.OnClickListener() {

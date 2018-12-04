@@ -102,6 +102,8 @@
     <string name="dialogSendMessage">Do you really want to send an alert message?</string>
     <string name="dialogYes">Yes</string>
     <string name="dialogCancel">Cancel</string>
+    <string name="messageSendToast">MessageSend</string>
+    <string name="messageContain">-----ALERT----- \n User in danger</string>
 
 
     <!-- Sign Up -->
@@ -110,7 +112,6 @@
     <string name="SignUp_WrongPwd">Password too short, enter at least 6 characters!</string>
     <string name="SignUp_SuccessfulCreation">Account successfully created!</string>
     <string name="SignUp_AuthFailed">Authentification failed!</string>
-
 
 
 </resources>
