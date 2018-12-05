@@ -10,9 +10,11 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 import ch.hes.it.higiv.Model.Plate;
+import ch.hes.it.higiv.Model.Travel;
 import ch.hes.it.higiv.R;
 import ch.hes.it.higiv.firebase.FirebaseCallBack;
 import ch.hes.it.higiv.firebase.PlateConnection;
+import ch.hes.it.higiv.firebase.TravelConnection;
 
 
 public class TravelSafeFinished extends Fragment {
@@ -22,20 +24,29 @@ public class TravelSafeFinished extends Fragment {
     private ImageButton badEvalButton;
 
     private PlateConnection plateConnection = new PlateConnection();
+    private TravelConnection travelConnection = new TravelConnection();
     private Plate plate;
+    private Travel travel;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
 
         View view = inflater.inflate(R.layout.fragment_travel_safe_finished, container, false);
-
-        plateConnection.getPlate(((TravelActivity) getActivity()).getUUID_plate(), new FirebaseCallBack() {
+        travelConnection.getTravel(((TravelActivity) getActivity()).getUUID_travel(), new FirebaseCallBack() {
             @Override
             public void onCallBack(Object o) {
-            plate = (Plate) o;
+                travel = (Travel) o;
+                plateConnection.getPlate(travel.getIdPlate(), new FirebaseCallBack() {
+                    @Override
+                    public void onCallBack(Object o) {
+                        plate = (Plate) o;
+                    }
+                });
             }
         });
+
+
 
 
         goodEvalButton = (ImageButton) view.findViewById(R.id.imageButtonYes);
@@ -46,7 +57,7 @@ public class TravelSafeFinished extends Fragment {
 
                 plateConnection.setGoodEvaluation(plate);
                 //Go to main activity profile fragment
-                ((TravelActivity)getActivity()).setViewPager(0);
+                (getActivity()).finish();
 
 
             }
@@ -59,7 +70,7 @@ public class TravelSafeFinished extends Fragment {
 
                 plateConnection.setBadEvaluation(plate);
                 //Go to Edit profile fragment
-                ((TravelActivity)getActivity()).setViewPager(0);
+                (getActivity()).finish();
             }
         });
 

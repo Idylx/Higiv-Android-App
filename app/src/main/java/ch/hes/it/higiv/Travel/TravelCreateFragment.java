@@ -19,19 +19,22 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.UUID;
 
-import ch.hes.it.higiv.Model.State;
 import ch.hes.it.higiv.Model.Travel;
 import ch.hes.it.higiv.Model.Plate;
 import ch.hes.it.higiv.R;
+import ch.hes.it.higiv.firebase.FirebaseAuthentication;
+import ch.hes.it.higiv.firebase.FirebaseCallBack;
+import ch.hes.it.higiv.firebase.PlateConnection;
+import ch.hes.it.higiv.firebase.TravelConnection;
 
 
 public class TravelCreateFragment extends Fragment {
@@ -40,21 +43,36 @@ public class TravelCreateFragment extends Fragment {
     private DatabaseReference mDatabaseReference = FirebaseDatabase.getInstance().getReference();
     //Access the current user
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-    private EditText inputDestination, inputPlateNumberSate, inputPlateNumber;
+    private EditText inputDestination, inputPlateNumberState, inputPlateNumber;
     private NumberPicker inputNbPersons;
     private Button btnBeginTravel, btnStopTravel;
+
+
     //Objects to save into FireBase
     private Travel travel;
     private Plate plate;
-    //States possible entered in FireBase
-    private ArrayList<String> states;
+
+    //existing plate
+    private Plate plateExisting ;
+
+
+    private String numberPlate;
     private int nbPerson = 1;
 
     private DataPassListener mCallback;
 
+    // connection to firebase
+    private TravelConnection connectionDatabase = new TravelConnection();
+    private PlateConnection plateConnection = new PlateConnection();
+
+
+
+
     public interface DataPassListener{
         public void passData(String data);
     }
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
@@ -64,7 +82,7 @@ public class TravelCreateFragment extends Fragment {
         final View rootView = inflater.inflate(R.layout.fragment_travel_create, container, false);
 
         inputDestination = (EditText) rootView.findViewById(R.id.destination);
-        inputPlateNumberSate = (EditText) rootView.findViewById(R.id.plate_number_state);
+        inputPlateNumberState = (EditText) rootView.findViewById(R.id.plate_number_state);
         inputPlateNumber = (EditText) rootView.findViewById(R.id.plate_number);
         //inputNbPersons = (EditText) rootView.findViewById(R.id.number_of_places);
         inputNbPersons = (NumberPicker) rootView.findViewById(R.id.number_of_places);
@@ -92,11 +110,11 @@ public class TravelCreateFragment extends Fragment {
         btnStopTravel.setBackground(getActivity().getResources().getDrawable(R.color.colorPrimaryDark));
 
         //Listener used to go to the next edittext which is plate number, when the field is filled in
-        inputPlateNumberSate.addTextChangedListener(new TextWatcher() {
+        inputPlateNumberState.addTextChangedListener(new TextWatcher() {
 
             public void onTextChanged(CharSequence s, int start,int before, int count)
             {
-                if(inputPlateNumberSate.getText().toString().length() == 2)
+                if(inputPlateNumberState.getText().toString().length() == 2)
                 {
                     inputPlateNumber.requestFocus();
                 }
@@ -107,23 +125,7 @@ public class TravelCreateFragment extends Fragment {
 
         });
 
-        //Acess the states node to retrieve all states possible when we create a travel
-        mDatabaseReference.child("states").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
 
-                states = new ArrayList<String>();
-
-                for (DataSnapshot ds : dataSnapshot.getChildren())
-                {
-                    states.add(ds.getValue(State.class).getName());
-                }
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                System.out.println(databaseError.getMessage());
-            }
-        });
 
         //Listener used to react to the button click
         btnBeginTravel.setOnClickListener(new View.OnClickListener() {
@@ -137,75 +139,69 @@ public class TravelCreateFragment extends Fragment {
                     return;
                 }
 
-                //Check if the state entered is valid
-                if (!states.contains(inputPlateNumberSate.getText().toString())) {
-                    Toast.makeText(getActivity(), R.string.enter_state, Toast.LENGTH_SHORT).show();
-                    inputPlateNumberSate.requestFocus();
-                    return;
-                }
-
                 if (TextUtils.isEmpty(inputPlateNumber.getText())) {
                     Toast.makeText(getActivity(), R.string.enter_plate_number, Toast.LENGTH_SHORT).show();
                     inputPlateNumber.requestFocus();
                     return;
                 }
 
-
-                //Creation of new plate
-                String numberPlate = inputPlateNumberSate.getText().toString() + inputPlateNumber.getText().toString();
-                plate = new Plate(numberPlate);
-                String plateUUID = UUID.randomUUID().toString();
-
-                //Insertion of the object Plate in firebase
-                mDatabaseReference.child("plates").child(plateUUID).setValue(plate).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-
-                    }
-                });
-                //Creation of the object Travel
-                travel = new Travel(inputDestination.getText().toString(),
-                        inputPlateNumberSate.getText().toString(),
-                        plateUUID,
-                        nbPerson,
-                        user.getUid()
-                );
-
-                String travelUUID = UUID.randomUUID().toString();
+                travel = new Travel();
+                travel.setDestination(inputDestination.getText().toString());
+                travel.setNumberOfPerson(nbPerson);
+                travel.setIdUser(user.getUid());
+                travel.setTimeBegin(new SimpleDateFormat("dd-MM-yyyy kk:mm:ss").format(System.currentTimeMillis()));
 
 
-                //Insertion of the object Travel in firebase
-                mDatabaseReference.child("travels").child(travelUUID).setValue(travel).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful())
-                        {
-                            //Enable the button stop travel
-                            btnStopTravel.setEnabled(true);
-                            btnStopTravel.setBackground(getActivity().getResources().getDrawable(R.color.colorPrimary));
-
-                            //Disable the button begin travel
-                            btnBeginTravel.setEnabled(false);
-                            btnBeginTravel.setBackground(getActivity().getResources().getDrawable(R.color.colorPrimaryDark));
-
-                            //Display a message success
-                            Toast.makeText(getActivity(), R.string.CreationTravelSuccessful, Toast.LENGTH_LONG).show();
-                        }
-                        else {
-                            //Display a message error
-                            Toast.makeText(getActivity(), R.string.CreationTravelFailed, Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
-
-
+                final String travelUUID = UUID.randomUUID().toString();
                 ((TravelActivity)getActivity()).setUUID_travel(travelUUID);
-                ((TravelActivity)getActivity()).setUUID_plate(plateUUID);
 
-                ((TravelActivity)getActivity()).getIntent().putExtra("Plate", plate.getNumber());
-                ((TravelActivity)getActivity()).adapter.addFragmentToTravelFragmentList(new TravelOnGoing());
-                ((TravelActivity)getActivity()).viewPager.setAdapter(((TravelActivity)getActivity()).adapter);
-                ((TravelActivity)getActivity()).setViewPager(1);
+                numberPlate = inputPlateNumberState.getText().toString() + inputPlateNumber.getText().toString();
+
+                plateConnection.getPlate(numberPlate, new FirebaseCallBack() {
+                    @Override
+                    public void onCallBack(Object o) {
+                        plateExisting = (Plate) o;
+
+                        // if plate doesn't exist create it
+                        if(plateExisting==null) {
+                            //Creation of new plate
+                            plate = new Plate();
+                            plate.setNumber(numberPlate);
+                            //Insertion of the object Plate in firebase
+                            mDatabaseReference.child("plates").child(numberPlate).setValue(plate).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    travel.setIdPlate(numberPlate);
+                                }
+                            });
+
+                        }else{
+                            travel.setIdPlate(plateExisting.getNumber());
+                        }
+                        //Insertion of the object Travel in firebase
+                        mDatabaseReference.child("travels").child(travelUUID).setValue(travel).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful())
+                                {
+
+                                    ((TravelActivity)getActivity()).adapter.addFragmentToTravelFragmentList(new TravelOnGoing());
+                                    ((TravelActivity)getActivity()).viewPager.setAdapter(((TravelActivity)getActivity()).adapter);
+                                    ((TravelActivity)getActivity()).setViewPager(1);
+
+
+                                }
+                                else {
+                                    //Display a message error
+                                    Toast.makeText(getActivity(), R.string.CreationTravelFailed, Toast.LENGTH_LONG).show();
+                                }
+                            }
+                        });
+
+
+                    }
+                });
+
             }
         });
         return rootView;

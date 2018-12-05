@@ -15,7 +15,6 @@ public class TravelActivity extends AppCompatActivity {
     TravelStateSectionAdapter adapter = new TravelStateSectionAdapter(getSupportFragmentManager());
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,25 +33,16 @@ public class TravelActivity extends AppCompatActivity {
 
     }
 
-    public void setViewPager(int fragmentNumber){
+    public void setViewPager(int fragmentNumber) {
         viewPager.setCurrentItem(fragmentNumber);
     }
 
-    public void setUUID_travel (String uuid_travel)
-    {
-        uuid = uuid_travel;
-    }
-    public void setUUID_plate (String uuidPlate)
-    {
-        this.uuidPlate = uuidPlate;
+    public void setUUID_travel(String uuid_travel) {
+        this.uuid = uuid_travel;
     }
 
-    public String getUUID_travel ()
-    {
+
+    public String getUUID_travel() {
         return uuid;
-    }
-    public String getUUID_plate ()
-    {
-        return uuidPlate;
     }
 }

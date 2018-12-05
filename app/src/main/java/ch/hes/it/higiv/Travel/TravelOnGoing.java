@@ -1,6 +1,7 @@
 package ch.hes.it.higiv.Travel;
 
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -16,19 +17,31 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.concurrent.CountDownLatch;
+
+import ch.hes.it.higiv.Model.Plate;
 import ch.hes.it.higiv.Model.Travel;
 import ch.hes.it.higiv.R;
+import ch.hes.it.higiv.firebase.FirebaseCallBack;
+import ch.hes.it.higiv.firebase.PlateConnection;
+import ch.hes.it.higiv.firebase.TravelConnection;
 
 
 public class TravelOnGoing extends Fragment {
 
     //Access the database
     private DatabaseReference mDatabaseReference = FirebaseDatabase.getInstance().getReference();
+
+
     private Button StopButton, AlertButton;
     private TextView DestinationTv, CarPlateTv, NumberOfPersonTv;
     //Object Travel to retrieve from firebase
     private Travel travel;
-    private String plateString = "";
+    private Plate plate ;
+
+
+    TravelConnection travelConnection = new TravelConnection();
+    PlateConnection plateConnection = new PlateConnection();
 
     @Nullable
     @Override
@@ -42,25 +55,30 @@ public class TravelOnGoing extends Fragment {
         DestinationTv = (TextView) view.findViewById(R.id.destination_tv);
         CarPlateTv = (TextView) view.findViewById(R.id.car_plate_tv);
         NumberOfPersonTv = (TextView) view.findViewById(R.id.number_persons_tv);
-        plateString = ((TravelActivity)getActivity()).getIntent().getExtras().getString("Plate");
+        String uuidTravel = ((TravelActivity) getActivity()).getUUID_travel();
 
 
-        mDatabaseReference.child("travels").child(((TravelActivity)getActivity()).getUUID_travel()).addListenerForSingleValueEvent(new ValueEventListener() {
+        travelConnection.getTravel(uuidTravel, new FirebaseCallBack() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                travel = dataSnapshot.getValue(Travel.class);
-
-                //GET THE VALUES OF THE travel AND PUT THEM IT INTO THE EDITTEXTS
+            public void onCallBack(Object o) {
+                travel = (Travel)o;
                 DestinationTv.setText(travel.getDestination());
-                CarPlateTv.setText(plateString);
-                NumberOfPersonTv.setText(String.valueOf(travel.getNumberOfPerson()));
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                System.out.println(databaseError.getMessage());
+                NumberOfPersonTv.setText(Integer.toString(travel.getNumberOfPerson()));
+                plateConnection.getPlate(travel.getIdPlate(), new FirebaseCallBack() {
+                    @Override
+                    public void onCallBack(Object o) {
+                        plate = (Plate)o;
+                        CarPlateTv.setText(plate.getNumber());
+
+                    }
+                });
+
             }
         });
+
+
+
+
 
         StopButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,7 +96,7 @@ public class TravelOnGoing extends Fragment {
             @Override
             public void onClick(View v) {
                 //Go to send alert fragment
-                //  ((TravelActivity)getActivity()).setViewPager(?);
+
             }
         });
 
