@@ -75,9 +75,7 @@ public class TravelOnGoing extends Fragment {
             public void onCallBack(Object o) {
                 user = (User)o;
                 if(user != null){
-                    if(user.getEmergencyPhone().isEmpty()){
-                        AlertButton.setEnabled(false);
-                    }else{
+                    if(!user.getEmergencyPhone().isEmpty()){
                         phoneNumber = user.getEmergencyPhone();
                     }
                 }
@@ -137,8 +135,34 @@ public class TravelOnGoing extends Fragment {
         builder.setMessage(R.string.dialogSendMessage)
                 .setPositiveButton(R.string.dialogYes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        SmsManager.getDefault().sendTextMessage(phoneNumber, null, getString(R.string.messageContain), null, null);
-                        Toast.makeText(getActivity().getApplicationContext(), R.string.messageSendToast, Toast.LENGTH_SHORT).show();
+                        if (Build.VERSION.SDK_INT >= 23) {
+                            if (!checkPermission()) {
+                                Toast.makeText(getActivity().getApplicationContext(), R.string.permissionNotActivToast, Toast.LENGTH_SHORT).show();
+                            }else if(user.getEmergencyPhone().isEmpty()){
+                                Toast.makeText(getActivity().getApplicationContext(), R.string.phoneNumberDontExist, Toast.LENGTH_SHORT).show();
+                            }
+                            else{
+                                String alert = getString(R.string.messageContainAlert);
+                                String statName = "";
+                                String firstname = "";
+                                String lastname = "";
+                                String plate = plateString;
+                                String geolocalisation ="Unknown";
+                                if(!user.getFirstname().isEmpty() || !user.getLastname().isEmpty()){
+                                    statName = getString(R.string.messageContainUser);
+                                }
+                                if(!user.getFirstname().isEmpty()){
+                                    firstname=user.getFirstname() + " ";
+                                }
+                                if(!user.getLastname().isEmpty()){
+                                    lastname=user.getLastname();
+                                }
+                                String finalMessage = alert + "\n" + firstname + lastname + " " + statName + "\n" + getString(R.string.messageContainPlate)+ " " + plate + "\n" + getString(R.string.messageContainLocalisation) + " " + geolocalisation;
+                                SmsManager.getDefault().sendTextMessage(phoneNumber, null, finalMessage, null, null);
+                                Toast.makeText(getActivity().getApplicationContext(), R.string.messageSendToast, Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
                     }
                 })
                 .setNegativeButton(R.string.dialogCancel, new DialogInterface.OnClickListener() {
@@ -161,6 +185,5 @@ public class TravelOnGoing extends Fragment {
 
     private void requestPermission() {
         ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.SEND_SMS}, 1);
-
     }
 }

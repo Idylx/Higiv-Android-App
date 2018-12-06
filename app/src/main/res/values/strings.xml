@@ -103,7 +103,12 @@
     <string name="dialogYes">Yes</string>
     <string name="dialogCancel">Cancel</string>
     <string name="messageSendToast">MessageSend</string>
-    <string name="messageContain">-----ALERT----- \n User in danger</string>
+    <string name="permissionNotActivToast">Activ permission for access to the SMS</string>
+    <string name="phoneNumberDontExist">You did not enter a phone number!</string>
+    <string name="messageContainAlert">-----ALERT-----</string>
+    <string name="messageContainUser">is in danger</string>
+    <string name="messageContainPlate">Plate number:</string>
+    <string name="messageContainLocalisation">Geolocation at the time of the alert:</string>
 
 
     <!-- Sign Up -->
