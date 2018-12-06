@@ -115,14 +115,15 @@ public class TravelOnGoing extends Fragment {
         AlertButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //check if the permission is already allow
                 if (Build.VERSION.SDK_INT >= 23) {
                     if (!checkPermission()) {
+                        //if not, request the permission to the user
                         requestPermission();
                     }
                 }
+                //display a dialog for know if the user will make really that
                 onCreateDialog().show();
-                //Go to send alert fragment
-                //  ((TravelActivity)getActivity()).setViewPager(?);
 
             }
         });
@@ -135,29 +136,19 @@ public class TravelOnGoing extends Fragment {
         builder.setMessage(R.string.dialogSendMessage)
                 .setPositiveButton(R.string.dialogYes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+                        //check if the permission is allow
                         if (Build.VERSION.SDK_INT >= 23) {
                             if (!checkPermission()) {
+                                //the permission is not allow
                                 Toast.makeText(getActivity().getApplicationContext(), R.string.permissionNotActivToast, Toast.LENGTH_SHORT).show();
                             }else if(user.getEmergencyPhone().isEmpty()){
+                                //the phone number is not enter
                                 Toast.makeText(getActivity().getApplicationContext(), R.string.phoneNumberDontExist, Toast.LENGTH_SHORT).show();
                             }
                             else{
-                                String alert = getString(R.string.messageContainAlert);
-                                String statName = "";
-                                String firstname = "";
-                                String lastname = "";
-                                String plate = plateString;
-                                String geolocalisation ="Unknown";
-                                if(!user.getFirstname().isEmpty() || !user.getLastname().isEmpty()){
-                                    statName = getString(R.string.messageContainUser);
-                                }
-                                if(!user.getFirstname().isEmpty()){
-                                    firstname=user.getFirstname() + " ";
-                                }
-                                if(!user.getLastname().isEmpty()){
-                                    lastname=user.getLastname();
-                                }
-                                String finalMessage = alert + "\n" + firstname + lastname + " " + statName + "\n" + getString(R.string.messageContainPlate)+ " " + plate + "\n" + getString(R.string.messageContainLocalisation) + " " + geolocalisation;
+
+                                String finalMessage = CreateMessage();
+                                //Send the SMS
                                 SmsManager.getDefault().sendTextMessage(phoneNumber, null, finalMessage, null, null);
                                 Toast.makeText(getActivity().getApplicationContext(), R.string.messageSendToast, Toast.LENGTH_SHORT).show();
                             }
@@ -173,7 +164,7 @@ public class TravelOnGoing extends Fragment {
         // Create the AlertDialog object and return it
         return builder.create();
     }
-
+    //Method for check if the user have already allow the permission for send message
     private boolean checkPermission() {
         int result = ContextCompat.checkSelfPermission(getActivity().getApplicationContext(), Manifest.permission.SEND_SMS);
         if (result == PackageManager.PERMISSION_GRANTED) {
@@ -182,8 +173,28 @@ public class TravelOnGoing extends Fragment {
             return false;
         }
     }
-
+    //method for request the permission to the user
     private void requestPermission() {
         ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.SEND_SMS}, 1);
+    }
+    private String CreateMessage() {
+        //create the text for the SMS
+        String alert = getString(R.string.messageContainAlert);
+        String statName = "";
+        String firstname = "";
+        String lastname = "";
+        String plate = plateString;
+        String geolocalisation ="Unknown";
+        //Check if the user have enter the information
+        if(!user.getFirstname().isEmpty() || !user.getLastname().isEmpty()){
+            statName = getString(R.string.messageContainUser);
+        }
+        if(!user.getFirstname().isEmpty()){
+            firstname=user.getFirstname() + " ";
+        }
+        if(!user.getLastname().isEmpty()){
+            lastname=user.getLastname();
+        }
+        return alert + "\n" + firstname + lastname + " " + statName + "\n" + getString(R.string.messageContainPlate)+ " " + plate + "\n" + getString(R.string.messageContainLocalisation) + " " + geolocalisation;
     }
 }
