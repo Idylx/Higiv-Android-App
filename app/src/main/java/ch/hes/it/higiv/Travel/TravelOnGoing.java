@@ -29,14 +29,13 @@ public class TravelOnGoing extends Fragment {
 
     private Button StopButton, AlertButton;
     private TextView DestinationTv, CarPlateTv, NumberOfPersonTv;
+
     //Object Travel to retrieve from firebase
     private Travel travel;
-    private Plate plate ;
     private String idTravel;
 
 
     TravelConnection travelConnection = new TravelConnection();
-    PlateConnection plateConnection = new PlateConnection();
 
     @Nullable
     @Override
@@ -50,6 +49,8 @@ public class TravelOnGoing extends Fragment {
         DestinationTv = (TextView) view.findViewById(R.id.destination_tv);
         CarPlateTv = (TextView) view.findViewById(R.id.car_plate_tv);
         NumberOfPersonTv = (TextView) view.findViewById(R.id.number_persons_tv);
+
+
         idTravel = ((TravelActivity) getActivity()).getidTravel();
 
         StopButton.setOnClickListener(new View.OnClickListener() {
@@ -61,8 +62,6 @@ public class TravelOnGoing extends Fragment {
                 ((TravelActivity)getActivity()).setViewPager(2);
             }
         });
-
-
         AlertButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,7 +75,6 @@ public class TravelOnGoing extends Fragment {
 
     @Override
     public void onStart() {
-
         super.onStart();
 
         // get current travel, cannot be on create view
@@ -88,10 +86,7 @@ public class TravelOnGoing extends Fragment {
                 DestinationTv.setText(travel.getDestination());
                 NumberOfPersonTv.setText(Integer.toString(travel.getNumberOfPerson()));
                 CarPlateTv.setText(travel.getIdPlate());
-
             }
         });
-
-
     }
 }
