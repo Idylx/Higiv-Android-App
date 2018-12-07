@@ -75,70 +75,73 @@ public class Takepicture extends AppCompatActivity {
         });
 
 
-
         // Button that saves the image we took with the camera on Firebase
         savePlateNumber.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View view)
             {
+                if(plate.getDrawable() == null)
+                {
+                    Toast.makeText(getApplicationContext(), "Take a picture first", Toast.LENGTH_LONG).show();
+                    return;
+                }
                 if(TextUtils.isEmpty(retrieveTextFromImage.getText()))
                 {
                     Toast.makeText(getApplicationContext(), "Enter the plate number of the car", Toast.LENGTH_LONG).show();
+                    return;
                 }
-                else
-                {
-                    //get the camera image
-                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                    byte[] dataBAOS = baos.toByteArray();
 
-                    mProgress.setTitle("Uploading");
-                    mProgress.show();
+                //get the camera image
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                byte[] dataBAOS = baos.toByteArray();
 
-                    //name of the image file (add time to have different files to avoid rewrite on the same file)
+                mProgress.setTitle("Uploading");
+                mProgress.show();
 
-                    SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                    Date now = new Date();
+                //name of the image file (add time to have different files to avoid rewrite on the same file)
 
-                    filepath = mStorageRef.child(retrieveTextFromImage.getText().toString() + "/" + sdfDate.format(now));
+                SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                Date now = new Date();
 
-                    //upload image
+                filepath = mStorageRef.child(retrieveTextFromImage.getText().toString() + "/" + sdfDate.format(now));
 
-                    filepath.putBytes(dataBAOS)
-                            .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                                @Override
-                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                    //if the upload is successfull
-                                    //hiding the progress dialog
-                                    mProgress.dismiss();
+                //upload image
 
-                                    //and displaying a success toast
-                                    Toast.makeText(getApplicationContext(), "File Uploaded ", Toast.LENGTH_LONG).show();
-                                }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception exception) {
-                                    //if the upload is not successfull
-                                    //hiding the progress dialog
-                                    mProgress.dismiss();
+                filepath.putBytes(dataBAOS)
+                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                //if the upload is successfull
+                                //hiding the progress dialog
+                                mProgress.dismiss();
 
-                                    //and displaying error message
-                                    Toast.makeText(getApplicationContext(), "Failed again"+exception.getMessage(), Toast.LENGTH_LONG).show();
-                                }
-                            })
-                            .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                                @Override
-                                public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                                    //calculating progress percentage
-                                    double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                                //and displaying a success toast
+                                Toast.makeText(getApplicationContext(), "File Uploaded ", Toast.LENGTH_LONG).show();
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception exception) {
+                                //if the upload is not successfull
+                                //hiding the progress dialog
+                                mProgress.dismiss();
 
-                                    //displaying percentage in progress dialog
-                                    mProgress.setMessage("Uploaded " + ((int) progress) + "%...");
-                                }
-                            });
+                                //and displaying error message
+                                Toast.makeText(getApplicationContext(), "Failed again"+exception.getMessage(), Toast.LENGTH_LONG).show();
+                            }
+                        })
+                        .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                                //calculating progress percentage
+                                double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
 
-                }
+                                //displaying percentage in progress dialog
+                                mProgress.setMessage("Uploaded " + ((int) progress) + "%...");
+                            }
+                        });
+
             }
         });
     }
@@ -184,4 +187,6 @@ public class Takepicture extends AppCompatActivity {
             retrieveTextFromImage.setText(textOfImage);
         }
     }
+
+    
 }
