@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
+import java.text.SimpleDateFormat;
+
 import ch.hes.it.higiv.Model.Plate;
 import ch.hes.it.higiv.Model.Travel;
 import ch.hes.it.higiv.R;
@@ -33,7 +35,7 @@ public class TravelSafeFinished extends Fragment {
 
 
         View view = inflater.inflate(R.layout.fragment_travel_safe_finished, container, false);
-        travelConnection.getTravel(((TravelActivity) getActivity()).getUUID_travel(), new FirebaseCallBack() {
+        travelConnection.getTravel(((TravelActivity) getActivity()).getidTravel(), new FirebaseCallBack() {
             @Override
             public void onCallBack(Object o) {
                 travel = (Travel) o;
@@ -49,15 +51,21 @@ public class TravelSafeFinished extends Fragment {
 
 
 
+
+
         goodEvalButton = (ImageButton) view.findViewById(R.id.imageButtonYes);
 
         goodEvalButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                travel.setTimeEnd(new SimpleDateFormat("dd-MM-yyyy kk:mm:ss").format(System.currentTimeMillis()));
+                travelConnection.setEndTravel(travel, ((TravelActivity) getActivity()).getidTravel());
+
                 plateConnection.setGoodEvaluation(plate);
-                //Go to main activity profile fragment
-                (getActivity()).finish();
+
+
+                ((TravelActivity)getActivity()).finishActivity();
 
 
             }
@@ -68,9 +76,12 @@ public class TravelSafeFinished extends Fragment {
             @Override
             public void onClick(View v) {
 
+                travel.setTimeEnd(new SimpleDateFormat("dd-MM-yyyy kk:mm:ss").format(System.currentTimeMillis()));
+                travelConnection.setEndTravel(travel, ((TravelActivity) getActivity()).getidTravel());
                 plateConnection.setBadEvaluation(plate);
-                //Go to Edit profile fragment
-                (getActivity()).finish();
+
+                // end the activity
+                ((TravelActivity)getActivity()).finish();
             }
         });
 

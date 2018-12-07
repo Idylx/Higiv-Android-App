@@ -22,16 +22,12 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.UUID;
 
 import ch.hes.it.higiv.Model.Travel;
 import ch.hes.it.higiv.Model.Plate;
 import ch.hes.it.higiv.R;
-import ch.hes.it.higiv.firebase.FirebaseAuthentication;
 import ch.hes.it.higiv.firebase.FirebaseCallBack;
 import ch.hes.it.higiv.firebase.PlateConnection;
 import ch.hes.it.higiv.firebase.TravelConnection;
@@ -56,13 +52,15 @@ public class TravelCreateFragment extends Fragment {
     private Plate plateExisting ;
 
 
+
+
     private String numberPlate;
     private int nbPerson = 1;
 
     private DataPassListener mCallback;
 
     // connection to firebase
-    private TravelConnection connectionDatabase = new TravelConnection();
+    private TravelConnection travelConnection = new TravelConnection();
     private PlateConnection plateConnection = new PlateConnection();
 
 
@@ -153,9 +151,9 @@ public class TravelCreateFragment extends Fragment {
 
 
                 final String travelUUID = UUID.randomUUID().toString();
-                ((TravelActivity)getActivity()).setUUID_travel(travelUUID);
+                ((TravelActivity)getActivity()).setIDtravel(travelUUID);
 
-                numberPlate = inputPlateNumberState.getText().toString() + inputPlateNumber.getText().toString();
+                numberPlate = inputPlateNumberState.getText().toString().toUpperCase() + inputPlateNumber.getText().toString().toUpperCase();
 
                 plateConnection.getPlate(numberPlate, new FirebaseCallBack() {
                     @Override
@@ -178,30 +176,14 @@ public class TravelCreateFragment extends Fragment {
                         }else{
                             travel.setIdPlate(plateExisting.getNumber());
                         }
-                        //Insertion of the object Travel in firebase
-                        mDatabaseReference.child("travels").child(travelUUID).setValue(travel).addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful())
-                                {
 
-                                    ((TravelActivity)getActivity()).adapter.addFragmentToTravelFragmentList(new TravelOnGoing());
-                                    ((TravelActivity)getActivity()).viewPager.setAdapter(((TravelActivity)getActivity()).adapter);
-                                    ((TravelActivity)getActivity()).setViewPager(1);
-
-
-                                }
-                                else {
-                                    //Display a message error
-                                    Toast.makeText(getActivity(), R.string.CreationTravelFailed, Toast.LENGTH_LONG).show();
-                                }
-                            }
-                        });
+                        travelConnection.setTravel(travel, travelUUID);
+                        ((TravelActivity) getActivity()).addFragmentToAdapter(new TravelOnGoing());
+                        ((TravelActivity) getActivity()).setViewPager(1);
 
 
                     }
                 });
-
             }
         });
         return rootView;

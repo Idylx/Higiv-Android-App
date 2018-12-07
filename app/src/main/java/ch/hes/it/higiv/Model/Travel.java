@@ -6,7 +6,6 @@ public class Travel {
 
     @NonNull
     private String destination;
-
     @NonNull
     private String idPlate;
     @NonNull
@@ -16,9 +15,6 @@ public class Travel {
 
     // geoloc start
     // geoloc end travel
-
-
-
 
     @NonNull
     private String timeBegin;

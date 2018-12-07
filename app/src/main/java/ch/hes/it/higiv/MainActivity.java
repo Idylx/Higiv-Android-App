@@ -48,6 +48,8 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(MainActivity.this, TravelActivity.class));
+
+
                 //add snackbar to main CAN BE REMOVED VERY SOON
 //                Snackbar.make(view, "Create a new Travel", Snackbar.LENGTH_LONG)
 //                        .setAction("Action", null).show();
