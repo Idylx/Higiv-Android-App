@@ -115,9 +115,8 @@ public class Takepicture extends AppCompatActivity {
                 //name of the image file (add time to have different files to avoid rewrite on the same file)
 
                 SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                Date now = new Date();
 
-                filepath = mStorageRef.child(retrieveTextFromImage.getText().toString() + "/" + sdfDate.format(now));
+                filepath = mStorageRef.child(retrieveTextFromImage.getText().toString() + "/" + sdfDate.format(new Date()));
 
                 //upload image
 
@@ -154,7 +153,6 @@ public class Takepicture extends AppCompatActivity {
                                 mProgress.setMessage("Uploaded " + ((int) progress) + "%...");
                             }
                         });
-
             }
         });
     }
@@ -189,7 +187,6 @@ public class Takepicture extends AppCompatActivity {
             for (int i=0 ; i<items.size() ; i++)
             {
                 sb.append(items.valueAt(i).getValue());
-                //sb.append("\n");
             }
 
             textOfImage = (sb.toString()).replace("-", "");
@@ -221,5 +218,4 @@ public class Takepicture extends AppCompatActivity {
         ActivityCompat.requestPermissions(Takepicture.this, new String[]{Manifest.permission.CAMERA,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
     }
-
 }
