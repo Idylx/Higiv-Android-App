@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,10 @@ import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -40,7 +45,8 @@ public class TravelCreateFragment extends Fragment {
     private DatabaseReference mDatabaseReference = FirebaseDatabase.getInstance().getReference();
     //Access the current user
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-    private EditText inputDestination, inputPlateNumberSate, inputPlateNumber;
+    private EditText  inputPlateNumberSate, inputPlateNumber;
+    private String inputDestination;
     private NumberPicker inputNbPersons;
     private Button btnBeginTravel, btnStopTravel;
     //Objects to save into FireBase
@@ -63,7 +69,7 @@ public class TravelCreateFragment extends Fragment {
 
         final View rootView = inflater.inflate(R.layout.fragment_travel_create, container, false);
 
-        inputDestination = (EditText) rootView.findViewById(R.id.destination);
+  //      inputDestination = (EditText) rootView.findViewById(R.id.destination);
         inputPlateNumberSate = (EditText) rootView.findViewById(R.id.plate_number_state);
         inputPlateNumber = (EditText) rootView.findViewById(R.id.plate_number);
         //inputNbPersons = (EditText) rootView.findViewById(R.id.number_of_places);
@@ -85,6 +91,21 @@ public class TravelCreateFragment extends Fragment {
             }
         });
 
+
+        PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment) getActivity().getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
+        autocompleteFragment.setHint("Destination");
+        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                // TODO: Get info about the selected place.
+              inputDestination = (String) place.getName();
+            }
+
+            @Override
+            public void onError(Status status) {
+
+            }
+        });
         //Disable stop travel button
         btnStopTravel.setEnabled(false);
 
@@ -131,9 +152,9 @@ public class TravelCreateFragment extends Fragment {
             public void onClick(View v) {
 
                 //Checking if there isn't empty fields, and if it's the case set the focus on the empty field
-                if (TextUtils.isEmpty(inputDestination.getText())) {
+                if (TextUtils.isEmpty(inputDestination)) {
                     Toast.makeText(getActivity(), R.string.enter_destination, Toast.LENGTH_SHORT).show();
-                    inputDestination.requestFocus();
+                 //   inputDestination.requestFocus();
                     return;
                 }
 
@@ -164,7 +185,7 @@ public class TravelCreateFragment extends Fragment {
                     }
                 });
                 //Creation of the object Travel
-                travel = new Travel(inputDestination.getText().toString(),
+                travel = new Travel(inputDestination,
                         inputPlateNumberSate.getText().toString(),
                         plateUUID,
                         nbPerson,
