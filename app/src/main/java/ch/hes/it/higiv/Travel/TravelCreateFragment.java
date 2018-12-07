@@ -12,11 +12,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.Toast;
 
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -80,7 +84,6 @@ public class TravelCreateFragment extends Fragment {
   //      inputDestination = (EditText) rootView.findViewById(R.id.destination);
         inputPlateNumberState = (EditText) rootView.findViewById(R.id.plate_number_state);
         inputPlateNumber = (EditText) rootView.findViewById(R.id.plate_number);
-        //inputNbPersons = (EditText) rootView.findViewById(R.id.number_of_places);
         inputNbPersons = (NumberPicker) rootView.findViewById(R.id.number_of_places);
         btnBeginTravel = (Button) rootView.findViewById(R.id.btn_begin_travel);
         btnStopTravel = (Button) rootView.findViewById(R.id.btn_cancel_travel);
@@ -102,11 +105,12 @@ public class TravelCreateFragment extends Fragment {
 
         PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment) getActivity().getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
         autocompleteFragment.setHint("Destination");
-        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+        autocompleteFragment.setOnPlaceSelectedListener(
+
+            new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
-                // TODO: Get info about the selected place.
-              inputDestination = (String) place.getName();
+               inputDestination = (String) place.getName();
             }
 
             @Override
@@ -114,6 +118,9 @@ public class TravelCreateFragment extends Fragment {
 
             }
         });
+
+
+        inputNbPersons.setShowDividers(LinearLayout.SHOW_DIVIDER_NONE);
         //Disable stop travel button
         btnStopTravel.setEnabled(false);
 
@@ -148,7 +155,6 @@ public class TravelCreateFragment extends Fragment {
                 //Checking if there isn't empty fields, and if it's the case set the focus on the empty field
                 if (TextUtils.isEmpty(inputDestination)) {
                     Toast.makeText(getActivity(), R.string.enter_destination, Toast.LENGTH_SHORT).show();
-                 //   inputDestination.requestFocus();
                     return;
                 }
 
@@ -160,7 +166,7 @@ public class TravelCreateFragment extends Fragment {
 
                 // setting the travel information
                 travel = new Travel();
-                travel.setDestination(inputDestination.getText().toString());
+                travel.setDestination(inputDestination);
                 travel.setNumberOfPerson(nbPerson);
                 travel.setIdUser(user.getUid());
                 travel.setTimeBegin(new SimpleDateFormat("dd-MM-yyyy kk:mm:ss").format(System.currentTimeMillis()));
