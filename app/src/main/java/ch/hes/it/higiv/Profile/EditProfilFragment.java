@@ -1,5 +1,6 @@
 package ch.hes.it.higiv.Profile;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -18,6 +19,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import ch.hes.it.higiv.MainActivity;
 import ch.hes.it.higiv.Model.User;
 import ch.hes.it.higiv.R;
 import ch.hes.it.higiv.firebase.FirebaseAuthentication;
@@ -158,7 +160,10 @@ public class EditProfilFragment extends Fragment {
                     //Go back to profile fragment
                     ((ActivityProfile)getActivity()).setViewPager(0);
                     getActivity().getFragmentManager().popBackStackImmediate();
-                Toast.makeText(getActivity(), "Saved!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Saved!", Toast.LENGTH_SHORT).show();
+
+                    Intent intent = new Intent(getActivity(), MainActivity.class);
+                    startActivity(intent);
                 //}
                 //else{
                  //   Toast.makeText(getActivity(), R.string.ProfilVerificationToast, Toast.LENGTH_SHORT).show();
