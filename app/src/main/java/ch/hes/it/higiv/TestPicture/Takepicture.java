@@ -44,7 +44,6 @@ public class Takepicture extends AppCompatActivity {
     private EditText retrieveTextFromImage;
     private ImageView plate;
     private Bitmap bitmap;
-    private ProgressDialog mProgress;
     private TextRecognizer textRecognizer;
     private SparseArray<TextBlock> items;
     private Frame frame;
@@ -62,7 +61,6 @@ public class Takepicture extends AppCompatActivity {
         setContentView(R.layout.activity_takepicture);
 
         mStorageRef = FirebaseStorage.getInstance().getReferenceFromUrl("gs://hitch-guide-to-the-valais.appspot.com");
-        mProgress = new ProgressDialog(this);
 
         takePicture = (Button)findViewById(R.id.btn_takepicture);
         plate = (ImageView)findViewById(R.id.imageplate);
@@ -109,6 +107,8 @@ public class Takepicture extends AppCompatActivity {
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                 byte[] dataBAOS = baos.toByteArray();
 
+                final ProgressDialog mProgress = new ProgressDialog(Takepicture.this);
+
                 mProgress.setTitle("Uploading");
                 mProgress.show();
 
@@ -116,7 +116,7 @@ public class Takepicture extends AppCompatActivity {
 
                 SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-                filepath = mStorageRef.child(retrieveTextFromImage.getText().toString() + "/" + sdfDate.format(new Date()));
+                filepath = mStorageRef.child(retrieveTextFromImage.getText().toString().toUpperCase() + "/" + sdfDate.format(new Date()));
 
                 //upload image
 
