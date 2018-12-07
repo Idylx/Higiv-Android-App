@@ -1,15 +1,19 @@
 package ch.hes.it.higiv;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.telephony.SmsManager;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -36,13 +40,18 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
 import ch.hes.it.higiv.Account.LoginActivity;
+import ch.hes.it.higiv.Model.User;
 import ch.hes.it.higiv.Profile.ActivityProfile;
 import ch.hes.it.higiv.Travel.TravelActivity;
+import ch.hes.it.higiv.firebase.FirebaseCallBack;
+import ch.hes.it.higiv.firebase.UserConnection;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
 
     private FirebaseAuth auth;
+    private User user;
+    private String phoneNumber;
 
     private final int ERROR_DIALOG_REQUEST = 9001;
 
@@ -65,6 +74,7 @@ public class MainActivity extends AppCompatActivity
 
         // get the instance of firebase auhtentifcation
         auth = FirebaseAuth.getInstance();
+
 
 
         //get the toolbar
@@ -268,7 +278,35 @@ public class MainActivity extends AppCompatActivity
                 //bla bla
                 break;
             case R.id.nav_send_alert:
-                //bla bla
+                //Calls the Firebase Manager --> link to Firebase
+                UserConnection userConnection = new UserConnection();
+
+                //Calls the getUser methode from the manager and wait for the callback
+                userConnection.getUser(FirebaseAuth.getInstance().getUid(), new FirebaseCallBack() {
+                    @Override
+                    public void onCallBack(Object o) {
+                        user = (User)o;
+                        if(user != null){
+                            if(user.getEmergencyPhone().isEmpty()){
+                                //the phone number is not enter
+                                Toast.makeText(MainActivity.this, R.string.phoneNumberDontExist, Toast.LENGTH_SHORT).show();
+                            }else{
+                                phoneNumber = user.getEmergencyPhone();
+                                if (Build.VERSION.SDK_INT >= 23) {
+                                    if (!checkPermission()) {
+                                        //if not, request the permission to the user
+                                        requestPermission();
+                                    }
+                                }
+                                onCreateDialog().show();
+
+                            }
+                        }
+
+                    }
+
+                });
+
                 break;
             case R.id.nav_settings:
                 // bla bla
@@ -301,5 +339,67 @@ public class MainActivity extends AppCompatActivity
         super.onStop();
 
     }
+
+    public Dialog onCreateDialog() {
+        // Use the Builder class for convenient dialog construction
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setMessage(R.string.dialogSendMessage)
+                .setPositiveButton(R.string.dialogYes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //check if the permission is allow
+                        if (!checkPermission()) {
+                            //the permission is not allow
+                            Toast.makeText(MainActivity.this, R.string.permissionNotActivToast, Toast.LENGTH_SHORT).show();
+                        } else{
+
+                            String finalMessage = CreateMessage();
+                            //Send the SMS
+                            SmsManager.getDefault().sendTextMessage(phoneNumber, null, finalMessage, null, null);
+                            Toast.makeText(MainActivity.this, R.string.messageSendToast, Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                })
+                .setNegativeButton(R.string.dialogCancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User cancelled the dialog
+                    }
+                });
+        // Create the AlertDialog object and return it
+        return builder.create();
+    }
+
+    private boolean checkPermission() {
+        int result = ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.SEND_SMS);
+        if (result == PackageManager.PERMISSION_GRANTED) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    //method for request the permission to the user
+    private void requestPermission() {
+        ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.SEND_SMS}, 1);
+    }
+    private String CreateMessage() {
+        //create the text for the SMS
+        String alert = getString(R.string.messageContainAlert);
+        String statName = "";
+        String firstname = "";
+        String lastname = "";
+        String geolocalisation ="Unknown";
+        //Check if the user have enter the information
+        if(!user.getFirstname().isEmpty() || !user.getLastname().isEmpty()){
+            statName = getString(R.string.messageContainUser);
+        }
+        if(!user.getFirstname().isEmpty()){
+            firstname=user.getFirstname() + " ";
+        }
+        if(!user.getLastname().isEmpty()){
+            lastname=user.getLastname();
+        }
+        return alert + "\n" + firstname + lastname + " " + statName + "\n" + getString(R.string.messageContainLocalisation) + " " + geolocalisation;
+    }
+
 
 }
