@@ -70,7 +70,7 @@ public class TravelOnGoing extends Fragment {
         DestinationTv = (TextView) view.findViewById(R.id.destination_tv);
         CarPlateTv = (TextView) view.findViewById(R.id.car_plate_tv);
         NumberOfPersonTv = (TextView) view.findViewById(R.id.number_persons_tv);
-        plateString = ((TravelActivity)getActivity()).getIntent().getExtras().getString("Plate");
+
 
 
         //Calls the Firebase Manager --> link to Firebase
@@ -137,7 +137,7 @@ public class TravelOnGoing extends Fragment {
                                 Toast.makeText(getActivity().getApplicationContext(), R.string.phoneNumberDontExist, Toast.LENGTH_SHORT).show();
                             }
                             else{
-
+                                plateString = travel.getIdPlate();
                                 String finalMessage = CreateMessage();
                                 //Send the SMS
                                 SmsManager.getDefault().sendTextMessage(phoneNumber, null, finalMessage, null, null);
