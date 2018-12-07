@@ -51,30 +51,23 @@ public class TravelCreateFragment extends Fragment {
     //existing plate
     private Plate plateExisting ;
 
-
-
-
+    //current var
     private String numberPlate;
     private int nbPerson = 1;
 
-    private DataPassListener mCallback;
 
     // connection to firebase
     private TravelConnection travelConnection = new TravelConnection();
     private PlateConnection plateConnection = new PlateConnection();
 
 
-
-
-    public interface DataPassListener{
-        public void passData(String data);
-    }
-
+    private String travelID;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
+
 
 
         final View rootView = inflater.inflate(R.layout.fragment_travel_create, container, false);
@@ -130,6 +123,8 @@ public class TravelCreateFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
+                ((TravelActivity)getActivity()).getDeviceLocation();
+
                 //Checking if there isn't empty fields, and if it's the case set the focus on the empty field
                 if (TextUtils.isEmpty(inputDestination.getText())) {
                     Toast.makeText(getActivity(), R.string.enter_destination, Toast.LENGTH_SHORT).show();
@@ -143,18 +138,21 @@ public class TravelCreateFragment extends Fragment {
                     return;
                 }
 
+                // setting the travel information
                 travel = new Travel();
                 travel.setDestination(inputDestination.getText().toString());
                 travel.setNumberOfPerson(nbPerson);
                 travel.setIdUser(user.getUid());
                 travel.setTimeBegin(new SimpleDateFormat("dd-MM-yyyy kk:mm:ss").format(System.currentTimeMillis()));
 
-
-                final String travelUUID = UUID.randomUUID().toString();
-                ((TravelActivity)getActivity()).setIDtravel(travelUUID);
+                // create id for the travel
+                travelID = UUID.randomUUID().toString();
+                ((TravelActivity)getActivity()).setIDtravel(travelID);
 
                 numberPlate = inputPlateNumberState.getText().toString().toUpperCase() + inputPlateNumber.getText().toString().toUpperCase();
 
+
+                //get plate with current number plate
                 plateConnection.getPlate(numberPlate, new FirebaseCallBack() {
                     @Override
                     public void onCallBack(Object o) {
@@ -173,11 +171,16 @@ public class TravelCreateFragment extends Fragment {
                                 }
                             });
 
+                            //if exist set the existing id plate
                         }else{
                             travel.setIdPlate(plateExisting.getNumber());
                         }
 
-                        travelConnection.setTravel(travel, travelUUID);
+                        // set travel and locatioon
+                        travelConnection.setTravel(travel, travelID);
+                        travelConnection.setBeginLocationTravel(((TravelActivity) getActivity()).getCurrentLocation(), travelID);
+
+                        //create next fragment
                         ((TravelActivity) getActivity()).addFragmentToAdapter(new TravelOnGoing());
                         ((TravelActivity) getActivity()).setViewPager(1);
 

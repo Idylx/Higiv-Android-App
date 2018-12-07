@@ -79,6 +79,8 @@ public class TravelOnGoing extends Fragment {
 
         super.onStart();
 
+        // get current travel, cannot be on create view
+        // need to be call during the start
         travelConnection.getTravel(idTravel, new FirebaseCallBack() {
             @Override
             public void onCallBack(Object o) {

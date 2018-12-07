@@ -1,11 +1,6 @@
 package ch.hes.it.higiv.firebase;
 
-import android.support.annotation.NonNull;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
+import android.location.Location;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -39,6 +34,22 @@ public class TravelConnection extends FirebaseConnection {
     mDatabaseReference.child("travels").child(idTravel).child("timeEnd").setValue(travel.getTimeEnd());
     }
 
+    public void setBeginLocationTravel(Location location, String idTravel) {
+        mDatabaseReference.child("travels").child(idTravel).child("beginLocation").child("accuracy").setValue(location.getAccuracy());
+        mDatabaseReference.child("travels").child(idTravel).child("beginLocation").child("latitude").setValue(location.getLatitude());
+        mDatabaseReference.child("travels").child(idTravel).child("beginLocation").child("longitude").setValue(location.getLongitude());
+    }
+
+    public void setEndLocationTravel(Location location, String idTravel) {
+        mDatabaseReference.child("travels").child(idTravel).child("endLocation").child("accuracy").setValue(location.getAccuracy());
+        mDatabaseReference.child("travels").child(idTravel).child("endLocation").child("latitude").setValue(location.getLatitude());
+        mDatabaseReference.child("travels").child(idTravel).child("endLocation").child("longitude").setValue(location.getLongitude());
+    }
+    public void setLastLocationTravel(Location location, String idTravel) {
+        mDatabaseReference.child("travels").child(idTravel).child("endLocation").child("accuracy").setValue(location.getAccuracy());
+        mDatabaseReference.child("travels").child(idTravel).child("endLocation").child("latitude").setValue(location.getLatitude());
+        mDatabaseReference.child("travels").child(idTravel).child("endLocation").child("longitude").setValue(location.getLongitude());
+    }
 
 
 }

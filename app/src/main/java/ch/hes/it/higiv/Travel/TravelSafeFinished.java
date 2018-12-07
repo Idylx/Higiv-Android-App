@@ -48,26 +48,16 @@ public class TravelSafeFinished extends Fragment {
             }
         });
 
-
-
-
-
-
         goodEvalButton = (ImageButton) view.findViewById(R.id.imageButtonYes);
 
         goodEvalButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                travel.setTimeEnd(new SimpleDateFormat("dd-MM-yyyy kk:mm:ss").format(System.currentTimeMillis()));
-                travelConnection.setEndTravel(travel, ((TravelActivity) getActivity()).getidTravel());
-
+                setEndTravel();
                 plateConnection.setGoodEvaluation(plate);
 
-
-                ((TravelActivity)getActivity()).finishActivity();
-
-
+                // end activity
+                ((TravelActivity)getActivity()).finish();
             }
         });
         badEvalButton = (ImageButton) view.findViewById(R.id.imageButtonNo);
@@ -75,18 +65,28 @@ public class TravelSafeFinished extends Fragment {
         badEvalButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                travel.setTimeEnd(new SimpleDateFormat("dd-MM-yyyy kk:mm:ss").format(System.currentTimeMillis()));
-                travelConnection.setEndTravel(travel, ((TravelActivity) getActivity()).getidTravel());
+                setEndTravel();
                 plateConnection.setBadEvaluation(plate);
 
-                // end the activity
+                // end activity
                 ((TravelActivity)getActivity()).finish();
             }
         });
 
         return  view;
 
+    }
+
+
+    private void setEndTravel(){
+        // get device location
+        ((TravelActivity)getActivity()).getDeviceLocation();
+
+
+        // set end travel information
+        travel.setTimeEnd(new SimpleDateFormat("dd-MM-yyyy kk:mm:ss").format(System.currentTimeMillis()));
+        travelConnection.setEndTravel(travel, ((TravelActivity) getActivity()).getidTravel());
+        travelConnection.setEndLocationTravel(((TravelActivity) getActivity()).getCurrentLocation(), ((TravelActivity) getActivity()).getidTravel());
     }
 
 }
