@@ -1,11 +1,16 @@
 package ch.hes.it.higiv.TestPicture;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -64,6 +69,14 @@ public class Takepicture extends AppCompatActivity {
         savePlateNumber = (Button)findViewById(R.id.btn_savePlateNumber);
         retrieveTextFromImage = (EditText) findViewById(R.id.retrieveTextImage);
 
+
+        //check if the permission is already allow
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (!checkPermissions()) {
+                //if not, request the permission to the user
+                requestPermissions();
+            }
+        }
 
         // Button that opens the camera
         takePicture.setOnClickListener(new View.OnClickListener()
@@ -188,5 +201,25 @@ public class Takepicture extends AppCompatActivity {
         }
     }
 
-    
+    //Check the permissions for the camera and storage
+    private boolean checkPermissions() {
+        String[] result = {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
+        if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
+                result[0]) == PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(this.getApplicationContext(),
+                result[1]) == PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(this.getApplicationContext(),
+                result[2]) == PackageManager.PERMISSION_GRANTED) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    //method for request the permission to the user
+    private void requestPermissions() {
+        ActivityCompat.requestPermissions(Takepicture.this, new String[]{Manifest.permission.CAMERA,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+    }
+
 }
