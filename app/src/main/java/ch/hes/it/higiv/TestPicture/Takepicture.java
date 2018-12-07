@@ -91,7 +91,7 @@ public class Takepicture extends AppCompatActivity {
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                     byte[] dataBAOS = baos.toByteArray();
-                    
+
                     mProgress.setTitle("Uploading");
                     mProgress.show();
 
