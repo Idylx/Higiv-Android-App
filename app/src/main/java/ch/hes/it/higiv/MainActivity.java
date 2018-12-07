@@ -1,6 +1,7 @@
 package ch.hes.it.higiv;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -41,6 +42,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import ch.hes.it.higiv.Account.LoginActivity;
 import ch.hes.it.higiv.Model.User;
+import ch.hes.it.higiv.PermissionsServices.PermissionsServices;
 import ch.hes.it.higiv.Profile.ActivityProfile;
 import ch.hes.it.higiv.Travel.TravelActivity;
 import ch.hes.it.higiv.firebase.FirebaseCallBack;
@@ -60,6 +62,7 @@ public class MainActivity extends AppCompatActivity
     private final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
     private final float DEFAULT_ZOOM = 15f;
 
+    private PermissionsServices permissionsServices = new PermissionsServices();
 
     private Boolean mLocationPermissionGranted = false;
     private GoogleMap mMap;
@@ -120,8 +123,9 @@ public class MainActivity extends AppCompatActivity
         userName.setText(auth.getCurrentUser().getDisplayName());
 
         //For the map
-        isServicesOK();
-        getLocationPermission();
+        if(isServicesOK()){
+            getLocationPermission();
+        }
 
     }
 
@@ -142,26 +146,19 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void getDeviceLocation() {
-        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
-        try {
-            if (mLocationPermissionGranted) {
-                final Task location = mFusedLocationProviderClient.getLastLocation();
-                location.addOnCompleteListener(new OnCompleteListener() {
-                    @Override
-                    public void onComplete(@NonNull Task task) {
-                        if (task.isSuccessful()) {
-                            Location currentLocation = (Location) task.getResult();
-                            moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), DEFAULT_ZOOM);
-                        } else {
-                            Toast.makeText(MainActivity.this, R.string.NoDeviceLocation, Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+        permissionsServices.getDeviceLocation(this, mLocationPermissionGranted, new FirebaseCallBack() {
+            @Override
+            public void onCallBack(Object o) {
+                Task task = (Task) o;
+                if (task.isSuccessful()) {
+                    Location currentLocation = (Location) task.getResult();
+                    moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), DEFAULT_ZOOM);
+                } else {
+                    Toast.makeText(MainActivity.this, R.string.NoDeviceLocation, Toast.LENGTH_SHORT).show();
+                }
             }
-
-        } catch (SecurityException e) {
-        }
+        });
     }
 
     private void moveCamera(LatLng latLng, float zoom) {
@@ -206,16 +203,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     public boolean isServicesOK(){
-        int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(MainActivity.this);
-        if(available == ConnectionResult.SUCCESS){
-            return true;
-        } else if(GoogleApiAvailability.getInstance().isUserResolvableError(available) ){
-            Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(MainActivity.this, available, ERROR_DIALOG_REQUEST );
-            dialog.show();
-        } else {
-            Toast.makeText(this, R.string.WrongServicesMap, Toast.LENGTH_SHORT).show();
-        }
-        return false;
+            return permissionsServices.isServicesMapOK(this);
     }
 
 
@@ -371,12 +359,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private boolean checkPermission() {
-        int result = ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.SEND_SMS);
-        if (result == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        } else {
-            return false;
-        }
+        return permissionsServices.isServicesSMSOK(this);
     }
     //method for request the permission to the user
     private void requestPermission() {
