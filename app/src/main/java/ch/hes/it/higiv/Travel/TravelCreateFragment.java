@@ -42,9 +42,6 @@ import ch.hes.it.higiv.firebase.TravelConnection;
 
 
 public class TravelCreateFragment extends Fragment {
-
-    //Access the database
-    private DatabaseReference mDatabaseReference = FirebaseDatabase.getInstance().getReference();
     //Access the current user
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private EditText  inputPlateNumberState, inputPlateNumber;
@@ -190,13 +187,8 @@ public class TravelCreateFragment extends Fragment {
                             plate = new Plate();
                             plate.setNumber(numberPlate);
                             //Insertion of the object Plate in firebase
-                            mDatabaseReference.child("plates").child(numberPlate).setValue(plate).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    travel.setIdPlate(numberPlate);
-                                }
-                            });
-
+                            plateConnection.setPlate(plate, numberPlate);
+                            travel.setIdPlate(numberPlate);
                             //if exist set the existing id plate
                         }else{
                             travel.setIdPlate(plateExisting.getNumber());
