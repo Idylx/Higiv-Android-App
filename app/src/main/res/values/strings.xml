@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Higiv</string>
+    <string name="app_name">HIGIV</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password (optional)</string>
     <string name="action_sign_in">Sign in or register</string>
@@ -7,9 +7,7 @@
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
-    <string name="permission_rationale">"Contacts permissions are needed for providing email
-        completions."
-    </string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email completions."</string>
     <string name="action_sign_in_short">Register</string>
     <string name="email">Email</string>
     <string name="minimum_password">Password too short, enter minimum 6 characters!</string>
@@ -24,9 +22,9 @@
     <string name="hint_email">Email</string>
     <string name="hint_password">Password</string>
     <string name="hint_name">Fullname</string>
-    <string name="btn_login">LOGIN</string>
+    <string name="btn_login">LOG IN</string>
     <string name="btn_link_to_register">Register me !</string>
-    <string name="btn_link_to_login">Already registered. Login Me!</string>
+    <string name="btn_link_to_login">I already have an account. Login me!</string>
     <string name="title_activity_reset_password">ResetPasswordActivity</string>
     <string name="btn_forgot_password">Forgot your password?</string>
     <string name="btn_reset_password">Reset Password</string>
@@ -37,9 +35,48 @@
     <string name="btn_remove">Remove</string>
     <string name="btn_sign_out">Sign Out</string>
     <string name="lbl_forgot_password">Forgot password?</string>
-    <string name="forgot_password_msg">We just need your registered Email Id to sent you password reset instructions.</string>
+    <string name="lbl_create_account">Create my account</string>
+    <string name="forgot_password_msg">We just need your registered Email to sent you password reset instructions.</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_logout">Log out</string>
+    <string name="travel">Travel</string>
+    <string name="find_spot">Find spot</string>
+    <string name="send_alert">Send alert</string>
+    <string name="nav_application">Application</string>
+    <string name="nav_about">About</string>
+    <string name="edit_profil">Edit profil</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
+
+    <!-- Edit User page -->
+    <string name="FirstnameEditPage">Firstname</string>
+    <string name="LastnameEditPage">Lastname</string>
+    <string name="EmailEditPage">Email</string>
+    <string name="GenderEditPage">Gender</string>
+    <string name="PasswordEditPage">Password</string>
+    <string name="EditButtonEditPage">Save</string>
+    <string name="MenEditPage">Men</string>
+    <string name="womenEditPage">Women</string>
+    <string name="otherEditPage">Others</string>
+    <string name="ProfilVerificationToast">Please fill up all the fields</string>
+
+    <!-- Detail User page -->
+    <string name="EmailDetailProfil">Email:</string>
+    <string name="GenderDetailProfil">Gender:</string>
+    <string name="EditButtonDetailProfile">Edit Profile</string>
+    <string name="ProfileLabelDetailProfile">Profile</string>
+    <string name="ResetPwdButton">Reset Password</string>
+    <string name="GenderMale">Mr.</string>
+    <string name="GenderFemale">Ms.</string>
+    <string name="GenderOther">Other</string>
+
+
+    <!-- Travel -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="destination">Destination</string>
     <string name="plate_number">Number plate</string>
@@ -59,4 +96,12 @@
     <string name="btn_cancel_travel">Cancel</string>
     <string name="travel_overview">Travel overview</string>
     <string name="car_plate">Car plate</string>
+
+    <!-- Sign Up -->
+    <string name="SignUp_EnterEmail">Enter email address!</string>
+    <string name="SignUp_EnterPwd">Enter password!</string>
+    <string name="SignUp_WrongPwd">Password too short, enter at least 6 characters!</string>
+    <string name="SignUp_SuccessfulCreation">Account successfully created!</string>
+    <string name="SignUp_AuthFailed">Authentification failed!</string>
+
 </resources>

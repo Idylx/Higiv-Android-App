@@ -9,18 +9,23 @@ public class Travel {
     @NonNull
     private String state;
     @NonNull
-    private int numberPlate;
+    private String idPlate;
     @NonNull
     private int numberOfPerson;
     @NonNull
     private String idUser;
 
+    // geoloc start
+    // geoloc end travel
+    // date heure begin travel
+    // date heure travel
+
     public Travel (){}
 
-    public Travel(String destination, String state, int numberPlate, int numberOfPerson, String idUser) {
+    public Travel(String destination, String state, String idPlate, int numberOfPerson, String idUser) {
         this.destination = destination;
         this.state = state;
-        this.numberPlate = numberPlate;
+        this.idPlate = idPlate;
         this.numberOfPerson = numberOfPerson;
         this.idUser = idUser;
     }
@@ -42,12 +47,12 @@ public class Travel {
         this.state = state;
     }
 
-    public int getNumberPlate() {
-        return numberPlate;
+    public String getIdPlate() {
+        return idPlate;
     }
 
-    public void setNumberPlate(int numberPlate) {
-        this.numberPlate = numberPlate;
+    public void setIdPlate(String idPlate) {
+        this.idPlate = idPlate;
     }
 
     public int getNumberOfPerson() {
@@ -70,7 +75,7 @@ public class Travel {
     public String toString() {
         return "Description: "  + destination +
                 "State: "  + state +
-                "Number plate: "  + numberPlate +
+                "Number plate: "  + idPlate +
                 "Number of person: "  + numberOfPerson +
                 "\n"+ "IdUser: " + idUser;
     }

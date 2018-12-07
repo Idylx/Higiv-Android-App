@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_create_travel"
+            android:icon="@drawable/ic_directions_car_black_24dp"
+            android:title="@string/travel" />
+        <item
+            android:id="@+id/nav_find_spot"
+            android:icon="@drawable/ic_place_black_24dp"
+            android:title="@string/find_spot" />
+        <item
+            android:id="@+id/nav_send_alert"
+            android:icon="@drawable/ic_warning_black_24dp"
+            android:title="@string/send_alert" />
+
+    </group>
+
+    <item android:title="@string/nav_application">
+        <menu>
+            <item
+                android:id="@+id/nav_settings"
+                android:icon="@drawable/ic_settings_black_24dp"
+                android:title="@string/action_settings" />
+            <item
+                android:id="@+id/nav_about"
+                android:icon="@drawable/ic_help_black_24dp"
+                android:title="@string/nav_about" />
+
+        </menu>
+    </item>
+
+</menu>
