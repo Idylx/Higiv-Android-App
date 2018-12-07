@@ -1,8 +1,19 @@
 package ch.hes.it.higiv;
 
+import android.Manifest;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
+import android.location.Location;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.telephony.SmsManager;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,17 +24,46 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
 import ch.hes.it.higiv.Account.LoginActivity;
+import ch.hes.it.higiv.Model.User;
 import ch.hes.it.higiv.Profile.ActivityProfile;
 import ch.hes.it.higiv.Travel.TravelActivity;
+import ch.hes.it.higiv.firebase.FirebaseCallBack;
+import ch.hes.it.higiv.firebase.UserConnection;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
 
     private FirebaseAuth auth;
+    private User user;
+    private String phoneNumber;
+
+    private final int ERROR_DIALOG_REQUEST = 9001;
+
+    private final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
+    private final String COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
+    private final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
+    private final float DEFAULT_ZOOM = 15f;
+
+
+    private Boolean mLocationPermissionGranted = false;
+    private GoogleMap mMap;
+    private FusedLocationProviderClient mFusedLocationProviderClient;
 
 
     @Override
@@ -69,7 +109,7 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         //get view header
-        View header =navigationView.getHeaderView(0);
+        View header = navigationView.getHeaderView(0);
 
         //modifying textView to see login email
         TextView emailUser = header.findViewById(R.id.textView_navbar_emailUser);
@@ -79,6 +119,103 @@ public class MainActivity extends AppCompatActivity
         TextView userName = header.findViewById(R.id.textView_navbar_nameUser);
         userName.setText(auth.getCurrentUser().getDisplayName());
 
+        //For the map
+        isServicesOK();
+        getLocationPermission();
+
+    }
+
+    public void getLocationPermission() {
+        String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
+
+        if (ContextCompat.checkSelfPermission(this.getApplicationContext(), FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(this.getApplicationContext(), COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                mLocationPermissionGranted = true;
+                initMap();
+            } else {
+                ActivityCompat.requestPermissions(this, permissions, LOCATION_PERMISSION_REQUEST_CODE);
+            }
+        } else {
+            ActivityCompat.requestPermissions(this, permissions, LOCATION_PERMISSION_REQUEST_CODE);
+        }
+
+    }
+
+    private void getDeviceLocation() {
+        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+
+        try {
+            if (mLocationPermissionGranted) {
+                final Task location = mFusedLocationProviderClient.getLastLocation();
+                location.addOnCompleteListener(new OnCompleteListener() {
+                    @Override
+                    public void onComplete(@NonNull Task task) {
+                        if (task.isSuccessful()) {
+                            Location currentLocation = (Location) task.getResult();
+                            moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), DEFAULT_ZOOM);
+                        } else {
+                            Toast.makeText(MainActivity.this, R.string.NoDeviceLocation, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+
+        } catch (SecurityException e) {
+        }
+    }
+
+    private void moveCamera(LatLng latLng, float zoom) {
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+        getDeviceLocation();
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        mMap.setMyLocationEnabled(true);
+    }
+
+    public void initMap(){
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(MainActivity.this);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        mLocationPermissionGranted = false;
+
+        switch (requestCode){
+            case LOCATION_PERMISSION_REQUEST_CODE:
+                if(grantResults.length > 0){
+                    for(int i = 0; i < grantResults.length; i++){
+                        if(grantResults[i] != PackageManager.PERMISSION_GRANTED){
+                            mLocationPermissionGranted = false;
+                            return;
+                        }
+                    }
+                    mLocationPermissionGranted = true;
+                    //initialize map
+                    initMap();
+                }
+        }
+    }
+
+    public boolean isServicesOK(){
+        int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(MainActivity.this);
+        if(available == ConnectionResult.SUCCESS){
+            return true;
+        } else if(GoogleApiAvailability.getInstance().isUserResolvableError(available) ){
+            Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(MainActivity.this, available, ERROR_DIALOG_REQUEST );
+            dialog.show();
+        } else {
+            Toast.makeText(this, R.string.WrongServicesMap, Toast.LENGTH_SHORT).show();
+        }
+        return false;
     }
 
 
@@ -142,7 +279,35 @@ public class MainActivity extends AppCompatActivity
                 //bla bla
                 break;
             case R.id.nav_send_alert:
-                //bla bla
+                //Calls the Firebase Manager --> link to Firebase
+                UserConnection userConnection = new UserConnection();
+
+                //Calls the getUser methode from the manager and wait for the callback
+                userConnection.getUser(FirebaseAuth.getInstance().getUid(), new FirebaseCallBack() {
+                    @Override
+                    public void onCallBack(Object o) {
+                        user = (User)o;
+                        if(user != null){
+                            if(user.getEmergencyPhone().isEmpty()){
+                                //the phone number is not enter
+                                Toast.makeText(MainActivity.this, R.string.phoneNumberDontExist, Toast.LENGTH_SHORT).show();
+                            }else{
+                                phoneNumber = user.getEmergencyPhone();
+                                if (Build.VERSION.SDK_INT >= 23) {
+                                    if (!checkPermission()) {
+                                        //if not, request the permission to the user
+                                        requestPermission();
+                                    }
+                                }
+                                onCreateDialog().show();
+
+                            }
+                        }
+
+                    }
+
+                });
+
                 break;
             case R.id.nav_settings:
                 // bla bla
@@ -176,7 +341,66 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    public Dialog onCreateDialog() {
+        // Use the Builder class for convenient dialog construction
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setMessage(R.string.dialogSendMessage)
+                .setPositiveButton(R.string.dialogYes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //check if the permission is allow
+                        if (!checkPermission()) {
+                            //the permission is not allow
+                            Toast.makeText(MainActivity.this, R.string.permissionNotActivToast, Toast.LENGTH_SHORT).show();
+                        } else{
 
+                            String finalMessage = CreateMessage();
+                            //Send the SMS
+                            SmsManager.getDefault().sendTextMessage(phoneNumber, null, finalMessage, null, null);
+                            Toast.makeText(MainActivity.this, R.string.messageSendToast, Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                })
+                .setNegativeButton(R.string.dialogCancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User cancelled the dialog
+                    }
+                });
+        // Create the AlertDialog object and return it
+        return builder.create();
+    }
+
+    private boolean checkPermission() {
+        int result = ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.SEND_SMS);
+        if (result == PackageManager.PERMISSION_GRANTED) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    //method for request the permission to the user
+    private void requestPermission() {
+        ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.SEND_SMS}, 1);
+    }
+    private String CreateMessage() {
+        //create the text for the SMS
+        String alert = getString(R.string.messageContainAlert);
+        String statName = "";
+        String firstname = "";
+        String lastname = "";
+        String geolocalisation ="Unknown";
+        //Check if the user have enter the information
+        if(!user.getFirstname().isEmpty() || !user.getLastname().isEmpty()){
+            statName = getString(R.string.messageContainUser);
+        }
+        if(!user.getFirstname().isEmpty()){
+            firstname=user.getFirstname() + " ";
+        }
+        if(!user.getLastname().isEmpty()){
+            lastname=user.getLastname();
+        }
+        return alert + "\n" + firstname + lastname + " " + statName + "\n" + getString(R.string.messageContainLocalisation) + " " + geolocalisation;
+    }
 
 
 }

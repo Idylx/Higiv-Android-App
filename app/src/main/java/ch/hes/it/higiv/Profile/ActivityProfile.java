@@ -27,7 +27,6 @@ public class ActivityProfile extends AppCompatActivity {
     //Sets the adapter to the viewpager.
     public void setUpViewPager(ViewPager viewPager) {
         EditStateSectionAdapter adapter = new EditStateSectionAdapter(getSupportFragmentManager());
-        adapter.addFragmentToList(new DetailProfilFragment());
         adapter.addFragmentToList(new EditProfilFragment());
 
         viewPager.setAdapter(adapter);

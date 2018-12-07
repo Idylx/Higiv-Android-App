@@ -1,5 +1,6 @@
 package ch.hes.it.higiv.Profile;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -18,6 +19,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import ch.hes.it.higiv.MainActivity;
 import ch.hes.it.higiv.Model.User;
 import ch.hes.it.higiv.R;
 import ch.hes.it.higiv.firebase.FirebaseAuthentication;
@@ -29,9 +31,13 @@ public class EditProfilFragment extends Fragment {
     private EditText FirstnameLabel;
     private EditText LastnameLabel;
     private EditText EmailLabel;
+    private EditText PhoneLabel;
 
     private Button ResetButton;
     private Button EditButton;
+
+    //Testing
+    private Button DeleteButton;
 
     private RadioGroup radioGroup;
     private RadioButton RadioMen;
@@ -55,6 +61,7 @@ public class EditProfilFragment extends Fragment {
         FirstnameLabel = (EditText) view.findViewById(R.id.FirstnameLabel);
         LastnameLabel = (EditText) view.findViewById(R.id.LastnameLabel);
         EmailLabel = (EditText) view.findViewById(R.id.EmailLabel);
+        PhoneLabel = (EditText) view.findViewById(R.id.PhoneLabel);
 
         EmailLabel.setText(FirebaseAuth.getInstance().getCurrentUser().getEmail());
 
@@ -67,14 +74,17 @@ public class EditProfilFragment extends Fragment {
         radioGroup = (RadioGroup) view .findViewById(R.id.radioGroup);
 
         EditButton = (Button) view.findViewById(R.id.EditButton);
-
         ResetButton = view.findViewById(R.id.resetButton);
+
+        //Testing
+        DeleteButton = (Button) view.findViewById(R.id.deleteButton);
 
         FirstnameLabel.setText("");
         LastnameLabel.setText("");
+        PhoneLabel.setText("");
 
         //Manager for Firebase Called
-        UserConnection userConnection = new UserConnection();
+        final UserConnection userConnection = new UserConnection();
         //Method from manager to retrieve the user
         userConnection.getUser(FirebaseAuth.getInstance().getUid(), new FirebaseCallBack() {
             @Override
@@ -83,6 +93,7 @@ public class EditProfilFragment extends Fragment {
                 if(user != null){
                     FirstnameLabel.setText(user.getFirstname());
                     LastnameLabel.setText(user.getLastname());
+                    PhoneLabel.setText(user.getEmergencyPhone());
                     gender= user.getGender();
                     if(user.getGender()!= null){
                         switch(gender) {
@@ -128,22 +139,35 @@ public class EditProfilFragment extends Fragment {
             }
         });
 
+        DeleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                userConnection.deleteUser(getActivity(), userAuth);
+            }
+        });
+
 
         EditButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(allInputFilled()){
+                //if(allInputFilled()){
                     //Update Email in Firebase
                     userAuth.updateEmail(EmailLabel.getText().toString());
-                    final User theUser = getUserFromFragment(FirstnameLabel.getText().toString(), LastnameLabel.getText().toString(), gender);
+                    final User theUser = getUserFromFragment(FirstnameLabel.getText().toString(), LastnameLabel.getText().toString(),PhoneLabel.getText().toString(), gender);
                     //calls the edit method from the manager of Firebase
                     connectionDatabase.editUser(theUser);
+
                     //Go back to profile fragment
                     ((ActivityProfile)getActivity()).setViewPager(0);
-                }
-                else{
-                    Toast.makeText(getActivity(), R.string.ProfilVerificationToast, Toast.LENGTH_SHORT).show();
-                }
+                    getActivity().getFragmentManager().popBackStackImmediate();
+                    Toast.makeText(getActivity(), "Saved!", Toast.LENGTH_SHORT).show();
+
+                    Intent intent = new Intent(getActivity(), MainActivity.class);
+                    startActivity(intent);
+                //}
+                //else{
+                 //   Toast.makeText(getActivity(), R.string.ProfilVerificationToast, Toast.LENGTH_SHORT).show();
+                //}
             }
         });
 
@@ -175,17 +199,19 @@ public class EditProfilFragment extends Fragment {
     }
     public boolean allInputFilled(){
         boolean isFilled=true;
-        if(FirstnameLabel.getText().toString().equals("")||LastnameLabel.getText().toString().equals("")|| radioGroup.getCheckedRadioButtonId()==-1){
+        if(FirstnameLabel.getText().toString().equals("")||LastnameLabel.getText().toString().equals("")|| PhoneLabel.getText().toString().equals("")|| radioGroup.getCheckedRadioButtonId()==-1){
             isFilled=false;
         }
        return isFilled;
     }
 
-    public User getUserFromFragment(String firstname, String lastname, String gender){
+    public User getUserFromFragment(String firstname, String lastname, String phone, String gender){
+
         User user = new User();
         user.setFirstname(firstname);
         user.setLastname(lastname);
         user.setGender(gender);
+        user.setEmergencyPhone(phone);
         return user;
     }
 

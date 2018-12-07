@@ -60,10 +60,13 @@
     <string name="GenderEditPage">Gender</string>
     <string name="PasswordEditPage">Password</string>
     <string name="EditButtonEditPage">Save</string>
-    <string name="MenEditPage">Men</string>
-    <string name="womenEditPage">Women</string>
+    <string name="MenEditPage">Man</string>
+    <string name="womenEditPage">Woman</string>
     <string name="otherEditPage">Others</string>
     <string name="ProfilVerificationToast">Please fill up all the fields</string>
+    <string name="DeleteProfil">deleted profile</string>
+    <string name="DeleteUserButton">Delete User</string>
+    <string name="PhoneEditPage">Emergency phone</string>
 
     <!-- Detail User page -->
     <string name="EmailDetailProfil">Email:</string>
@@ -97,11 +100,29 @@
     <string name="travel_overview">Travel overview</string>
     <string name="car_plate">Car plate</string>
 
+    <!--Send message-->
+    <string name="dialogSendMessage">Do you really want to send an alert message?</string>
+    <string name="dialogYes">Yes</string>
+    <string name="dialogCancel">Cancel</string>
+    <string name="messageSendToast">MessageSend</string>
+    <string name="permissionNotActivToast">Activ permission for access to the SMS</string>
+    <string name="phoneNumberDontExist">You did not enter a phone number!</string>
+    <string name="messageContainAlert">-----ALERT-----</string>
+    <string name="messageContainUser">is in danger!</string>
+    <string name="messageContainPlate">Plate number:</string>
+    <string name="messageContainLocalisation">Geolocation at the time of the alert:</string>
+
+
     <!-- Sign Up -->
     <string name="SignUp_EnterEmail">Enter email address!</string>
     <string name="SignUp_EnterPwd">Enter password!</string>
     <string name="SignUp_WrongPwd">Password too short, enter at least 6 characters!</string>
     <string name="SignUp_SuccessfulCreation">Account successfully created!</string>
     <string name="SignUp_AuthFailed">Authentification failed!</string>
+
+    <!-- Maps -->
+    <string name="WrongServicesMap">You can\'t make map requests</string>
+    <string name="NoDeviceLocation">Unable to retrieve device location</string>
+
 
 </resources>
