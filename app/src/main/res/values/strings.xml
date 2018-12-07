@@ -60,8 +60,8 @@
     <string name="GenderEditPage">Gender</string>
     <string name="PasswordEditPage">Password</string>
     <string name="EditButtonEditPage">Save</string>
-    <string name="MenEditPage">Men</string>
-    <string name="womenEditPage">Women</string>
+    <string name="MenEditPage">Man</string>
+    <string name="womenEditPage">Woman</string>
     <string name="otherEditPage">Others</string>
     <string name="ProfilVerificationToast">Please fill up all the fields</string>
     <string name="DeleteProfil">deleted profile</string>
@@ -119,6 +119,10 @@
     <string name="SignUp_WrongPwd">Password too short, enter at least 6 characters!</string>
     <string name="SignUp_SuccessfulCreation">Account successfully created!</string>
     <string name="SignUp_AuthFailed">Authentification failed!</string>
+
+    <!-- Maps -->
+    <string name="WrongServicesMap">You can\'t make map requests</string>
+    <string name="NoDeviceLocation">Unable to retrieve device location</string>
 
 
 </resources>

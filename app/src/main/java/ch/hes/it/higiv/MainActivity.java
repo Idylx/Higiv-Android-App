@@ -152,7 +152,7 @@ public class MainActivity extends AppCompatActivity
                             Location currentLocation = (Location) task.getResult();
                             moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), DEFAULT_ZOOM);
                         } else {
-                            Toast.makeText(MainActivity.this, "Unable to retrieve device location", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this, R.string.NoDeviceLocation, Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -181,7 +181,6 @@ public class MainActivity extends AppCompatActivity
     public void initMap(){
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(MainActivity.this);
-        Toast.makeText(this, "Map is ready", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -212,7 +211,7 @@ public class MainActivity extends AppCompatActivity
             Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(MainActivity.this, available, ERROR_DIALOG_REQUEST );
             dialog.show();
         } else {
-            Toast.makeText(this, "You can't make map requests", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.WrongServicesMap, Toast.LENGTH_SHORT).show();
         }
         return false;
     }
