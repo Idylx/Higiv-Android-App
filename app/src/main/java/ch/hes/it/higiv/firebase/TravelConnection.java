@@ -1,6 +1,6 @@
 package ch.hes.it.higiv.firebase;
 
-import com.google.firebase.auth.FirebaseAuth;
+import android.location.Location;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -13,17 +13,8 @@ public class TravelConnection extends FirebaseConnection {
         super();
     }
 
-    //Method called from any activity to edit or add the user's information
-    public void editTravel(Travel travel){
-        String uid = FirebaseAuth.getInstance().getUid();
-        mDatabaseReference.child("travels").child(uid).child("numberOfPerson").setValue(travel.getNumberOfPerson());
-        mDatabaseReference.child("travels").child(uid).child("destination").setValue(travel.getDestination());
-        mDatabaseReference.child("travels").child(uid).child("idPlate").setValue(travel.getIdPlate());
-        mDatabaseReference.child("travels").child(uid).child("idUser").setValue(travel.getIdUser());
-    }
-
-    public void getTravel(String tid, final FirebaseCallBack firebaseCallBack){
-        mDatabaseReference.child("travels").child(tid).addValueEventListener(new ValueEventListener() {
+    public void getTravel(String uid, final FirebaseCallBack firebaseCallBack){
+        mDatabaseReference.child("travels").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Travel travel = dataSnapshot.getValue(Travel.class);
@@ -33,6 +24,31 @@ public class TravelConnection extends FirebaseConnection {
             public void onCancelled(DatabaseError databaseError) {
             }
         });
+    }
+
+    public void setTravel(Travel travel, String uid){
+        mDatabaseReference.child("travels").child(uid).setValue(travel);
+    }
+
+    public void setEndTravel(Travel travel, String idTravel) {
+    mDatabaseReference.child("travels").child(idTravel).child("timeEnd").setValue(travel.getTimeEnd());
+    }
+
+    public void setBeginLocationTravel(Location location, String idTravel) {
+        mDatabaseReference.child("travels").child(idTravel).child("beginLocation").child("accuracy").setValue(location.getAccuracy());
+        mDatabaseReference.child("travels").child(idTravel).child("beginLocation").child("latitude").setValue(location.getLatitude());
+        mDatabaseReference.child("travels").child(idTravel).child("beginLocation").child("longitude").setValue(location.getLongitude());
+    }
+
+    public void setEndLocationTravel(Location location, String idTravel) {
+        mDatabaseReference.child("travels").child(idTravel).child("endLocation").child("accuracy").setValue(location.getAccuracy());
+        mDatabaseReference.child("travels").child(idTravel).child("endLocation").child("latitude").setValue(location.getLatitude());
+        mDatabaseReference.child("travels").child(idTravel).child("endLocation").child("longitude").setValue(location.getLongitude());
+    }
+    public void setLastLocationTravel(Location location, String idTravel) {
+        mDatabaseReference.child("travels").child(idTravel).child("endLocation").child("accuracy").setValue(location.getAccuracy());
+        mDatabaseReference.child("travels").child(idTravel).child("endLocation").child("latitude").setValue(location.getLatitude());
+        mDatabaseReference.child("travels").child(idTravel).child("endLocation").child("longitude").setValue(location.getLongitude());
     }
 
 

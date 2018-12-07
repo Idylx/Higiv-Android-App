@@ -9,11 +9,6 @@ public class Plate {
     private String number;
 
 
-
-
-    @NonNull
-    private String uid;
-
     private int noGoodEvaluation;
     private int noBadEvaluation;
 
@@ -48,13 +43,7 @@ public class Plate {
     public void setNumber(String number) {
         this.number = number;
     }
-    public String getUid() {
-        return uid;
-    }
 
-    public void setUid(String uid) {
-        this.uid = uid;
-    }
 
 
     public String toString() {

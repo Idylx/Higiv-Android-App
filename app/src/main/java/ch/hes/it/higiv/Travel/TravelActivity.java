@@ -1,19 +1,39 @@
 package ch.hes.it.higiv.Travel;
 
+
+import android.location.Location;
+import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.Toast;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 
 import ch.hes.it.higiv.R;
 
 
 public class TravelActivity extends AppCompatActivity {
 
-    ViewPager viewPager;
-    private String uuid = "";
-    private String uuidPlate = "";
-    TravelStateSectionAdapter adapter = new TravelStateSectionAdapter(getSupportFragmentManager());
 
+
+    private Boolean mLocationPermissionGranted = true;
+    private FusedLocationProviderClient mFusedLocationProviderClient;
+
+
+
+    Location currentLocation;
+
+
+    private static final String TAG = "Travel Activity";
+
+    ViewPager viewPager;
+    private String idTravel = "";
+
+    TravelStateSectionAdapter adapter = new TravelStateSectionAdapter(getSupportFragmentManager());
 
 
     @Override
@@ -23,36 +43,65 @@ public class TravelActivity extends AppCompatActivity {
 
         viewPager = (ViewPager) findViewById(R.id.travelContainer);
         setUpViewPager(viewPager);
+
+
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
     public void setUpViewPager(ViewPager viewPager) {
         adapter.addFragmentToTravelFragmentList(new TravelCreateFragment());
-        //adapter.addFragmentToTravelFragmentList(new TravelOnGoing());
-        //adapter.addFragmentToTravelFragmentList(new TravelSafeFinished());
-
         viewPager.setAdapter(adapter);
-
+    }
+    public void addFragmentToAdapter(Fragment fragment){
+        adapter.addFragmentToTravelFragmentList(fragment);
+        adapter.notifyDataSetChanged();
     }
 
-    public void setViewPager(int fragmentNumber){
+    public void setViewPager(int fragmentNumber) {
         viewPager.setCurrentItem(fragmentNumber);
     }
 
-    public void setUUID_travel (String uuid_travel)
-    {
-        uuid = uuid_travel;
+    public void setIDtravel(String idTravel) {
+        this.idTravel = idTravel;
     }
-    public void setUUID_plate (String uuidPlate)
-    {
-        this.uuidPlate = uuidPlate;
+    public String getidTravel() {
+        return idTravel;
     }
 
-    public String getUUID_travel ()
-    {
-        return uuid;
+
+
+    public Location getCurrentLocation() {
+        return currentLocation;
     }
-    public String getUUID_plate ()
-    {
-        return uuidPlate;
+
+
+
+    public void getDeviceLocation() {
+        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+
+        try {
+            if (mLocationPermissionGranted) {
+                final Task location = mFusedLocationProviderClient.getLastLocation();
+                location.addOnCompleteListener(new OnCompleteListener() {
+                    @Override
+                    public void onComplete(@NonNull Task task) {
+                        if (task.isSuccessful()) {
+                             currentLocation = (Location) task.getResult();
+
+                        } else {
+                            Toast.makeText(TravelActivity.this, "Unable to retrieve device location", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+
+        } catch (SecurityException e) {
+        }
     }
+
 }
