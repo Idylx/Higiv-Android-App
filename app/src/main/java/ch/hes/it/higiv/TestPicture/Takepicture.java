@@ -7,6 +7,8 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
+import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -14,6 +16,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.text.format.Time;
 import android.util.SparseArray;
 import android.view.View;
 import android.widget.Button;
@@ -32,10 +35,12 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import ch.hes.it.higiv.R;
+
 
 public class Takepicture extends AppCompatActivity {
 
@@ -43,17 +48,20 @@ public class Takepicture extends AppCompatActivity {
     private Button takePicture, savePlateNumber;
     private EditText retrieveTextFromImage;
     private ImageView plate;
-    private Bitmap bitmap;
     private TextRecognizer textRecognizer;
     private SparseArray<TextBlock> items;
+    private ByteArrayOutputStream baos;
     private Frame frame;
+    private File outputDir, photoFile, photoDir;
     private StringBuilder sb;
-    private String textOfImage = "";
+    private Intent intent;
+    private String textOfImage, externalStorageStagte;
+    private double progress;
+    private ProgressDialog mProgress;
 
     //A Uri object to store file path
-    private Uri uri;
-
-    private static final int CAMERA_REQUEST_CODE = 3333;
+    private Uri uri, photoFileUri;
+    private static final int CAMERA_REQUEST_CODE = 666;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -61,6 +69,7 @@ public class Takepicture extends AppCompatActivity {
         setContentView(R.layout.activity_takepicture);
 
         mStorageRef = FirebaseStorage.getInstance().getReferenceFromUrl("gs://hitch-guide-to-the-valais.appspot.com");
+        mProgress = new ProgressDialog(this);
 
         takePicture = (Button)findViewById(R.id.btn_takepicture);
         plate = (ImageView)findViewById(R.id.imageplate);
@@ -76,11 +85,16 @@ public class Takepicture extends AppCompatActivity {
             }
         }
 
+
         // Button that opens the camera
         takePicture.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View view) {
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+                StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+                StrictMode.setVmPolicy(builder.build());
+                uri = generateTimeStampPhotoFileUri();
+                intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE).putExtra(MediaStore.EXTRA_OUTPUT, uri);
                 startActivityForResult(intent, CAMERA_REQUEST_CODE);
             }
         });
@@ -103,24 +117,19 @@ public class Takepicture extends AppCompatActivity {
                 }
 
                 //get the camera image
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                byte[] dataBAOS = baos.toByteArray();
-
-                final ProgressDialog mProgress = new ProgressDialog(Takepicture.this);
+                baos = new ByteArrayOutputStream();
+                plate.getDrawingCache().compress(Bitmap.CompressFormat.JPEG, 100, baos);
 
                 mProgress.setTitle("Uploading");
                 mProgress.show();
 
                 //name of the image file (add time to have different files to avoid rewrite on the same file)
-
                 SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
                 filepath = mStorageRef.child(retrieveTextFromImage.getText().toString().toUpperCase() + "/" + sdfDate.format(new Date()));
 
                 //upload image
-
-                filepath.putBytes(dataBAOS)
+                filepath.putBytes(baos.toByteArray())
                         .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                             @Override
                             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -147,7 +156,7 @@ public class Takepicture extends AppCompatActivity {
                             @Override
                             public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
                                 //calculating progress percentage
-                                double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                                progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
 
                                 //displaying percentage in progress dialog
                                 mProgress.setMessage("Uploaded " + ((int) progress) + "%...");
@@ -163,9 +172,7 @@ public class Takepicture extends AppCompatActivity {
 
         if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK)
         {
-            bitmap = (Bitmap)data.getExtras().get("data");
-            plate.setImageBitmap(bitmap);
-
+            plate.setImageURI(uri);
             getTextFromImage();
         }
     }
@@ -180,8 +187,10 @@ public class Takepicture extends AppCompatActivity {
         }
         else
         {
-            frame = new Frame.Builder().setBitmap(bitmap).build();
+            plate.buildDrawingCache();
+            frame = new Frame.Builder().setBitmap(plate.getDrawingCache()).build();
             items = textRecognizer.detect(frame);
+
             sb = new StringBuilder();
 
             for (int i=0 ; i<items.size() ; i++)
@@ -200,7 +209,7 @@ public class Takepicture extends AppCompatActivity {
 
     //Check the permissions for the camera and storage
     private boolean checkPermissions() {
-        String[] result = {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
+        String [] result = {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
         if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
                 result[0]) == PackageManager.PERMISSION_GRANTED
                 && ContextCompat.checkSelfPermission(this.getApplicationContext(),
@@ -217,5 +226,40 @@ public class Takepicture extends AppCompatActivity {
     private void requestPermissions() {
         ActivityCompat.requestPermissions(Takepicture.this, new String[]{Manifest.permission.CAMERA,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+    }
+
+
+    //this is for higher quality image from camera
+    private Uri generateTimeStampPhotoFileUri()
+    {
+        outputDir = getPhotoDirectory();
+        if (outputDir != null)
+        {
+            photoFile = new File(outputDir, System.currentTimeMillis() + ".jpg");
+            photoFileUri = Uri.fromFile(photoFile);
+        }
+        return photoFileUri;
+    }
+
+    //this is for higher quality image from camera
+    private File getPhotoDirectory()
+    {
+        externalStorageStagte = Environment.getExternalStorageState();
+        if (externalStorageStagte.equals(Environment.MEDIA_MOUNTED))
+        {
+            photoDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+            outputDir = new File(photoDir, getString(R.string.app_name));
+
+            if (!outputDir.exists() && !outputDir.mkdirs())
+            {
+                Toast.makeText(
+                        this,
+                        "Failed to create directory "
+                                + outputDir.getAbsolutePath(),
+                        Toast.LENGTH_SHORT).show();
+                outputDir = null;
+            }
+        }
+        return outputDir;
     }
 }
