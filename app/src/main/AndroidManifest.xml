@@ -41,7 +41,8 @@
             android:name=".MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".TestPicture.Takepicture"></activity>
+        <activity android:name=".TestPicture.Takepicture"
+            android:screenOrientation="portrait" />
 
         <!-- add this to the manifest to use recognition for our app -->
         <meta-data android:name="com.google.android.gms.vision.DEPENDENCIES"

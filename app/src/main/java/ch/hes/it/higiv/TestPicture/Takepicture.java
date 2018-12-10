@@ -1,14 +1,22 @@
 package ch.hes.it.higiv.TestPicture;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
+import android.os.Environment;
+import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.text.format.Time;
 import android.util.SparseArray;
 import android.view.View;
 import android.widget.Button;
@@ -27,10 +35,12 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import ch.hes.it.higiv.R;
+
 
 public class Takepicture extends AppCompatActivity {
 
@@ -38,18 +48,20 @@ public class Takepicture extends AppCompatActivity {
     private Button takePicture, savePlateNumber;
     private EditText retrieveTextFromImage;
     private ImageView plate;
-    private Bitmap bitmap;
-    private ProgressDialog mProgress;
     private TextRecognizer textRecognizer;
     private SparseArray<TextBlock> items;
+    private ByteArrayOutputStream baos;
     private Frame frame;
+    private File outputDir, photoFile, photoDir;
     private StringBuilder sb;
-    private String textOfImage = "";
+    private Intent intent;
+    private String textOfImage, externalStorageStagte;
+    private double progress;
+    private ProgressDialog mProgress;
 
     //A Uri object to store file path
-    private Uri uri;
-
-    private static final int CAMERA_REQUEST_CODE = 3333;
+    private Uri uri, photoFileUri;
+    private static final int CAMERA_REQUEST_CODE = 666;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -65,15 +77,27 @@ public class Takepicture extends AppCompatActivity {
         retrieveTextFromImage = (EditText) findViewById(R.id.retrieveTextImage);
 
 
+        //check if the permission is already allow
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (!checkPermissions()) {
+                //if not, request the permission to the user
+                requestPermissions();
+            }
+        }
+
+
         // Button that opens the camera
         takePicture.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View view) {
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+                StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+                StrictMode.setVmPolicy(builder.build());
+                uri = generateTimeStampPhotoFileUri();
+                intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE).putExtra(MediaStore.EXTRA_OUTPUT, uri);
                 startActivityForResult(intent, CAMERA_REQUEST_CODE);
             }
         });
-
 
 
         // Button that saves the image we took with the camera on Firebase
@@ -81,64 +105,63 @@ public class Takepicture extends AppCompatActivity {
         {
             public void onClick(View view)
             {
+                if(plate.getDrawable() == null)
+                {
+                    Toast.makeText(getApplicationContext(), "Take a picture first", Toast.LENGTH_LONG).show();
+                    return;
+                }
                 if(TextUtils.isEmpty(retrieveTextFromImage.getText()))
                 {
                     Toast.makeText(getApplicationContext(), "Enter the plate number of the car", Toast.LENGTH_LONG).show();
+                    return;
                 }
-                else
-                {
-                    //get the camera image
-                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                    byte[] dataBAOS = baos.toByteArray();
-                    
-                    mProgress.setTitle("Uploading");
-                    mProgress.show();
 
-                    //name of the image file (add time to have different files to avoid rewrite on the same file)
+                //get the camera image
+                baos = new ByteArrayOutputStream();
+                plate.getDrawingCache().compress(Bitmap.CompressFormat.JPEG, 100, baos);
 
-                    SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                    Date now = new Date();
+                mProgress.setTitle("Uploading");
+                mProgress.show();
 
-                    filepath = mStorageRef.child(retrieveTextFromImage.getText().toString() + "/" + sdfDate.format(now));
+                //name of the image file (add time to have different files to avoid rewrite on the same file)
+                SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-                    //upload image
+                filepath = mStorageRef.child(retrieveTextFromImage.getText().toString().toUpperCase() + "/" + sdfDate.format(new Date()));
 
-                    filepath.putBytes(dataBAOS)
-                            .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                                @Override
-                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                    //if the upload is successfull
-                                    //hiding the progress dialog
-                                    mProgress.dismiss();
+                //upload image
+                filepath.putBytes(baos.toByteArray())
+                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                //if the upload is successfull
+                                //hiding the progress dialog
+                                mProgress.dismiss();
 
-                                    //and displaying a success toast
-                                    Toast.makeText(getApplicationContext(), "File Uploaded ", Toast.LENGTH_LONG).show();
-                                }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception exception) {
-                                    //if the upload is not successfull
-                                    //hiding the progress dialog
-                                    mProgress.dismiss();
+                                //and displaying a success toast
+                                Toast.makeText(getApplicationContext(), "File Uploaded ", Toast.LENGTH_LONG).show();
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception exception) {
+                                //if the upload is not successfull
+                                //hiding the progress dialog
+                                mProgress.dismiss();
 
-                                    //and displaying error message
-                                    Toast.makeText(getApplicationContext(), "Failed again"+exception.getMessage(), Toast.LENGTH_LONG).show();
-                                }
-                            })
-                            .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                                @Override
-                                public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                                    //calculating progress percentage
-                                    double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                                //and displaying error message
+                                Toast.makeText(getApplicationContext(), "Failed again"+exception.getMessage(), Toast.LENGTH_LONG).show();
+                            }
+                        })
+                        .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                                //calculating progress percentage
+                                progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
 
-                                    //displaying percentage in progress dialog
-                                    mProgress.setMessage("Uploaded " + ((int) progress) + "%...");
-                                }
-                            });
-
-                }
+                                //displaying percentage in progress dialog
+                                mProgress.setMessage("Uploaded " + ((int) progress) + "%...");
+                            }
+                        });
             }
         });
     }
@@ -149,9 +172,7 @@ public class Takepicture extends AppCompatActivity {
 
         if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK)
         {
-            bitmap = (Bitmap)data.getExtras().get("data");
-            plate.setImageBitmap(bitmap);
-
+            plate.setImageURI(uri);
             getTextFromImage();
         }
     }
@@ -166,14 +187,15 @@ public class Takepicture extends AppCompatActivity {
         }
         else
         {
-            frame = new Frame.Builder().setBitmap(bitmap).build();
+            plate.buildDrawingCache();
+            frame = new Frame.Builder().setBitmap(plate.getDrawingCache()).build();
             items = textRecognizer.detect(frame);
+
             sb = new StringBuilder();
 
             for (int i=0 ; i<items.size() ; i++)
             {
                 sb.append(items.valueAt(i).getValue());
-                //sb.append("\n");
             }
 
             textOfImage = (sb.toString()).replace("-", "");
@@ -183,5 +205,61 @@ public class Takepicture extends AppCompatActivity {
 
             retrieveTextFromImage.setText(textOfImage);
         }
+    }
+
+    //Check the permissions for the camera and storage
+    private boolean checkPermissions() {
+        String [] result = {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
+        if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
+                result[0]) == PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(this.getApplicationContext(),
+                result[1]) == PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(this.getApplicationContext(),
+                result[2]) == PackageManager.PERMISSION_GRANTED) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    //method for request the permission to the user
+    private void requestPermissions() {
+        ActivityCompat.requestPermissions(Takepicture.this, new String[]{Manifest.permission.CAMERA,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+    }
+
+
+    //this is for higher quality image from camera
+    private Uri generateTimeStampPhotoFileUri()
+    {
+        outputDir = getPhotoDirectory();
+        if (outputDir != null)
+        {
+            photoFile = new File(outputDir, System.currentTimeMillis() + ".jpg");
+            photoFileUri = Uri.fromFile(photoFile);
+        }
+        return photoFileUri;
+    }
+
+    //this is for higher quality image from camera
+    private File getPhotoDirectory()
+    {
+        externalStorageStagte = Environment.getExternalStorageState();
+        if (externalStorageStagte.equals(Environment.MEDIA_MOUNTED))
+        {
+            photoDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+            outputDir = new File(photoDir, getString(R.string.app_name));
+
+            if (!outputDir.exists() && !outputDir.mkdirs())
+            {
+                Toast.makeText(
+                        this,
+                        "Failed to create directory "
+                                + outputDir.getAbsolutePath(),
+                        Toast.LENGTH_SHORT).show();
+                outputDir = null;
+            }
+        }
+        return outputDir;
     }
 }
