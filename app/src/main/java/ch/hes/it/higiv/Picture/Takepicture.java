@@ -1,4 +1,4 @@
-package ch.hes.it.higiv.TestPicture;
+package ch.hes.it.higiv.Picture;
 
 import android.Manifest;
 import android.app.ProgressDialog;
@@ -16,7 +16,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.text.format.Time;
 import android.util.SparseArray;
 import android.view.View;
 import android.widget.Button;

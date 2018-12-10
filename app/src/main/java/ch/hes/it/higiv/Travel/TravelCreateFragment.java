@@ -3,7 +3,6 @@ package ch.hes.it.higiv.Travel;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -17,19 +16,12 @@ import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.Toast;
 
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
-import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.SimpleDateFormat;
 import java.util.UUID;
@@ -40,7 +32,7 @@ import ch.hes.it.higiv.R;
 import ch.hes.it.higiv.firebase.FirebaseCallBack;
 import ch.hes.it.higiv.firebase.PlateConnection;
 import ch.hes.it.higiv.firebase.TravelConnection;
-import ch.hes.it.higiv.TestPicture.Takepicture;
+import ch.hes.it.higiv.Picture.Takepicture;
 
 public class TravelCreateFragment extends Fragment {
     //Access the current user
@@ -219,7 +211,7 @@ public class TravelCreateFragment extends Fragment {
                 });
             }
         });
-*/
+
 
         btnTakePicture.setOnClickListener(new View.OnClickListener() {
             @Override
