@@ -113,17 +113,32 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/btn_cancel_travel"
+    android:id="@+id/btn_cancel_travel"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentRight="true"
+    android:layout_marginEnd="32dp"
+    android:layout_marginBottom="40dp"
+    android:background="@color/colorPrimary"
+    android:text="@string/btn_cancel_travel"
+    android:textColor="@android:color/white"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/btn_takepicture"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_marginEnd="32dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginBottom="40dp"
         android:background="@color/colorPrimary"
-        android:text="@string/btn_cancel_travel"
+        android:text="Picture"
         android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toStartOf="@+id/btn_cancel_travel"
+        app:layout_constraintStart_toEndOf="@+id/btn_begin_travel" />
 
 
 

@@ -54,6 +54,11 @@ public class TravelCreateFragment extends Fragment {
 
     private DataPassListener mCallback;
 
+    //====================================
+    //Temporary
+    private Button btnTakePicture;
+    //====================================
+
     public interface DataPassListener{
         public void passData(String data);
     }
@@ -72,6 +77,11 @@ public class TravelCreateFragment extends Fragment {
         inputNbPersons = (NumberPicker) rootView.findViewById(R.id.number_of_places);
         btnBeginTravel = (Button) rootView.findViewById(R.id.btn_begin_travel);
         btnStopTravel = (Button) rootView.findViewById(R.id.btn_cancel_travel);
+
+        //===============================
+        //Temporary
+        btnTakePicture = (Button) rootView.findViewById(R.id.btn_takepicture);
+        //===============================
 
         //Set min max values for the NumberPicker
         inputNbPersons.setMinValue(1);
@@ -213,7 +223,7 @@ public class TravelCreateFragment extends Fragment {
         });
 */
 
-        btnBeginTravel.setOnClickListener(new View.OnClickListener() {
+        btnTakePicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getActivity(), Takepicture.class);
