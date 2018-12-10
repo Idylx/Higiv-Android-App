@@ -3,14 +3,23 @@
     package="ch.hes.it.higiv">
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
-    <!--uses-permission android:name="android.permission.GET_ACCOUNTS" -->
+    <!-- uses-permission android:name="android.permission.GET_ACCOUNTS" -->
     <uses-permission android:name="android.permission.READ_PROFILE" />
-    <!--uses-permission android:name="android.permission.READ_CONTACTS" -->
+    <!-- uses-permission android:name="android.permission.READ_CONTACTS" -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
+
+    <!-- use this to use recognition for our app -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    
+    <!-- use this to save the picture plate on firebase cloud storage -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
 
 
     <application
@@ -43,12 +52,20 @@
         </activity>
         <activity android:name=".Account.SignupActivity" />
         <activity android:name=".Account.ResetPasswordActivity" />
-        <activity android:name=".Profile.ActivityProfile"/>
-        <activity android:name=".Travel.TravelActivity"></activity>
+        <activity android:name=".Profile.ActivityProfile" />
+        <activity android:name=".Travel.TravelActivity" />
         <activity
             android:name=".MainActivity"
             android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".TestPicture.Takepicture"
+            android:screenOrientation="portrait" />
+
+        <!-- add this to the manifest to use recognition for our app -->
+        <meta-data android:name="com.google.android.gms.vision.DEPENDENCIES"
+            android:value="ocr"/>
+
+
     </application>
 
 </manifest>

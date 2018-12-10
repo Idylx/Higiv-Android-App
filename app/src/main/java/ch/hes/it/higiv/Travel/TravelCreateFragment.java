@@ -1,6 +1,7 @@
 package ch.hes.it.higiv.Travel;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -39,7 +40,7 @@ import ch.hes.it.higiv.R;
 import ch.hes.it.higiv.firebase.FirebaseCallBack;
 import ch.hes.it.higiv.firebase.PlateConnection;
 import ch.hes.it.higiv.firebase.TravelConnection;
-
+import ch.hes.it.higiv.TestPicture.Takepicture;
 
 public class TravelCreateFragment extends Fragment {
     //Access the current user
@@ -69,6 +70,12 @@ public class TravelCreateFragment extends Fragment {
 
     private String travelID;
 
+    //====================================
+    //Temporary
+    private Button btnTakePicture;
+    //====================================
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
@@ -84,6 +91,11 @@ public class TravelCreateFragment extends Fragment {
         inputNbPersons = (NumberPicker) rootView.findViewById(R.id.number_of_places);
         btnBeginTravel = (Button) rootView.findViewById(R.id.btn_begin_travel);
         btnStopTravel = (Button) rootView.findViewById(R.id.btn_cancel_travel);
+
+        //===============================
+        //Temporary
+        btnTakePicture = (Button) rootView.findViewById(R.id.btn_takepicture);
+        //===============================
 
         //Set min max values for the NumberPicker
         inputNbPersons.setMinValue(1);
@@ -207,6 +219,16 @@ public class TravelCreateFragment extends Fragment {
                 });
             }
         });
+*/
+
+        btnTakePicture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getActivity(), Takepicture.class);
+                startActivity(i);
+            }
+        });
+
         return rootView;
     }
 }
