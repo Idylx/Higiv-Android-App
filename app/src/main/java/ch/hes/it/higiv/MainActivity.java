@@ -68,6 +68,9 @@ public class MainActivity extends AppCompatActivity
     private GoogleMap mMap;
     private FusedLocationProviderClient mFusedLocationProviderClient;
 
+    private double latitude;
+    private double longitude;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -154,6 +157,8 @@ public class MainActivity extends AppCompatActivity
                 if (task.isSuccessful()) {
                     Location currentLocation = (Location) task.getResult();
                     moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), DEFAULT_ZOOM);
+                    longitude=currentLocation.getLongitude();
+                    latitude=currentLocation.getLatitude();
                 } else {
                     Toast.makeText(MainActivity.this, R.string.NoDeviceLocation, Toast.LENGTH_SHORT).show();
                 }
@@ -371,7 +376,11 @@ public class MainActivity extends AppCompatActivity
         String statName = "";
         String firstname = "";
         String lastname = "";
-        String geolocalisation ="Unknown";
+        getDeviceLocation();
+        String geolocalisation="";
+        if(latitude>0) {
+            geolocalisation = "https://www.google.com/search?q=" + latitude + "%2C" + longitude;
+        }
         //Check if the user have enter the information
         if(!user.getFirstname().isEmpty() || !user.getLastname().isEmpty()){
             statName = getString(R.string.messageContainUser);
