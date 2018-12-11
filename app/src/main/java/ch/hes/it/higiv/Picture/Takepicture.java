@@ -84,7 +84,6 @@ public class Takepicture extends AppCompatActivity {
             }
         }
 
-
         // Button that opens the camera
         takePicture.setOnClickListener(new View.OnClickListener()
         {

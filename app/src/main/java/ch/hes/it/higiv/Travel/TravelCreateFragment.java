@@ -1,17 +1,31 @@
 package ch.hes.it.higiv.Travel;
 
 
+import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.StrictMode;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.Toast;
@@ -20,10 +34,22 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.vision.Frame;
+import com.google.android.gms.vision.text.TextBlock;
+import com.google.android.gms.vision.text.TextRecognizer;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.UUID;
 
 import ch.hes.it.higiv.Model.Travel;
@@ -37,11 +63,27 @@ import ch.hes.it.higiv.Picture.Takepicture;
 public class TravelCreateFragment extends Fragment {
     //Access the current user
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-    private EditText  inputPlateNumberState, inputPlateNumber;
     private String inputDestination;
     private NumberPicker inputNbPersons;
     private Button btnBeginTravel, btnStopTravel;
 
+    private StorageReference mStorageRef, filepath;
+    private EditText retrieveTextFromImage;
+    private ImageView plateImage;
+    private TextRecognizer textRecognizer;
+    private SparseArray<TextBlock> items;
+    private ByteArrayOutputStream baos;
+    private Frame frame;
+    private File outputDir, photoFile, photoDir;
+    private StringBuilder sb;
+    private Intent intent;
+    private String textOfImage, externalStorageStagte;
+    private double progress;
+    private ProgressDialog mProgress;
+
+    //A Uri object to store file path
+    private Uri uri, photoFileUri;
+    private static final int CAMERA_REQUEST_CODE = 666;
 
     //Objects to save into FireBase
     private Travel travel;
@@ -62,13 +104,6 @@ public class TravelCreateFragment extends Fragment {
 
     private String travelID;
 
-    //====================================
-    //Temporary
-    private Button btnTakePicture;
-    //====================================
-
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
@@ -77,17 +112,9 @@ public class TravelCreateFragment extends Fragment {
 
         final View rootView = inflater.inflate(R.layout.fragment_travel_create, container, false);
 
-  //      inputDestination = (EditText) rootView.findViewById(R.id.destination);
-        inputPlateNumberState = (EditText) rootView.findViewById(R.id.plate_number_state);
-        inputPlateNumber = (EditText) rootView.findViewById(R.id.plate_number);
         inputNbPersons = (NumberPicker) rootView.findViewById(R.id.number_of_places);
         btnBeginTravel = (Button) rootView.findViewById(R.id.btn_begin_travel);
         btnStopTravel = (Button) rootView.findViewById(R.id.btn_cancel_travel);
-
-        //===============================
-        //Temporary
-        btnTakePicture = (Button) rootView.findViewById(R.id.btn_takepicture);
-        //===============================
 
         //Set min max values for the NumberPicker
         inputNbPersons.setMinValue(1);
@@ -128,24 +155,6 @@ public class TravelCreateFragment extends Fragment {
         //Change the background color because it's disabled
         btnStopTravel.setBackground(getActivity().getResources().getDrawable(R.color.colorPrimaryDark));
 
-        //Listener used to go to the next edittext which is plate number, when the field is filled in
-        inputPlateNumberState.addTextChangedListener(new TextWatcher() {
-
-            public void onTextChanged(CharSequence s, int start,int before, int count)
-            {
-                if(inputPlateNumberState.getText().toString().length() == 2)
-                {
-                    inputPlateNumber.requestFocus();
-                }
-            }
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
-
-            public void afterTextChanged(Editable s) { }
-
-        });
-
-
-
         //Listener used to react to the button click
         btnBeginTravel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -159,9 +168,9 @@ public class TravelCreateFragment extends Fragment {
                     return;
                 }
 
-                if (TextUtils.isEmpty(inputPlateNumber.getText())) {
+                if (TextUtils.isEmpty(retrieveTextFromImage.getText())) {
                     Toast.makeText(getActivity(), R.string.enter_plate_number, Toast.LENGTH_SHORT).show();
-                    inputPlateNumber.requestFocus();
+                    retrieveTextFromImage.requestFocus();
                     return;
                 }
 
@@ -176,8 +185,7 @@ public class TravelCreateFragment extends Fragment {
                 travelID = UUID.randomUUID().toString();
                 ((TravelActivity)getActivity()).setIDtravel(travelID);
 
-                numberPlate = inputPlateNumberState.getText().toString().toUpperCase() + inputPlateNumber.getText().toString().toUpperCase();
-
+                numberPlate = retrieveTextFromImage.getText().toString().toUpperCase();
 
                 //get plate with current number plate
                 plateConnection.getPlate(numberPlate, new FirebaseCallBack() {
@@ -209,18 +217,184 @@ public class TravelCreateFragment extends Fragment {
 
                     }
                 });
+
+                if(plateImage.getDrawable() == null)
+                {
+                    Toast.makeText(getContext(), "Take a picture first", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if(TextUtils.isEmpty(retrieveTextFromImage.getText()))
+                {
+                    Toast.makeText(getContext(), "Enter the plate number of the car", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                //get the camera image
+                baos = new ByteArrayOutputStream();
+                plateImage.getDrawingCache().compress(Bitmap.CompressFormat.JPEG, 100, baos);
+
+                mProgress.setTitle("Uploading");
+                mProgress.show();
+
+                //name of the image file (add time to have different files to avoid rewrite on the same file)
+                SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+                filepath = mStorageRef.child(retrieveTextFromImage.getText().toString().toUpperCase() + "/" + sdfDate.format(new Date()));
+
+                //upload image
+                filepath.putBytes(baos.toByteArray())
+                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                //if the upload is successfull
+                                //hiding the progress dialog
+                                mProgress.dismiss();
+
+                                //and displaying a success toast
+                                Toast.makeText(getContext(), "File Uploaded ", Toast.LENGTH_LONG).show();
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception exception) {
+                                //if the upload is not successfull
+                                //hiding the progress dialog
+                                mProgress.dismiss();
+
+                                //and displaying error message
+                                Toast.makeText(getContext(), "Failed again"+exception.getMessage(), Toast.LENGTH_LONG).show();
+                            }
+                        })
+                        .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                                //calculating progress percentage
+                                progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+
+                                //displaying percentage in progress dialog
+                                mProgress.setMessage("Uploaded " + ((int) progress) + "%...");
+                            }
+                        });
+
             }
         });
 
+        mStorageRef = FirebaseStorage.getInstance().getReferenceFromUrl("gs://hitch-guide-to-the-valais.appspot.com");
+        mProgress = new ProgressDialog(getContext());
 
-        btnTakePicture.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getActivity(), Takepicture.class);
-                startActivity(i);
+        plateImage = (ImageView)rootView.findViewById(R.id.imageplate);
+        retrieveTextFromImage = (EditText) rootView.findViewById(R.id.retrieveTextImage);
+
+        //check if the permission is already allow
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (!checkPermissions()) {
+                //if not, request the permission to the user
+                requestPermissions();
             }
-        });
+        }
+
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
+        uri = generateTimeStampPhotoFileUri();
+        intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE).putExtra(MediaStore.EXTRA_OUTPUT, uri);
+        startActivityForResult(intent, CAMERA_REQUEST_CODE);
 
         return rootView;
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == CAMERA_REQUEST_CODE && resultCode == getActivity().RESULT_OK)
+        {
+            plateImage.setImageURI(uri);
+            getTextFromImage();
+        }
+    }
+
+    public void getTextFromImage()
+    {
+        textRecognizer = new TextRecognizer.Builder(getContext()).build();
+
+        if (!textRecognizer.isOperational())
+        {
+            Toast.makeText(getContext(), "Could not get the text", Toast.LENGTH_LONG).show();
+        }
+        else
+        {
+            plateImage.buildDrawingCache();
+            frame = new Frame.Builder().setBitmap(plateImage.getDrawingCache()).build();
+            items = textRecognizer.detect(frame);
+
+            sb = new StringBuilder();
+
+            for (int i=0 ; i<items.size() ; i++)
+            {
+                sb.append(items.valueAt(i).getValue());
+            }
+
+            textOfImage = (sb.toString()).replace("-", "");
+            textOfImage = textOfImage.replace(" ", "");
+            textOfImage = textOfImage.replace(".", "");
+            textOfImage = textOfImage.toUpperCase();
+
+            retrieveTextFromImage.setText(textOfImage);
+        }
+    }
+
+    //Check the permissions for the camera and storage
+    private boolean checkPermissions() {
+        String [] result = {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
+        if (ContextCompat.checkSelfPermission(getContext().getApplicationContext(),
+                result[0]) == PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(getContext().getApplicationContext(),
+                result[1]) == PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(getContext().getApplicationContext(),
+                result[2]) == PackageManager.PERMISSION_GRANTED) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    //method for request the permission to the user
+    private void requestPermissions() {
+        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+    }
+
+
+    //this is for higher quality image from camera
+    private Uri generateTimeStampPhotoFileUri()
+    {
+        outputDir = getPhotoDirectory();
+        if (outputDir != null)
+        {
+            photoFile = new File(outputDir, System.currentTimeMillis() + ".jpg");
+            photoFileUri = Uri.fromFile(photoFile);
+        }
+        return photoFileUri;
+    }
+
+    //this is for higher quality image from camera
+    private File getPhotoDirectory()
+    {
+        externalStorageStagte = Environment.getExternalStorageState();
+        if (externalStorageStagte.equals(Environment.MEDIA_MOUNTED))
+        {
+            photoDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+            outputDir = new File(photoDir, getString(R.string.app_name));
+
+            if (!outputDir.exists() && !outputDir.mkdirs())
+            {
+                Toast.makeText(getContext(),
+                        "Failed to create directory "
+                                + outputDir.getAbsolutePath(),
+                        Toast.LENGTH_SHORT).show();
+                outputDir = null;
+            }
+        }
+        return outputDir;
     }
 }

@@ -16,32 +16,24 @@
         android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
         />
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/linearLayout"
+    <ImageView
+        android:id="@+id/imageplate"
+        android:layout_width="match_parent"
+        android:layout_height="150dp" />
+
+
+    <EditText
+        android:id="@+id/retrieveTextImage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:orientation="horizontal">
-
-
-        <android.support.design.widget.TextInputEditText
-            android:id="@+id/plate_number_state"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="@string/plate_number_state"
-            android:textSize="16sp" />
-
-
-        <android.support.design.widget.TextInputEditText
-            android:id="@+id/plate_number"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/plate_number"
-            android:textSize="16sp" />
-
-    </LinearLayout>
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageplate" />
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -64,8 +56,7 @@
             android:text="@string/number_of_person"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+            app:layout_constraintStart_toStartOf="parent" />
 
         <NumberPicker
             android:id="@+id/number_of_places"
@@ -119,21 +110,6 @@
             android:textColor="@android:color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
-
-        <Button
-            android:id="@+id/btn_takepicture"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="40dp"
-            android:background="@color/colorPrimary"
-            android:text="Picture"
-            android:textColor="@android:color/white"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/btn_cancel_travel"
-            app:layout_constraintStart_toEndOf="@+id/btn_begin_travel" />
 
     </GridLayout>
 
