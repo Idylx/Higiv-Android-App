@@ -66,7 +66,6 @@ public class TravelCreateFragment extends Fragment {
     private String inputDestination;
     private NumberPicker inputNbPersons;
     private Button btnBeginTravel, btnStopTravel;
-
     private StorageReference mStorageRef, filepath;
     private EditText retrieveTextFromImage;
     private ImageView plateImage;
