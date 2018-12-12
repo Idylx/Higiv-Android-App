@@ -233,6 +233,8 @@ public class TravelCreateFragment extends Fragment {
 
                 filepath = mStorageRef.child(retrieveTextFromImage.getText().toString().toUpperCase() + "/" + sdfDate.format(new Date()));
 
+                travel.setImagePath(filepath.toString());
+
                 //upload image
                 filepath.putBytes(baos.toByteArray())
                         .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
