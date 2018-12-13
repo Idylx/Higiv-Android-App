@@ -4,6 +4,9 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -18,6 +21,10 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
 import ch.hes.it.higiv.Model.Travel;
@@ -38,13 +45,22 @@ public class TravelOnGoing extends Fragment {
     private String plateString = "";
     private String idTravel;
 
-    PermissionsServices permissionsServices = new PermissionsServices();
-
     TravelConnection travelConnection = new TravelConnection();
 
     private User user;
 
     private String phoneNumber;
+    private String message;
+    private PermissionsServices permissionsServices = new PermissionsServices();
+
+    private Boolean mLocationPermissionGranted = false;
+    private double latitude;
+    private double longitude;
+
+    private final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
+    private final String COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
+    private final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
+    private final float DEFAULT_ZOOM = 15f;
 
     @Nullable
     @Override
@@ -108,6 +124,10 @@ public class TravelOnGoing extends Fragment {
         return  view;
     }
     public Dialog onCreateDialog() {
+        //test if the location is allow
+        if(isServicesOK()){
+            getLocationPermission();
+        }
         // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage(R.string.dialogSendMessage)
@@ -124,10 +144,7 @@ public class TravelOnGoing extends Fragment {
                             }
                             else{
                                 plateString = travel.getIdPlate();
-                                String finalMessage = CreateMessage();
-                                //Send the SMS
-                                SmsManager.getDefault().sendTextMessage(phoneNumber, null, finalMessage, null, null);
-                                Toast.makeText(getActivity().getApplicationContext(), R.string.messageSendToast, Toast.LENGTH_SHORT).show();
+                                CreateMessage();
                             }
                         }
 
@@ -149,14 +166,15 @@ public class TravelOnGoing extends Fragment {
     private void requestPermission() {
         ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.SEND_SMS}, 1);
     }
-    private String CreateMessage() {
+    private void CreateMessage() {
         //create the text for the SMS
         String alert = getString(R.string.messageContainAlert);
         String statName = "";
         String firstname = "";
         String lastname = "";
         String plate = plateString;
-        String geolocalisation ="Unknown";
+
+        String geolocalisation ="https://www.google.com/search?q=" + latitude + "%2C" + longitude;
         //Check if the user have enter the information
         if(!user.getFirstname().isEmpty() || !user.getLastname().isEmpty()){
             statName = getString(R.string.messageContainUser);
@@ -167,7 +185,9 @@ public class TravelOnGoing extends Fragment {
         if(!user.getLastname().isEmpty()){
             lastname=user.getLastname();
         }
-        return alert + "\n" + firstname + lastname + " " + statName + "\n" + getString(R.string.messageContainPlate)+ " " + plate + "\n" + getString(R.string.messageContainLocalisation) + " " + geolocalisation;
+
+        message = alert + "\n" + firstname + lastname + " " + statName + "\n" + getString(R.string.messageContainPlate)+ " " + plate + "\n" + getString(R.string.messageContainLocalisation) + " ";
+        getDeviceLocation();
     }
 
     @Override
@@ -185,5 +205,44 @@ public class TravelOnGoing extends Fragment {
                 CarPlateTv.setText(travel.getIdPlate());
             }
         });
+    }
+    private void getDeviceLocation() {
+
+        permissionsServices.getDeviceLocation(getActivity(), true/*mLocationPermissionGranted*/, new FirebaseCallBack() {
+            @Override
+            public void onCallBack(Object o) {
+
+                Task task = (Task) o;
+                if (task.isSuccessful()) {
+                    Location currentLocation = (Location) task.getResult();
+                    longitude=currentLocation.getLongitude();
+                    latitude=currentLocation.getLatitude();
+                    String geolocalisation ="https://www.google.com/search?q=" + latitude + "%2C" + longitude;
+                    message = message + geolocalisation;
+                    //Send the SMS
+                    SmsManager.getDefault().sendTextMessage(phoneNumber, null, message, null, null);
+                    Toast.makeText(getActivity().getApplicationContext(), R.string.messageSendToast, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getActivity().getApplicationContext(), R.string.NoDeviceLocation, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+    public boolean isServicesOK(){
+        return permissionsServices.isServicesMapOK(getActivity());
+    }
+    public void getLocationPermission() {
+        String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
+
+        if (ContextCompat.checkSelfPermission(getActivity().getApplicationContext(), FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(getActivity().getApplicationContext(), COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                mLocationPermissionGranted = true;
+            } else {
+                ActivityCompat.requestPermissions(getActivity(), permissions, LOCATION_PERMISSION_REQUEST_CODE);
+            }
+        } else {
+            ActivityCompat.requestPermissions(getActivity(), permissions, LOCATION_PERMISSION_REQUEST_CODE);
+        }
+
     }
 }
