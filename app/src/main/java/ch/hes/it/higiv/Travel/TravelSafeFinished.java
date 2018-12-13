@@ -77,11 +77,10 @@ public class TravelSafeFinished extends Fragment {
 
     }
 
-
+    //Save the travel and finish it
     private void setEndTravel(){
         // get device location
         ((TravelActivity)getActivity()).getDeviceLocation();
-
 
         // set end travel information
         travel.setTimeEnd(new SimpleDateFormat("dd-MM-yyyy kk:mm:ss").format(System.currentTimeMillis()));

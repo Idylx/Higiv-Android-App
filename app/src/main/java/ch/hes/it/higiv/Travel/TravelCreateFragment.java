@@ -1,18 +1,15 @@
 package ch.hes.it.higiv.Travel;
 
 
-import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.SparseArray;
@@ -48,6 +45,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
+import ch.hes.it.higiv.MainActivity;
 import ch.hes.it.higiv.Model.Travel;
 import ch.hes.it.higiv.Model.Plate;
 import ch.hes.it.higiv.PermissionsServices.PermissionsServices;
@@ -61,7 +59,7 @@ public class TravelCreateFragment extends Fragment {
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private String inputDestination;
     private NumberPicker inputNbPersons;
-    private Button btnBeginTravel, btnStopTravel, btnTakePicture;
+    private Button btnBeginTravel, btnCancelTravel, btnTakePicture;
 
     private StorageReference mStorageRef, filepath;
     private EditText retrieveTextFromImage;
@@ -86,7 +84,7 @@ public class TravelCreateFragment extends Fragment {
     private Plate plate;
 
     //existing plate
-    private Plate plateExisting ;
+    private Plate plateExisting;
 
     //current var
     private String numberPlate;
@@ -107,12 +105,11 @@ public class TravelCreateFragment extends Fragment {
                              Bundle savedInstanceState) {
 
 
-
         final View rootView = inflater.inflate(R.layout.fragment_travel_create, container, false);
 
         inputNbPersons = (NumberPicker) rootView.findViewById(R.id.number_of_places);
         btnBeginTravel = (Button) rootView.findViewById(R.id.btn_begin_travel);
-        btnStopTravel = (Button) rootView.findViewById(R.id.btn_cancel_travel);
+        btnCancelTravel = (Button) rootView.findViewById(R.id.btn_cancel_travel);
         btnTakePicture = (Button) rootView.findViewById(R.id.takePicture);
 
         //Set min max values for the NumberPicker
@@ -123,9 +120,9 @@ public class TravelCreateFragment extends Fragment {
         //Set a value change listener for NumberPicker
         inputNbPersons.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
-            public void onValueChange(NumberPicker picker, int oldVal, int newVal){
+            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
                 //Get the newly selected number from picker
-                nbPerson = newVal ;
+                nbPerson = newVal;
             }
         });
 
@@ -146,20 +143,22 @@ public class TravelCreateFragment extends Fragment {
                     }
                 });
 
-
         inputNbPersons.setShowDividers(LinearLayout.SHOW_DIVIDER_NONE);
-        //Disable stop travel button
-        btnStopTravel.setEnabled(false);
 
-        //Change the background color because it's disabled
-        btnStopTravel.setBackground(getActivity().getResources().getDrawable(R.color.colorPrimaryDark));
+        //Cancel the travel
+        btnCancelTravel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().finish();
+            }
+        });
 
         //Listener used to react to the button click
         btnBeginTravel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                ((TravelActivity)getActivity()).getDeviceLocation();
+                ((TravelActivity) getActivity()).getDeviceLocation();
 
                 //Checking if there isn't empty fields, and if it's the case set the focus on the empty field
                 if (TextUtils.isEmpty(inputDestination)) {
@@ -182,7 +181,7 @@ public class TravelCreateFragment extends Fragment {
 
                 // create id for the travel
                 travelID = UUID.randomUUID().toString();
-                ((TravelActivity)getActivity()).setIDtravel(travelID);
+                ((TravelActivity) getActivity()).setIDtravel(travelID);
 
                 numberPlate = retrieveTextFromImage.getText().toString().toUpperCase();
 
@@ -193,7 +192,7 @@ public class TravelCreateFragment extends Fragment {
                         plateExisting = (Plate) o;
 
                         // if plate doesn't exist create it
-                        if(plateExisting==null) {
+                        if (plateExisting == null) {
                             //Creation of new plate
                             plate = new Plate();
                             plate.setNumber(numberPlate);
@@ -201,7 +200,7 @@ public class TravelCreateFragment extends Fragment {
                             plateConnection.setPlate(plate, numberPlate);
                             travel.setIdPlate(numberPlate);
                             //if exist set the existing id plate
-                        }else{
+                        } else {
                             travel.setIdPlate(plateExisting.getNumber());
                         }
 
@@ -217,13 +216,7 @@ public class TravelCreateFragment extends Fragment {
                     }
                 });
 
-                if(plateImage.getDrawable() == null)
-                {
-                    Toast.makeText(getContext(), "Take a picture first", Toast.LENGTH_LONG).show();
-                    return;
-                }
-                if(TextUtils.isEmpty(retrieveTextFromImage.getText()))
-                {
+                if (TextUtils.isEmpty(retrieveTextFromImage.getText())) {
                     Toast.makeText(getContext(), "Enter the plate number of the car", Toast.LENGTH_LONG).show();
                     return;
                 }
@@ -261,7 +254,7 @@ public class TravelCreateFragment extends Fragment {
                                 mProgress.dismiss();
 
                                 //and displaying error message
-                                Toast.makeText(getContext(), "Failed again"+exception.getMessage(), Toast.LENGTH_LONG).show();
+                                Toast.makeText(getContext(), "Failed again" + exception.getMessage(), Toast.LENGTH_LONG).show();
                             }
                         })
                         .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
@@ -281,7 +274,7 @@ public class TravelCreateFragment extends Fragment {
         mStorageRef = FirebaseStorage.getInstance().getReferenceFromUrl("gs://hitch-guide-to-the-valais.appspot.com");
         mProgress = new ProgressDialog(getContext());
 
-        plateImage = (ImageView)rootView.findViewById(R.id.imageplate);
+        plateImage = (ImageView) rootView.findViewById(R.id.imageplate);
         retrieveTextFromImage = (EditText) rootView.findViewById(R.id.retrieveTextImage);
 
         btnTakePicture.setOnClickListener(new View.OnClickListener() {
@@ -298,7 +291,8 @@ public class TravelCreateFragment extends Fragment {
 
     }
 
-    private void startCamera(){
+    //Start the new activity for the Camera
+    private void startCamera() {
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
         uri = generateTimeStampPhotoFileUri();
@@ -306,35 +300,29 @@ public class TravelCreateFragment extends Fragment {
         startActivityForResult(intent, CAMERA_REQUEST_CODE);
     }
 
-    public void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == CAMERA_REQUEST_CODE && resultCode == getActivity().RESULT_OK)
-        {
+        if (requestCode == CAMERA_REQUEST_CODE && resultCode == getActivity().RESULT_OK) {
             plateImage.setImageURI(uri);
             getTextFromImage();
         }
     }
 
-    public void getTextFromImage()
-    {
+    //If there is text on the photo, retrieve it
+    public void getTextFromImage() {
         textRecognizer = new TextRecognizer.Builder(getContext()).build();
 
-        if (!textRecognizer.isOperational())
-        {
+        if (!textRecognizer.isOperational()) {
             Toast.makeText(getContext(), "Could not get the text", Toast.LENGTH_LONG).show();
-        }
-        else
-        {
+        } else {
             plateImage.buildDrawingCache();
             frame = new Frame.Builder().setBitmap(plateImage.getDrawingCache()).build();
             items = textRecognizer.detect(frame);
 
             sb = new StringBuilder();
 
-            for (int i=0 ; i<items.size() ; i++)
-            {
+            for (int i = 0; i < items.size(); i++) {
                 sb.append(items.valueAt(i).getValue());
             }
 
@@ -359,11 +347,9 @@ public class TravelCreateFragment extends Fragment {
 
 
     //this is for higher quality image from camera
-    private Uri generateTimeStampPhotoFileUri()
-    {
+    private Uri generateTimeStampPhotoFileUri() {
         outputDir = getPhotoDirectory();
-        if (outputDir != null)
-        {
+        if (outputDir != null) {
             photoFile = new File(outputDir, System.currentTimeMillis() + ".jpg");
             photoFileUri = Uri.fromFile(photoFile);
         }
@@ -371,16 +357,13 @@ public class TravelCreateFragment extends Fragment {
     }
 
     //this is for higher quality image from camera
-    private File getPhotoDirectory()
-    {
+    private File getPhotoDirectory() {
         externalStorageStagte = Environment.getExternalStorageState();
-        if (externalStorageStagte.equals(Environment.MEDIA_MOUNTED))
-        {
+        if (externalStorageStagte.equals(Environment.MEDIA_MOUNTED)) {
             photoDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
             outputDir = new File(photoDir, getString(R.string.app_name));
 
-            if (!outputDir.exists() && !outputDir.mkdirs())
-            {
+            if (!outputDir.exists() && !outputDir.mkdirs()) {
                 Toast.makeText(getContext(),
                         "Failed to create directory "
                                 + outputDir.getAbsolutePath(),
