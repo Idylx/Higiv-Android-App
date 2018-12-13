@@ -284,20 +284,21 @@ public class TravelCreateFragment extends Fragment {
         retrieveTextFromImage = (EditText) rootView.findViewById(R.id.retrieveTextImage);
 
         //check if the permission is already allow
-        if (Build.VERSION.SDK_INT >= 23) {
-            if (!checkPermissions()) {
-                //if not, request the permission to the user
-                requestPermissions();
-            }
+        if (checkPermissions()) {
+            startCamera();
+        } else {
+            //if not, request the permission to the user
+            requestPermissions();
         }
+        return rootView;
+    }
 
+    private void startCamera(){
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
         uri = generateTimeStampPhotoFileUri();
         intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE).putExtra(MediaStore.EXTRA_OUTPUT, uri);
         startActivityForResult(intent, CAMERA_REQUEST_CODE);
-
-        return rootView;
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data)

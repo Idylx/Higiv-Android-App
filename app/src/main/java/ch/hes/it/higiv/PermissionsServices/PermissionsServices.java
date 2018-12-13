@@ -83,7 +83,7 @@ public class PermissionsServices {
         return false;
     }
 
-    public boolean checkAndRequestLocationPermissions(Activity thisActivity, Context thisContext){
+    public boolean checkAndRequestLocationPermissions(Activity thisActivity, Context thisContext) {
         boolean mLocationPermissionGranted = false;
         String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
 
@@ -115,8 +115,7 @@ public class PermissionsServices {
                 Toast.makeText(thisActivity, R.string.NoPermissionsLocation, Toast.LENGTH_SHORT).show();
             }
 
-        }
-        catch (SecurityException e) {
+        } catch (SecurityException e) {
         }
     }
 
