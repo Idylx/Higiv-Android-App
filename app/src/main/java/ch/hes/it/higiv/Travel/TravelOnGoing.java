@@ -13,6 +13,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.telephony.SmsManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -206,9 +207,10 @@ public class TravelOnGoing extends Fragment {
             }
         });
     }
+
     private void getDeviceLocation() {
 
-        permissionsServices.getDeviceLocation(getActivity(), true/*mLocationPermissionGranted*/, new FirebaseCallBack() {
+        permissionsServices.getDeviceLocation(getActivity(), mLocationPermissionGranted, new FirebaseCallBack() {
             @Override
             public void onCallBack(Object o) {
 
@@ -232,17 +234,8 @@ public class TravelOnGoing extends Fragment {
         return permissionsServices.isServicesMapOK(getActivity());
     }
     public void getLocationPermission() {
-        String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
-
-        if (ContextCompat.checkSelfPermission(getActivity().getApplicationContext(), FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            if (ContextCompat.checkSelfPermission(getActivity().getApplicationContext(), COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                mLocationPermissionGranted = true;
-            } else {
-                ActivityCompat.requestPermissions(getActivity(), permissions, LOCATION_PERMISSION_REQUEST_CODE);
-            }
-        } else {
-            ActivityCompat.requestPermissions(getActivity(), permissions, LOCATION_PERMISSION_REQUEST_CODE);
+        if(permissionsServices.checkAndRequestLocationPermissions(getActivity(), getContext())){
+            mLocationPermissionGranted = true;
         }
-
     }
 }

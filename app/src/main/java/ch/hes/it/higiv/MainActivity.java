@@ -55,8 +55,6 @@ public class MainActivity extends AppCompatActivity
     private User user;
     private String phoneNumber;
 
-    private final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
-    private final String COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
     private final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
     private final float DEFAULT_ZOOM = 15f;
 
@@ -353,10 +351,11 @@ public class MainActivity extends AppCompatActivity
     private boolean checkPermission() {
         return permissionsServices.isServicesSMSOK(this);
     }
-    //method for request the permission to the user
+    //method for request the permission for the SMS to the user
     private void requestPermission() {
-        ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.SEND_SMS}, 1);
+        permissionsServices.requestSMSPermissions(this);
     }
+
     private String CreateMessage() {
         //create the text for the SMS
         String alert = getString(R.string.messageContainAlert);

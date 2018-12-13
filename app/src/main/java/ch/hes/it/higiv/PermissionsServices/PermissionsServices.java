@@ -42,6 +42,10 @@ public class PermissionsServices {
         }
     }
 
+    public void requestSMSPermissions(Activity thisActivity){
+        ActivityCompat.requestPermissions(thisActivity, new String[]{Manifest.permission.SEND_SMS}, 1);
+    }
+
     //=====================================================
     //Concerning the camera
     //=====================================================

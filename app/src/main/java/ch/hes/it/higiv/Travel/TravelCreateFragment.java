@@ -61,7 +61,7 @@ public class TravelCreateFragment extends Fragment {
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private String inputDestination;
     private NumberPicker inputNbPersons;
-    private Button btnBeginTravel, btnStopTravel;
+    private Button btnBeginTravel, btnStopTravel, btnTakePicture;
 
     private StorageReference mStorageRef, filepath;
     private EditText retrieveTextFromImage;
@@ -113,6 +113,7 @@ public class TravelCreateFragment extends Fragment {
         inputNbPersons = (NumberPicker) rootView.findViewById(R.id.number_of_places);
         btnBeginTravel = (Button) rootView.findViewById(R.id.btn_begin_travel);
         btnStopTravel = (Button) rootView.findViewById(R.id.btn_cancel_travel);
+        btnTakePicture = (Button) rootView.findViewById(R.id.takePicture);
 
         //Set min max values for the NumberPicker
         inputNbPersons.setMinValue(1);
@@ -283,14 +284,18 @@ public class TravelCreateFragment extends Fragment {
         plateImage = (ImageView)rootView.findViewById(R.id.imageplate);
         retrieveTextFromImage = (EditText) rootView.findViewById(R.id.retrieveTextImage);
 
-        //check if the permission is already allow
-        if (checkPermissions()) {
-            startCamera();
-        } else {
-            //if not, request the permission to the user
-            requestPermissions();
-        }
+        btnTakePicture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (checkPermissions()) {
+                    startCamera();
+                } else {
+                    requestPermissions();
+                }
+            }
+        });
         return rootView;
+
     }
 
     private void startCamera(){
