@@ -81,7 +81,6 @@ public class TravelCreateFragment extends Fragment {
 
         final View rootView = inflater.inflate(R.layout.fragment_travel_create, container, false);
 
-  //      inputDestination = (EditText) rootView.findViewById(R.id.destination);
         inputPlateNumberState = (EditText) rootView.findViewById(R.id.plate_number_state);
         inputPlateNumber = (EditText) rootView.findViewById(R.id.plate_number);
         inputNbPersons = (NumberPicker) rootView.findViewById(R.id.number_of_places);
@@ -91,7 +90,8 @@ public class TravelCreateFragment extends Fragment {
         //Set min max values for the NumberPicker
         inputNbPersons.setMinValue(1);
         inputNbPersons.setMaxValue(9);
-        inputNbPersons.setWrapSelectorWheel(true);
+        inputNbPersons.setWrapSelectorWheel(false);
+       
 
         //Set a value change listener for NumberPicker
         inputNbPersons.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
@@ -101,6 +101,7 @@ public class TravelCreateFragment extends Fragment {
                 nbPerson = newVal ;
             }
         });
+
 
 
         PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment) getActivity().getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
