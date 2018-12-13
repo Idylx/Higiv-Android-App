@@ -4,44 +4,31 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.telephony.SmsManager;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
-import ch.hes.it.higiv.Model.Plate;
 import ch.hes.it.higiv.Model.Travel;
 import ch.hes.it.higiv.Model.User;
+import ch.hes.it.higiv.PermissionsServices.PermissionsServices;
 import ch.hes.it.higiv.R;
 import ch.hes.it.higiv.firebase.FirebaseCallBack;
 import ch.hes.it.higiv.firebase.UserConnection;
 import ch.hes.it.higiv.firebase.TravelConnection;
 
 public class TravelOnGoing extends Fragment {
-
-    //Access the database
-    private DatabaseReference mDatabaseReference = FirebaseDatabase.getInstance().getReference();
-
 
     private Button StopButton, AlertButton;
     private TextView DestinationTv, CarPlateTv, NumberOfPersonTv;
@@ -51,6 +38,7 @@ public class TravelOnGoing extends Fragment {
     private String plateString = "";
     private String idTravel;
 
+    PermissionsServices permissionsServices = new PermissionsServices();
 
     TravelConnection travelConnection = new TravelConnection();
 
@@ -70,8 +58,6 @@ public class TravelOnGoing extends Fragment {
         DestinationTv = (TextView) view.findViewById(R.id.destination_tv);
         CarPlateTv = (TextView) view.findViewById(R.id.car_plate_tv);
         NumberOfPersonTv = (TextView) view.findViewById(R.id.number_persons_tv);
-
-
 
         //Calls the Firebase Manager --> link to Firebase
         UserConnection userConnection = new UserConnection();
@@ -157,12 +143,7 @@ public class TravelOnGoing extends Fragment {
     }
     //Method for check if the user have already allow the permission for send message
     private boolean checkPermission() {
-        int result = ContextCompat.checkSelfPermission(getActivity().getApplicationContext(), Manifest.permission.SEND_SMS);
-        if (result == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        } else {
-            return false;
-        }
+        return permissionsServices.isServicesSMSOK(getActivity().getApplicationContext());
     }
     //method for request the permission to the user
     private void requestPermission() {

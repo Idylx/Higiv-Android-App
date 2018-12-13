@@ -4,7 +4,6 @@ package ch.hes.it.higiv.Travel;
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
@@ -15,10 +14,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,11 +50,11 @@ import java.util.UUID;
 
 import ch.hes.it.higiv.Model.Travel;
 import ch.hes.it.higiv.Model.Plate;
+import ch.hes.it.higiv.PermissionsServices.PermissionsServices;
 import ch.hes.it.higiv.R;
 import ch.hes.it.higiv.firebase.FirebaseCallBack;
 import ch.hes.it.higiv.firebase.PlateConnection;
 import ch.hes.it.higiv.firebase.TravelConnection;
-import ch.hes.it.higiv.Picture.Takepicture;
 
 public class TravelCreateFragment extends Fragment {
     //Access the current user
@@ -101,6 +97,8 @@ public class TravelCreateFragment extends Fragment {
     private TravelConnection travelConnection = new TravelConnection();
     private PlateConnection plateConnection = new PlateConnection();
 
+    private PermissionsServices permissionsServices = new PermissionsServices();
+
 
     private String travelID;
 
@@ -135,17 +133,17 @@ public class TravelCreateFragment extends Fragment {
         autocompleteFragment.setHint("Destination");
         autocompleteFragment.setOnPlaceSelectedListener(
 
-            new PlaceSelectionListener() {
-            @Override
-            public void onPlaceSelected(Place place) {
-               inputDestination = (String) place.getName();
-            }
+                new PlaceSelectionListener() {
+                    @Override
+                    public void onPlaceSelected(Place place) {
+                        inputDestination = (String) place.getName();
+                    }
 
-            @Override
-            public void onError(Status status) {
+                    @Override
+                    public void onError(Status status) {
 
-            }
-        });
+                    }
+                });
 
 
         inputNbPersons.setShowDividers(LinearLayout.SHOW_DIVIDER_NONE);
@@ -345,23 +343,12 @@ public class TravelCreateFragment extends Fragment {
 
     //Check the permissions for the camera and storage
     private boolean checkPermissions() {
-        String [] result = {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
-        if (ContextCompat.checkSelfPermission(getContext().getApplicationContext(),
-                result[0]) == PackageManager.PERMISSION_GRANTED
-                && ContextCompat.checkSelfPermission(getContext().getApplicationContext(),
-                result[1]) == PackageManager.PERMISSION_GRANTED
-                && ContextCompat.checkSelfPermission(getContext().getApplicationContext(),
-                result[2]) == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        } else {
-            return false;
-        }
+        return permissionsServices.isServicesCameraOK(getContext().getApplicationContext());
     }
 
     //method for request the permission to the user
     private void requestPermissions() {
-        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+        permissionsServices.requestCameraPermissions(getActivity());
     }
 
 

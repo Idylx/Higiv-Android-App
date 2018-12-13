@@ -13,22 +13,20 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+import ch.hes.it.higiv.PermissionsServices.PermissionsServices;
 import ch.hes.it.higiv.R;
+import ch.hes.it.higiv.firebase.FirebaseCallBack;
 
 
 public class TravelActivity extends AppCompatActivity {
 
+    private Boolean mLocationPermissionGranted = false;
 
-
-    private Boolean mLocationPermissionGranted = true;
-    private FusedLocationProviderClient mFusedLocationProviderClient;
+    PermissionsServices permissionsServices = new PermissionsServices();
 
 
 
     Location currentLocation;
-
-
-    private static final String TAG = "Travel Activity";
 
     ViewPager viewPager;
     private String idTravel = "";
@@ -44,7 +42,7 @@ public class TravelActivity extends AppCompatActivity {
         viewPager = (ViewPager) findViewById(R.id.travelContainer);
         setUpViewPager(viewPager);
 
-
+        mLocationPermissionGranted = permissionsServices.checkAndRequestLocationPermissions(this, this.getApplicationContext());
 
     }
 
@@ -82,26 +80,18 @@ public class TravelActivity extends AppCompatActivity {
 
 
     public void getDeviceLocation() {
-        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
-        try {
-            if (mLocationPermissionGranted) {
-                final Task location = mFusedLocationProviderClient.getLastLocation();
-                location.addOnCompleteListener(new OnCompleteListener() {
-                    @Override
-                    public void onComplete(@NonNull Task task) {
-                        if (task.isSuccessful()) {
-                             currentLocation = (Location) task.getResult();
-
-                        } else {
-                            Toast.makeText(TravelActivity.this, "Unable to retrieve device location", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+        permissionsServices.getDeviceLocation(this, mLocationPermissionGranted, new FirebaseCallBack() {
+            @Override
+            public void onCallBack(Object o) {
+                Task task = (Task) o;
+                if (task.isSuccessful()) {
+                    currentLocation = (Location) task.getResult();
+                } else {
+                    Toast.makeText(TravelActivity.this, R.string.NoDeviceLocation, Toast.LENGTH_SHORT).show();
+                }
             }
-
-        } catch (SecurityException e) {
-        }
+        });
     }
 
 }

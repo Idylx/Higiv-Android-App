@@ -120,9 +120,13 @@
     <string name="SignUp_SuccessfulCreation">Account successfully created!</string>
     <string name="SignUp_AuthFailed">Authentification failed!</string>
 
+    <!-- Camera -->
+    <string name="FailedDirectoryCreation">Failed to create directory </string>
+
     <!-- Maps -->
     <string name="WrongServicesMap">You can\'t make map requests</string>
     <string name="NoDeviceLocation">Unable to retrieve device location</string>
+    <string name="NoPermissionsLocation">Location permission not granted</string>
 
 
 </resources>

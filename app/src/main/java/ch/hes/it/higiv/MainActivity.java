@@ -55,8 +55,6 @@ public class MainActivity extends AppCompatActivity
     private User user;
     private String phoneNumber;
 
-    private final int ERROR_DIALOG_REQUEST = 9001;
-
     private final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     private final String COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
     private final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
@@ -66,7 +64,9 @@ public class MainActivity extends AppCompatActivity
 
     private Boolean mLocationPermissionGranted = false;
     private GoogleMap mMap;
-    private FusedLocationProviderClient mFusedLocationProviderClient;
+
+    private Double latitude = null;
+    private Double longitude = null;
 
 
     @Override
@@ -128,19 +128,10 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void getLocationPermission() {
-        String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
-
-        if (ContextCompat.checkSelfPermission(this.getApplicationContext(), FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            if (ContextCompat.checkSelfPermission(this.getApplicationContext(), COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                mLocationPermissionGranted = true;
-                initMap();
-            } else {
-                ActivityCompat.requestPermissions(this, permissions, LOCATION_PERMISSION_REQUEST_CODE);
-            }
-        } else {
-            ActivityCompat.requestPermissions(this, permissions, LOCATION_PERMISSION_REQUEST_CODE);
+        if(permissionsServices.checkAndRequestLocationPermissions(this, this.getApplicationContext())){
+            mLocationPermissionGranted = true;
+            initMap();
         }
-
     }
 
     private void getDeviceLocation() {
@@ -152,6 +143,9 @@ public class MainActivity extends AppCompatActivity
                 if (task.isSuccessful()) {
                     Location currentLocation = (Location) task.getResult();
                     moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), DEFAULT_ZOOM);
+                    //coordinates for alert sms
+                    longitude = currentLocation.getLongitude();
+                    latitude = currentLocation.getLatitude();
                 } else {
                     Toast.makeText(MainActivity.this, R.string.NoDeviceLocation, Toast.LENGTH_SHORT).show();
                 }
@@ -369,7 +363,11 @@ public class MainActivity extends AppCompatActivity
         String statName = "";
         String firstname = "";
         String lastname = "";
-        String geolocalisation ="Unknown";
+        String geolocalisation = "Unknown";
+        getDeviceLocation();
+        if(latitude != null && longitude != null){
+            geolocalisation = "https://www.google.com/search?q=" + latitude + "%2C" + longitude;
+        }
         //Check if the user have enter the information
         if(!user.getFirstname().isEmpty() || !user.getLastname().isEmpty()){
             statName = getString(R.string.messageContainUser);

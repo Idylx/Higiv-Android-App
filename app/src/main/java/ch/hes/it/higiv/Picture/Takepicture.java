@@ -1,9 +1,7 @@
 package ch.hes.it.higiv.Picture;
 
-import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
@@ -11,8 +9,6 @@ import android.os.Environment;
 import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -38,6 +34,7 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import ch.hes.it.higiv.PermissionsServices.PermissionsServices;
 import ch.hes.it.higiv.R;
 
 
@@ -58,6 +55,8 @@ public class Takepicture extends AppCompatActivity {
     private double progress;
     private ProgressDialog mProgress;
 
+    private PermissionsServices permissionsServices = new PermissionsServices();
+
     //A Uri object to store file path
     private Uri uri, photoFileUri;
     private static final int CAMERA_REQUEST_CODE = 666;
@@ -77,11 +76,9 @@ public class Takepicture extends AppCompatActivity {
 
 
         //check if the permission is already allow
-        if (Build.VERSION.SDK_INT >= 23) {
-            if (!checkPermissions()) {
-                //if not, request the permission to the user
-                requestPermissions();
-            }
+        if (!checkPermissions()) {
+            //if not, request the permission to the user
+            requestPermissions();
         }
 
         // Button that opens the camera
@@ -207,23 +204,12 @@ public class Takepicture extends AppCompatActivity {
 
     //Check the permissions for the camera and storage
     private boolean checkPermissions() {
-        String [] result = {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
-        if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
-                result[0]) == PackageManager.PERMISSION_GRANTED
-                && ContextCompat.checkSelfPermission(this.getApplicationContext(),
-                result[1]) == PackageManager.PERMISSION_GRANTED
-                && ContextCompat.checkSelfPermission(this.getApplicationContext(),
-                result[2]) == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        } else {
-            return false;
-        }
+        return permissionsServices.isServicesCameraOK(this.getApplicationContext());
     }
 
     //method for request the permission to the user
     private void requestPermissions() {
-        ActivityCompat.requestPermissions(Takepicture.this, new String[]{Manifest.permission.CAMERA,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+        permissionsServices.requestCameraPermissions(this);
     }
 
 
@@ -250,11 +236,7 @@ public class Takepicture extends AppCompatActivity {
 
             if (!outputDir.exists() && !outputDir.mkdirs())
             {
-                Toast.makeText(
-                        this,
-                        "Failed to create directory "
-                                + outputDir.getAbsolutePath(),
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,R.string.FailedDirectoryCreation + outputDir.getAbsolutePath(), Toast.LENGTH_SHORT).show();
                 outputDir = null;
             }
         }
