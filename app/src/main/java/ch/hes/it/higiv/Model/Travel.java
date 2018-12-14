@@ -1,6 +1,7 @@
 package ch.hes.it.higiv.Model;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 public class Travel {
 
@@ -10,6 +11,8 @@ public class Travel {
     private String idPlate;
     @NonNull
     private int numberOfPerson;
+    @Nullable
+    private String filePath;
     @NonNull
     private String idUser;
 
@@ -33,6 +36,13 @@ public class Travel {
         this.destination = destination;
     }
 
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public void setFilePath( String filePath) {
+        this.filePath = filePath;
+    }
 
     public String getIdPlate() {
         return idPlate;
