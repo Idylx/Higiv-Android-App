@@ -332,6 +332,8 @@ public class TravelCreateFragment extends Fragment {
             textOfImage = textOfImage.replace(" ", "");
             textOfImage = textOfImage.replace(".", "");
             textOfImage = textOfImage.toUpperCase();
+            textOfImage = textOfImage.replace("\n","");
+
 
             retrieveTextFromImage.setText(textOfImage);
         }
