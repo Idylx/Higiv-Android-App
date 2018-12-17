@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 
@@ -56,8 +57,10 @@ public class TravelSafeFinished extends Fragment {
                 setEndTravel();
                 plateConnection.setGoodEvaluation(plate);
 
+                Toast.makeText(getActivity(),R.string.satisfied, Toast.LENGTH_SHORT).show();
                 // end activity
                 ((TravelActivity)getActivity()).finish();
+
             }
         });
         badEvalButton = (ImageButton) view.findViewById(R.id.imageButtonNo);
@@ -67,6 +70,8 @@ public class TravelSafeFinished extends Fragment {
             public void onClick(View v) {
                 setEndTravel();
                 plateConnection.setBadEvaluation(plate);
+
+                Toast.makeText(getActivity(),R.string.unsatisfied, Toast.LENGTH_SHORT).show();
 
                 // end activity
                 ((TravelActivity)getActivity()).finish();

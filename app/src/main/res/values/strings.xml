@@ -99,6 +99,9 @@
     <string name="btn_cancel_travel">Cancel</string>
     <string name="travel_overview">Travel overview</string>
     <string name="car_plate">Car plate</string>
+    <string name="safe_travel">Enjoy the ride ?</string>
+    <string name="satisfied">We noticed that your enjoy your ride !</string>
+    <string name="unsatisfied">We noticed that you didn\'t enjoy your ride !</string>
 
     <!--Send message-->
     <string name="dialogSendMessage">Do you really want to send an alert message?</string>
