@@ -51,15 +51,18 @@ public class TravelActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
+    //Initial fragment set up
     public void setUpViewPager(ViewPager viewPager) {
         adapter.addFragmentToTravelFragmentList(new TravelCreateFragment());
         viewPager.setAdapter(adapter);
     }
+    //Add fragment to the fragment lists connected to this activity
     public void addFragmentToAdapter(Fragment fragment){
         adapter.addFragmentToTravelFragmentList(fragment);
         adapter.notifyDataSetChanged();
     }
 
+    //Set the current fragment to be displayed
     public void setViewPager(int fragmentNumber) {
         viewPager.setCurrentItem(fragmentNumber);
     }
@@ -78,7 +81,7 @@ public class TravelActivity extends AppCompatActivity {
     }
 
 
-
+    //Call the manager to retrieve the location
     public void getDeviceLocation() {
 
         permissionsServices.getDeviceLocation(this, mLocationPermissionGranted, new FirebaseCallBack() {

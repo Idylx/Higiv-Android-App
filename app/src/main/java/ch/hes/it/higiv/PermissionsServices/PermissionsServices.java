@@ -33,6 +33,7 @@ public class PermissionsServices {
     //Concerning the SMS
     //=====================================================
 
+    //Verifies that the device has the SMS permissions allowed
     public boolean isServicesSMSOK(Context thisActivity) {
         int result = ContextCompat.checkSelfPermission(thisActivity, Manifest.permission.SEND_SMS);
         if (result == PackageManager.PERMISSION_GRANTED) {
@@ -42,6 +43,7 @@ public class PermissionsServices {
         }
     }
 
+    //If the device doesn't have the SMS permissions allowed, displays a dialog for the user to enable them
     public void requestSMSPermissions(Activity thisActivity){
         ActivityCompat.requestPermissions(thisActivity, new String[]{Manifest.permission.SEND_SMS}, 1);
     }
@@ -49,6 +51,8 @@ public class PermissionsServices {
     //=====================================================
     //Concerning the camera
     //=====================================================
+
+    //Verifies that the device has the Camera and External Storage permissions allowed
     public boolean isServicesCameraOK(Context thisActivity) {
         if (Build.VERSION.SDK_INT >= 23) {
             String[] result = {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
@@ -66,6 +70,7 @@ public class PermissionsServices {
         return false;
     }
 
+    //If the device doesn't have the Camera and External Storage permissions allowed, displays a dialog for the user to enable them
     public void requestCameraPermissions(Activity thisActivity) {
         ActivityCompat.requestPermissions(thisActivity, new String[]{Manifest.permission.CAMERA,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
@@ -74,6 +79,8 @@ public class PermissionsServices {
     //=====================================================
     //Concerning the map
     //=====================================================
+
+    //verify that the services of the phone can support the latest map API
     public boolean isServicesMapOK(Activity thisActivity) {
         int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(thisActivity);
         if (available == ConnectionResult.SUCCESS) {
@@ -87,6 +94,7 @@ public class PermissionsServices {
         return false;
     }
 
+    //Check if the device has the location permissions allowed. if not, it will display a dialog for the user to enable them.
     public boolean checkAndRequestLocationPermissions(Activity thisActivity, Context thisContext) {
         boolean mLocationPermissionGranted = false;
         String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
@@ -103,6 +111,7 @@ public class PermissionsServices {
         return mLocationPermissionGranted;
     }
 
+    //Method to retrieve the current device location
     public void getDeviceLocation(Activity thisActivity, boolean mLocationPermissionGranted, final FirebaseCallBack firebaseCallBack) {
         FusedLocationProviderClient mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(thisActivity);
 

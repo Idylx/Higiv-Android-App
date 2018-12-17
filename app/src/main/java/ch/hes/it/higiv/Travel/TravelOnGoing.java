@@ -4,8 +4,6 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,7 +11,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.telephony.SmsManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,9 +19,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -57,11 +51,6 @@ public class TravelOnGoing extends Fragment {
     private Boolean mLocationPermissionGranted = false;
     private double latitude;
     private double longitude;
-
-    private final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
-    private final String COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
-    private final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
-    private final float DEFAULT_ZOOM = 15f;
 
     @Nullable
     @Override
@@ -124,6 +113,8 @@ public class TravelOnGoing extends Fragment {
 
         return  view;
     }
+
+    //Dialog for the alert SMS to be sent
     public Dialog onCreateDialog() {
         //test if the location is allow
         if(isServicesOK()){
@@ -167,6 +158,8 @@ public class TravelOnGoing extends Fragment {
     private void requestPermission() {
         ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.SEND_SMS}, 1);
     }
+
+    //Create the SMS message to be sent
     private void CreateMessage() {
         //create the text for the SMS
         String alert = getString(R.string.messageContainAlert);
@@ -175,7 +168,6 @@ public class TravelOnGoing extends Fragment {
         String lastname = "";
         String plate = plateString;
 
-        String geolocalisation ="https://www.google.com/search?q=" + latitude + "%2C" + longitude;
         //Check if the user have enter the information
         if(!user.getFirstname().isEmpty() || !user.getLastname().isEmpty()){
             statName = getString(R.string.messageContainUser);
@@ -208,6 +200,7 @@ public class TravelOnGoing extends Fragment {
         });
     }
 
+    //Calls the manager to retrieve the device's location
     private void getDeviceLocation() {
 
         permissionsServices.getDeviceLocation(getActivity(), mLocationPermissionGranted, new FirebaseCallBack() {
@@ -230,9 +223,12 @@ public class TravelOnGoing extends Fragment {
             }
         });
     }
+
+    //Call the manager to verify that the devices can support the Map API
     public boolean isServicesOK(){
         return permissionsServices.isServicesMapOK(getActivity());
     }
+    //Call the manager to verify and request if needed the location permissions
     public void getLocationPermission() {
         if(permissionsServices.checkAndRequestLocationPermissions(getActivity(), getContext())){
             mLocationPermissionGranted = true;
