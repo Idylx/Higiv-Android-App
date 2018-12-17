@@ -35,12 +35,13 @@ public class PermissionsServices {
 
     //Verifies that the device has the SMS permissions allowed
     public boolean isServicesSMSOK(Context thisActivity) {
-        int result = ContextCompat.checkSelfPermission(thisActivity, Manifest.permission.SEND_SMS);
-        if (result == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        } else {
-            return false;
+        if (Build.VERSION.SDK_INT >= 23) {
+            int result = ContextCompat.checkSelfPermission(thisActivity, Manifest.permission.SEND_SMS);
+            if (result == PackageManager.PERMISSION_GRANTED) {
+                return true;
+            }
         }
+        return false;
     }
 
     //If the device doesn't have the SMS permissions allowed, displays a dialog for the user to enable them
@@ -124,10 +125,7 @@ public class PermissionsServices {
                         firebaseCallBack.onCallBack(task);
                     }
                 });
-            } else {
-                Toast.makeText(thisActivity, R.string.NoPermissionsLocation, Toast.LENGTH_SHORT).show();
             }
-
         } catch (SecurityException e) {
         }
     }

@@ -266,14 +266,11 @@ public class MainActivity extends AppCompatActivity
                                 Toast.makeText(MainActivity.this, R.string.phoneNumberDontExist, Toast.LENGTH_SHORT).show();
                             }else{
                                 phoneNumber = user.getEmergencyPhone();
-                                if (Build.VERSION.SDK_INT >= 23) {
-                                    if (!checkPermission()) {
-                                        //if not, request the permission to the user
-                                        requestPermission();
-                                    }
+                                if (!checkPermission()) {
+                                    //if not, request the permission to the user
+                                    requestPermission();
                                 }
                                 onCreateDialog().show();
-
                             }
                         }
 
