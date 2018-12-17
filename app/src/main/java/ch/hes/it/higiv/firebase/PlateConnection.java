@@ -29,6 +29,7 @@ public class PlateConnection extends FirebaseConnection {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Plate plate = dataSnapshot.getValue(Plate.class);
                 firebaseCallBack.onCallBack(plate);
+
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
