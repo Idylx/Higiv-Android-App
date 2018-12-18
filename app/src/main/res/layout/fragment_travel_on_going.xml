@@ -9,8 +9,11 @@
     <android.support.constraint.ConstraintLayout
         android:id="@+id/constraintLayout2"
         android:layout_width="match_parent"
-        android:layout_height="177dp"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="163dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/btn_send_alert"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
 
         <ImageView
             android:id="@+id/cloud1"
@@ -120,12 +123,12 @@
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/linearLayout3"
         android:layout_width="match_parent"
-        android:layout_height="286dp"
-        android:layout_marginTop="8dp"
+        android:layout_height="179dp"
         android:orientation="vertical"
         android:padding="20dp"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout2"
+        app:layout_constraintTop_toTopOf="parent"
         tools:context=".Travel.TravelOnGoing">
 
 
@@ -213,29 +216,32 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/car_plate_tv" />
-
-
-            <Button
-                android:id="@+id/btn_send_alert"
-                android:layout_width="wrap_content"
-                android:layout_height="53dp"
-                android:layout_marginTop="50dp"
-                android:layout_marginBottom="50dp"
-                android:background="@color/colorPrimary"
-                android:text="@string/btn_send_alert"
-                android:textColor="@android:color/white" />
-
-            <Button
-                android:id="@+id/btn_cancel_travel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="50dp"
-                android:layout_marginTop="50dp"
-                android:background="@color/colorPrimary"
-                android:text="@string/btn_stop_travel"
-                android:textColor="@android:color/white" />
         </GridLayout>
 
 
     </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_send_alert"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginBottom="24dp"
+        android:background="@color/colorPrimary"
+        android:text="@string/btn_send_alert"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btn_cancel_travel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="50dp"
+        android:layout_marginBottom="24dp"
+        android:background="@color/colorPrimary"
+        android:text="@string/btn_stop_travel"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 </android.support.constraint.ConstraintLayout>
