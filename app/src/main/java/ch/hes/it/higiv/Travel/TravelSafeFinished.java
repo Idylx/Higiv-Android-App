@@ -14,6 +14,7 @@ import java.text.SimpleDateFormat;
 
 import ch.hes.it.higiv.Model.Plate;
 import ch.hes.it.higiv.Model.Travel;
+import ch.hes.it.higiv.PermissionsServices.PermissionsServices;
 import ch.hes.it.higiv.R;
 import ch.hes.it.higiv.firebase.FirebaseCallBack;
 import ch.hes.it.higiv.firebase.PlateConnection;
@@ -28,6 +29,9 @@ public class TravelSafeFinished extends Fragment {
 
     private PlateConnection plateConnection = new PlateConnection();
     private TravelConnection travelConnection = new TravelConnection();
+
+    private PermissionsServices permissionsServices = new PermissionsServices();
+
     private Plate plate;
     private Travel travel;
     @Nullable
@@ -90,7 +94,8 @@ public class TravelSafeFinished extends Fragment {
         // set end travel information
         travel.setTimeEnd(new SimpleDateFormat("dd-MM-yyyy kk:mm:ss").format(System.currentTimeMillis()));
         travelConnection.setEndTravel(travel, ((TravelActivity) getActivity()).getidTravel());
-        travelConnection.setEndLocationTravel(((TravelActivity) getActivity()).getCurrentLocation(), ((TravelActivity) getActivity()).getidTravel());
+        if(permissionsServices.checkAndRequestLocationPermissions(getActivity(), getContext()))
+            travelConnection.setEndLocationTravel(((TravelActivity) getActivity()).getCurrentLocation(), ((TravelActivity) getActivity()).getidTravel());
     }
 
 }

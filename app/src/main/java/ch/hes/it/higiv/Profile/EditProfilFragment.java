@@ -153,6 +153,7 @@ public class EditProfilFragment extends Fragment {
 
                     Intent intent = new Intent(getActivity(), MainActivity.class);
                     startActivity(intent);
+                    getActivity().finish();
                 //}
                 //else{
                  //   Toast.makeText(getActivity(), R.string.ProfilVerificationToast, Toast.LENGTH_SHORT).show();

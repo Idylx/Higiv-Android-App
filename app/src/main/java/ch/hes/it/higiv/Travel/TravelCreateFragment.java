@@ -206,7 +206,8 @@ public class TravelCreateFragment extends Fragment {
 
                         // set travel and locatioon
                         travelConnection.setTravel(travel, travelID);
-                        travelConnection.setBeginLocationTravel(((TravelActivity) getActivity()).getCurrentLocation(), travelID);
+                        if(permissionsServices.checkAndRequestLocationPermissions(getActivity(), getContext()))
+                            travelConnection.setBeginLocationTravel(((TravelActivity) getActivity()).getCurrentLocation(), travelID);
 
                         //create next fragment
                         ((TravelActivity) getActivity()).addFragmentToAdapter(new TravelOnGoing());
