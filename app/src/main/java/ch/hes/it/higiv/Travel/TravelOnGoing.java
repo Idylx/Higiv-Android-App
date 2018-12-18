@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -18,6 +19,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
 import ch.hes.it.higiv.Model.Travel;
@@ -38,13 +40,17 @@ public class TravelOnGoing extends Fragment {
     private String plateString = "";
     private String idTravel;
 
-    PermissionsServices permissionsServices = new PermissionsServices();
-
     TravelConnection travelConnection = new TravelConnection();
 
     private User user;
 
     private String phoneNumber;
+    private String message;
+    private PermissionsServices permissionsServices = new PermissionsServices();
+
+    private Boolean mLocationPermissionGranted = false;
+    private double latitude;
+    private double longitude;
 
     @Nullable
     @Override
@@ -107,7 +113,13 @@ public class TravelOnGoing extends Fragment {
 
         return  view;
     }
+
+    //Dialog for the alert SMS to be sent
     public Dialog onCreateDialog() {
+        //test if the location is allow
+        if(isServicesOK()){
+            getLocationPermission();
+        }
         // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage(R.string.dialogSendMessage)
@@ -124,10 +136,7 @@ public class TravelOnGoing extends Fragment {
                             }
                             else{
                                 plateString = travel.getIdPlate();
-                                String finalMessage = CreateMessage();
-                                //Send the SMS
-                                SmsManager.getDefault().sendTextMessage(phoneNumber, null, finalMessage, null, null);
-                                Toast.makeText(getActivity().getApplicationContext(), R.string.messageSendToast, Toast.LENGTH_SHORT).show();
+                                CreateMessage();
                             }
                         }
 
@@ -149,14 +158,16 @@ public class TravelOnGoing extends Fragment {
     private void requestPermission() {
         ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.SEND_SMS}, 1);
     }
-    private String CreateMessage() {
+
+    //Create the SMS message to be sent
+    private void CreateMessage() {
         //create the text for the SMS
         String alert = getString(R.string.messageContainAlert);
         String statName = "";
         String firstname = "";
         String lastname = "";
         String plate = plateString;
-        String geolocalisation ="Unknown";
+
         //Check if the user have enter the information
         if(!user.getFirstname().isEmpty() || !user.getLastname().isEmpty()){
             statName = getString(R.string.messageContainUser);
@@ -167,7 +178,9 @@ public class TravelOnGoing extends Fragment {
         if(!user.getLastname().isEmpty()){
             lastname=user.getLastname();
         }
-        return alert + "\n" + firstname + lastname + " " + statName + "\n" + getString(R.string.messageContainPlate)+ " " + plate + "\n" + getString(R.string.messageContainLocalisation) + " " + geolocalisation;
+
+        message = alert + "\n" + firstname + lastname + " " + statName + "\n" + getString(R.string.messageContainPlate)+ " " + plate + "\n" + getString(R.string.messageContainLocalisation) + " ";
+        getDeviceLocation();
     }
 
     @Override
@@ -185,5 +198,40 @@ public class TravelOnGoing extends Fragment {
                 CarPlateTv.setText(travel.getIdPlate());
             }
         });
+    }
+
+    //Calls the manager to retrieve the device's location
+    private void getDeviceLocation() {
+
+        permissionsServices.getDeviceLocation(getActivity(), mLocationPermissionGranted, new FirebaseCallBack() {
+            @Override
+            public void onCallBack(Object o) {
+
+                Task task = (Task) o;
+                if (task.isSuccessful()) {
+                    Location currentLocation = (Location) task.getResult();
+                    longitude=currentLocation.getLongitude();
+                    latitude=currentLocation.getLatitude();
+                    String geolocalisation ="https://www.google.com/search?q=" + latitude + "%2C" + longitude;
+                    message = message + geolocalisation;
+                    //Send the SMS
+                    SmsManager.getDefault().sendTextMessage(phoneNumber, null, message, null, null);
+                    Toast.makeText(getActivity().getApplicationContext(), R.string.messageSendToast, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getActivity().getApplicationContext(), R.string.NoDeviceLocation, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    //Call the manager to verify that the devices can support the Map API
+    public boolean isServicesOK(){
+        return permissionsServices.isServicesMapOK(getActivity());
+    }
+    //Call the manager to verify and request if needed the location permissions
+    public void getLocationPermission() {
+        if(permissionsServices.checkAndRequestLocationPermissions(getActivity(), getContext())){
+            mLocationPermissionGranted = true;
+        }
     }
 }

@@ -1,7 +1,5 @@
 package ch.hes.it.higiv;
 
-import android.Manifest;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -12,8 +10,6 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.telephony.SmsManager;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -27,16 +23,11 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -55,8 +46,6 @@ public class MainActivity extends AppCompatActivity
     private User user;
     private String phoneNumber;
 
-    private final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
-    private final String COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
     private final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
     private final float DEFAULT_ZOOM = 15f;
 
@@ -127,13 +116,14 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    //Calls the manager to verify is the permissions have been allowed
     public void getLocationPermission() {
         if(permissionsServices.checkAndRequestLocationPermissions(this, this.getApplicationContext())){
             mLocationPermissionGranted = true;
             initMap();
         }
     }
-
+    //Calls the manager to get the location of the device
     private void getDeviceLocation() {
 
         permissionsServices.getDeviceLocation(this, mLocationPermissionGranted, new FirebaseCallBack() {
@@ -153,22 +143,22 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
+    //Centers the map with the device location in the middle
     private void moveCamera(LatLng latLng, float zoom) {
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
     }
 
+    //As soon as the map is ready, get the location and display it on the map
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        getDeviceLocation();
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
+        if(permissionsServices.checkAndRequestLocationPermissions(this, this.getApplicationContext())){
+            getDeviceLocation();
+            mMap.setMyLocationEnabled(true);
         }
-        mMap.setMyLocationEnabled(true);
     }
 
+    //Initiailize the map
     public void initMap(){
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(MainActivity.this);
@@ -194,13 +184,14 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    //Calls the manager to check is the device can support the latest
     public boolean isServicesOK(){
             return permissionsServices.isServicesMapOK(this);
     }
 
 
 
-
+    //Back button
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -211,6 +202,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    //For the menu on the top bar
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -244,6 +236,7 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    //for the drawer
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -320,7 +313,7 @@ public class MainActivity extends AppCompatActivity
         super.onStop();
 
     }
-
+    //Displays the dialog to send the SMS as an Alert signal
     public Dialog onCreateDialog() {
         // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
@@ -350,13 +343,15 @@ public class MainActivity extends AppCompatActivity
         return builder.create();
     }
 
+    //Check SMS permissions
     private boolean checkPermission() {
         return permissionsServices.isServicesSMSOK(this);
     }
-    //method for request the permission to the user
+    //method for request the permission for the SMS to the user
     private void requestPermission() {
-        ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.SEND_SMS}, 1);
+        permissionsServices.requestSMSPermissions(this);
     }
+    //Create the message to be sent by SMS
     private String CreateMessage() {
         //create the text for the SMS
         String alert = getString(R.string.messageContainAlert);

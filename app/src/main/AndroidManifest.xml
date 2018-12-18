@@ -53,13 +53,12 @@
         <activity android:name=".Account.SignupActivity" />
         <activity android:name=".Account.ResetPasswordActivity" />
         <activity android:name=".Profile.ActivityProfile" />
-        <activity android:name=".Travel.TravelActivity" />
+        <activity android:name=".Travel.TravelActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".MainActivity"
-            android:label="@string/title_activity_main"
+            android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Picture.Takepicture"
-            android:screenOrientation="portrait" />
 
         <!-- add this to the manifest to use recognition for our app -->
         <meta-data android:name="com.google.android.gms.vision.DEPENDENCIES"
