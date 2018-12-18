@@ -130,6 +130,7 @@
     <string name="WrongServicesMap">You can\'t make map requests</string>
     <string name="NoDeviceLocation">Unable to retrieve device location</string>
     <string name="NoPermissionsLocation">Location permission not granted</string>
+    <string name="DeleteUserSettings">Delete your account</string>
 
 
 </resources>

@@ -36,8 +36,6 @@ public class EditProfilFragment extends Fragment {
     private Button ResetButton;
     private Button EditButton;
 
-    //Testing
-    private Button DeleteButton;
 
     private RadioGroup radioGroup;
     private RadioButton RadioMen;
@@ -76,8 +74,6 @@ public class EditProfilFragment extends Fragment {
         EditButton = (Button) view.findViewById(R.id.EditButton);
         ResetButton = view.findViewById(R.id.resetButton);
 
-        //Testing
-        DeleteButton = (Button) view.findViewById(R.id.deleteButton);
 
         FirstnameLabel.setText("");
         LastnameLabel.setText("");
@@ -136,13 +132,6 @@ public class EditProfilFragment extends Fragment {
                         gender = "";
                         break;
                 }
-            }
-        });
-
-        DeleteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                userConnection.deleteUser(getActivity(), userAuth);
             }
         });
 

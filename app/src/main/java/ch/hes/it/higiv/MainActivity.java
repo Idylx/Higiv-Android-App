@@ -31,6 +31,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
+import ch.hes.it.higiv.AboutSettings.About;
+import ch.hes.it.higiv.AboutSettings.Settings;
 import ch.hes.it.higiv.Account.LoginActivity;
 import ch.hes.it.higiv.Model.User;
 import ch.hes.it.higiv.PermissionsServices.PermissionsServices;
@@ -280,10 +282,10 @@ public class MainActivity extends AppCompatActivity
 
                 break;
             case R.id.nav_settings:
-                // bla bla
+                startActivity(new Intent(MainActivity.this, Settings.class));
                 break;
             case R.id.nav_about:
-                //bla bla
+                startActivity(new Intent(MainActivity.this, About.class));
                 break;
         }
 
