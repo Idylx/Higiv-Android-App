@@ -1,123 +1,241 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="20dp"
-    tools:context=".Travel.TravelOnGoing">
+    tools:context=".MainActivity">
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/constraintLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="177dp"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/cloud1"
+            android:layout_width="137dp"
+            android:layout_height="74dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="90dp"
+            app:layout_constraintBottom_toBottomOf="@+id/tree"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@drawable/cloud" />
+
+        <ImageView
+            android:id="@+id/moutain"
+            android:layout_width="334dp"
+            android:layout_height="133dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@drawable/mountains" />
+
+        <ImageView
+            android:id="@+id/cloud2"
+            android:layout_width="137dp"
+            android:layout_height="74dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="70dp"
+            app:layout_constraintBottom_toBottomOf="@+id/line"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@drawable/cloud" />
+
+        <View
+            android:id="@+id/line"
+            android:layout_width="0dp"
+            android:layout_height="5dp"
+            android:layout_gravity="center"
+            android:background="#000000"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
 
+        <ImageView
+            android:id="@+id/tree"
+            android:layout_width="134dp"
+            android:layout_height="85dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/moutain"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@drawable/tree" />
 
-    <TextView
-        android:id="@+id/travel_overview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/colorPrimary"
-        android:text="@string/travel_overview"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+        <ImageView
+            android:id="@+id/lamp"
+            android:layout_width="74dp"
+            android:layout_height="120dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="80dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="5dp"
+            app:layout_constraintBottom_toBottomOf="@+id/moutain"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.53"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0"
+            app:srcCompat="@drawable/lamp"
+            tools:ignore="MissingConstraints" />
 
-    <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        <ImageView
+            android:id="@+id/car"
+            android:layout_width="271dp"
+            android:layout_height="66dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/car"
+            app:layout_constraintBottom_toBottomOf="@+id/lamp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:ignore="MissingConstraints" />
+
+        <ImageView
+            android:id="@+id/wheel1"
+            android:layout_width="27dp"
+            android:layout_height="27dp"
+            android:layout_marginEnd="80dp"
+            app:layout_constraintBottom_toBottomOf="@+id/car"
+            app:layout_constraintEnd_toEndOf="@+id/car"
+            app:srcCompat="@drawable/wheel" />
+
+        <ImageView
+            android:id="@+id/wheel2"
+            android:layout_width="27dp"
+            android:layout_height="27dp"
+            android:layout_marginStart="80dp"
+            app:layout_constraintBottom_toBottomOf="@+id/car"
+            app:layout_constraintStart_toStartOf="@+id/car"
+            app:srcCompat="@drawable/wheel" />
+
+
+    </android.support.constraint.ConstraintLayout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:columnCount="2"
-        android:orientation="horizontal"
-        app:layout_optimizationLevel="standard">
-
-        <TextView
-            android:id="@+id/destination_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="0dp"
-            android:layout_marginStart="16dp"
-            android:padding="0dp"
-            android:text="@string/destination"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/travel_overview" />
+        android:layout_height="286dp"
+        android:layout_marginTop="8dp"
+        android:orientation="vertical"
+        android:padding="20dp"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout2"
+        tools:context=".Travel.TravelOnGoing">
 
 
         <TextView
-            android:id="@+id/destination_tv"
+            android:id="@+id/travel_overview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="50dp"
-            android:text="TextView"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/travel_overview" />
+            android:text="@string/travel_overview"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="@color/colorPrimary" />
 
-        <TextView
-            android:id="@+id/car_plate_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="0dp"
-            android:layout_marginStart="16dp"
-            android:padding="0dp"
-            android:text="@string/car_plate"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/destination_label" />
+        <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:layout_marginTop="40dp"
+            android:columnCount="2"
+            android:orientation="horizontal"
+            app:layout_optimizationLevel="standard">
 
-        <TextView
-            android:id="@+id/car_plate_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="50dp"
-            android:text="TextView"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/destination_tv" />
-
-        <TextView
-            android:id="@+id/number_persons_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="0dp"
-            android:layout_marginStart="16dp"
-            android:padding="0dp"
-            android:text="@string/number_of_person"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/car_plate_label" />
-
-        <TextView
-            android:id="@+id/number_persons_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="50dp"
-            android:text="TextView"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/car_plate_tv" />
+            <TextView
+                android:id="@+id/destination_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="0dp"
+                android:layout_marginStart="16dp"
+                android:padding="0dp"
+                android:text="@string/destination"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/travel_overview" />
 
 
-        <Button
-            android:id="@+id/btn_send_alert"
-            android:layout_width="wrap_content"
-            android:layout_height="53dp"
-            android:layout_marginTop="50dp"
-            android:layout_marginBottom="50dp"
-            android:background="@color/colorPrimary"
-            android:text="@string/btn_send_alert"
-            android:textColor="@android:color/white" />
+            <TextView
+                android:id="@+id/destination_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50dp"
+                android:text="TextView"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/travel_overview" />
 
-        <Button
-            android:id="@+id/btn_cancel_travel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="50dp"
-            android:layout_marginTop="50dp"
-            android:background="@color/colorPrimary"
-            android:text="@string/btn_stop_travel"
-            android:textColor="@android:color/white" />
-    </GridLayout>
+            <TextView
+                android:id="@+id/car_plate_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="0dp"
+                android:layout_marginStart="16dp"
+                android:padding="0dp"
+                android:text="@string/car_plate"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/destination_label" />
+
+            <TextView
+                android:id="@+id/car_plate_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50dp"
+                android:text="TextView"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/destination_tv" />
+
+            <TextView
+                android:id="@+id/number_persons_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="0dp"
+                android:layout_marginStart="16dp"
+                android:padding="0dp"
+                android:text="@string/number_of_person"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/car_plate_label" />
+
+            <TextView
+                android:id="@+id/number_persons_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50dp"
+                android:text="TextView"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/car_plate_tv" />
 
 
+            <Button
+                android:id="@+id/btn_send_alert"
+                android:layout_width="wrap_content"
+                android:layout_height="53dp"
+                android:layout_marginTop="50dp"
+                android:layout_marginBottom="50dp"
+                android:background="@color/colorPrimary"
+                android:text="@string/btn_send_alert"
+                android:textColor="@android:color/white" />
+
+            <Button
+                android:id="@+id/btn_cancel_travel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="50dp"
+                android:background="@color/colorPrimary"
+                android:text="@string/btn_stop_travel"
+                android:textColor="@android:color/white" />
+        </GridLayout>
 
 
-</LinearLayout>
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>

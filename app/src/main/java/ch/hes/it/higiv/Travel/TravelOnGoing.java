@@ -15,7 +15,11 @@ import android.telephony.SmsManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LinearInterpolator;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,6 +56,16 @@ public class TravelOnGoing extends Fragment {
     private double latitude;
     private double longitude;
 
+    //animation
+    private ImageView wheelImg1;
+    private ImageView wheelImg2;
+    private ImageView lampImg;
+    private ImageView moutainImg;
+    private ImageView treeImg;
+    private ImageView cloud1Img;
+    private ImageView cloud2Img;
+    private ImageView carImg;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -64,6 +78,50 @@ public class TravelOnGoing extends Fragment {
         DestinationTv = (TextView) view.findViewById(R.id.destination_tv);
         CarPlateTv = (TextView) view.findViewById(R.id.car_plate_tv);
         NumberOfPersonTv = (TextView) view.findViewById(R.id.number_persons_tv);
+
+        //animation
+        wheelImg1 = (ImageView) view.findViewById(R.id.wheel1);
+        wheelImg2 = (ImageView) view.findViewById(R.id.wheel2);
+        lampImg = (ImageView) view.findViewById(R.id.lamp);
+        moutainImg = (ImageView) view.findViewById(R.id.moutain);
+        treeImg =(ImageView) view.findViewById(R.id.tree);
+        cloud1Img =(ImageView) view.findViewById(R.id.cloud1);
+        cloud2Img =(ImageView) view.findViewById(R.id.cloud2);
+        carImg =(ImageView) view.findViewById(R.id.car);
+
+        //animation for the rotation of wheels
+        Animation animWheel = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate);
+        animWheel.setInterpolator(new LinearInterpolator());
+        wheelImg1.startAnimation(animWheel);
+        wheelImg2.startAnimation(animWheel);
+
+        //animation for the lamp
+        Animation animLamp = AnimationUtils.loadAnimation(getActivity(), R.anim.righttoleft);
+        animLamp.setInterpolator(new LinearInterpolator());
+        lampImg.startAnimation(animLamp);
+
+        //animation for the mountain
+        Animation animRightMoutain = AnimationUtils.loadAnimation(getActivity(), R.anim.righttoleftmoutain);
+        animRightMoutain.setInterpolator(new LinearInterpolator());
+        moutainImg.startAnimation(animRightMoutain);
+
+        //animation for the Tree
+        Animation animRightTree = AnimationUtils.loadAnimation(getActivity(), R.anim.righttolefttree);
+        animRightTree.setInterpolator(new LinearInterpolator());
+        treeImg.startAnimation(animRightTree);
+
+        //animation for the clouds
+        Animation animRightCloud1 = AnimationUtils.loadAnimation(getActivity(), R.anim.righttoleftcloud);
+        animRightCloud1.setInterpolator(new LinearInterpolator());
+        cloud1Img.startAnimation(animRightCloud1);
+        Animation animRightCloud2 = AnimationUtils.loadAnimation(getActivity(), R.anim.righttoleftcloud2);
+        animRightCloud2.setInterpolator(new LinearInterpolator());
+        cloud2Img.startAnimation(animRightCloud2);
+
+        //animation for the vibration car
+        Animation animRightCar = AnimationUtils.loadAnimation(getActivity(), R.anim.vibration);
+        animRightCar.setInterpolator(new LinearInterpolator());
+        carImg.startAnimation(animRightCar);
 
         //Calls the Firebase Manager --> link to Firebase
         UserConnection userConnection = new UserConnection();
