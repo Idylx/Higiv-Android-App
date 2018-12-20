@@ -113,6 +113,12 @@ public class TravelCreateFragment extends Fragment {
         btnCancelTravel = (Button) rootView.findViewById(R.id.btn_cancel_travel);
         btnTakePicture = (Button) rootView.findViewById(R.id.takePicture);
 
+        /* début de code qui ne fonctionne pas encore ...
+        if (savedInstanceState != null){
+            plateImage.setImageURI(uri);
+        }
+        */
+
         //Set min max values for the NumberPicker
         inputNbPersons.setMinValue(1);
         inputNbPersons.setMaxValue(9);
@@ -222,7 +228,7 @@ public class TravelCreateFragment extends Fragment {
                     return;
                 }
 
-                //if the user hasn't took a picture
+                //if the user hasn't taken a picture
                 if (plateImage.getDrawable() != null)
                 {
                     //get the camera image
@@ -315,6 +321,7 @@ public class TravelCreateFragment extends Fragment {
         }
     }
 
+
     //If there is text on the photo, retrieve it
     public void getTextFromImage() {
         textRecognizer = new TextRecognizer.Builder(getContext()).build();
@@ -337,9 +344,11 @@ public class TravelCreateFragment extends Fragment {
             textOfImage = textOfImage.replace(".", "");
             textOfImage = textOfImage.toUpperCase();
             textOfImage = textOfImage.replace("\n","");
-            
 
-            retrieveTextFromImage.setText(textOfImage);
+            if (!textOfImage.isEmpty())
+            {
+                retrieveTextFromImage.setText(textOfImage);
+            }
         }
     }
 
