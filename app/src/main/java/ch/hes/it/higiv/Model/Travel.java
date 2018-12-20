@@ -19,11 +19,9 @@ public class Travel {
     @NonNull
     private String timeBegin;
     private String timeEnd;
-
+    private String badComment;
 
     public Travel (){}
-
-
 
     public String getDestination() {
         return destination;
@@ -74,13 +72,19 @@ public class Travel {
         this.timeEnd = timeEnd;
     }
 
+    public String getBadComment() {
+        return badComment;
+    }
 
+    public void setBadComment(String badComment) {
+        this.badComment = badComment;
+    }
 
     public String toString() {
         return "Description: "  + destination +
                 "Number plate: "  + idPlate +
                 "Number of person: "  + numberOfPerson +
-                "\n"+ "IdUser: " + idUser;
+                "\n"+ "IdUser: " + idUser+ "BadComment: " + badComment;
     }
 
 

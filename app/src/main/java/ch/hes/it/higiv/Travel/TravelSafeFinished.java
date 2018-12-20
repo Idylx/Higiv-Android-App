@@ -1,5 +1,7 @@
 package ch.hes.it.higiv.Travel;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -7,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageButton;
 
 import java.text.SimpleDateFormat;
@@ -68,8 +71,31 @@ public class TravelSafeFinished extends Fragment {
                 setEndTravel();
                 plateConnection.setBadEvaluation(plate);
 
+                AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+                alert.setMessage("Add a comment");
+
+                // Set an EditText view to get user input
+                final EditText input = new EditText(getActivity());
+                alert.setView(input);
+
+                alert.setPositiveButton("Send comment", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        // Do something with value!
+                        travel.setBadComment(input.getText().toString());
+                        travelConnection.setReport(travel, ((TravelActivity) getActivity()).getidTravel());
+                        ((TravelActivity)getActivity()).finish();
+                    }
+                });
+
+                alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+
+                        ((TravelActivity)getActivity()).finish();
+                    }
+                });
+
+                alert.show();
                 // end activity
-                ((TravelActivity)getActivity()).finish();
             }
         });
 

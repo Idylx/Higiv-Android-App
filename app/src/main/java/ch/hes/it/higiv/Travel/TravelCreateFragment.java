@@ -226,54 +226,55 @@ public class TravelCreateFragment extends Fragment {
                     Toast.makeText(getContext(), "Enter the plate number of the car", Toast.LENGTH_LONG).show();
                     return;
                 }
+                //if the user hasn't taken a picture
+                if (plateImage.getDrawable() != null) {
+                    //get the camera image
+                    baos = new ByteArrayOutputStream();
+                    plateImage.getDrawingCache().compress(Bitmap.CompressFormat.JPEG, 100, baos);
 
-                //get the camera image
-                baos = new ByteArrayOutputStream();
-                plateImage.getDrawingCache().compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                    mProgress.setTitle("Uploading");
+                    mProgress.show();
 
-                mProgress.setTitle("Uploading");
-                mProgress.show();
+                    //name of the image file (add time to have different files to avoid rewrite on the same file)
+                    SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-                //name of the image file (add time to have different files to avoid rewrite on the same file)
-                SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    filepath = mStorageRef.child(retrieveTextFromImage.getText().toString().toUpperCase() + "/" + sdfDate.format(new Date()));
 
-                filepath = mStorageRef.child(retrieveTextFromImage.getText().toString().toUpperCase() + "/" + sdfDate.format(new Date()));
+                    //upload image
+                    filepath.putBytes(baos.toByteArray())
+                            .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                    //if the upload is successfull
+                                    //hiding the progress dialog
+                                    mProgress.dismiss();
 
-                //upload image
-                filepath.putBytes(baos.toByteArray())
-                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                //if the upload is successfull
-                                //hiding the progress dialog
-                                mProgress.dismiss();
+                                    //and displaying a success toast
+                                    Toast.makeText(getContext(), "File Uploaded ", Toast.LENGTH_LONG).show();
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception exception) {
+                                    //if the upload is not successfull
+                                    //hiding the progress dialog
+                                    mProgress.dismiss();
 
-                                //and displaying a success toast
-                                Toast.makeText(getContext(), "File Uploaded ", Toast.LENGTH_LONG).show();
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception exception) {
-                                //if the upload is not successfull
-                                //hiding the progress dialog
-                                mProgress.dismiss();
+                                    //and displaying error message
+                                    Toast.makeText(getContext(), "Failed again" + exception.getMessage(), Toast.LENGTH_LONG).show();
+                                }
+                            })
+                            .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                                    //calculating progress percentage
+                                    progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
 
-                                //and displaying error message
-                                Toast.makeText(getContext(), "Failed again"+exception.getMessage(), Toast.LENGTH_LONG).show();
-                            }
-                        })
-                        .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                                //calculating progress percentage
-                                progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
-
-                                //displaying percentage in progress dialog
-                                mProgress.setMessage("Uploaded " + ((int) progress) + "%...");
-                            }
-                        });
-
+                                    //displaying percentage in progress dialog
+                                    mProgress.setMessage("Uploaded " + ((int) progress) + "%...");
+                                }
+                            });
+                }
             }
         });
 
