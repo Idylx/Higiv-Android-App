@@ -1,0 +1,7 @@
+<!--fait venir l'élément de la gauche-->
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shareInterpolator="false">
+    <translate android:fromXDelta="-1452%" android:toXDelta="0%"
+        android:fromYDelta="0%" android:toYDelta="0%"
+        android:duration="2800"/>
+</set>

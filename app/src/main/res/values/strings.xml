@@ -131,6 +131,7 @@
     <string name="NoDeviceLocation">Unable to retrieve device location</string>
     <string name="NoPermissionsLocation">Location permission not granted</string>
     <string name="DeleteUserSettings">Delete your account</string>
+    <string name="TextAbout">This project has been carried out by students from the HES-SO</string>
 
 
 </resources>

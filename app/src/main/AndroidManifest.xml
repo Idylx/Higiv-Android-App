@@ -64,7 +64,9 @@
             android:value="ocr" />
 
         <activity android:name=".AboutSettings.Settings"></activity>
-        <activity android:name=".AboutSettings.About"></activity>
+        <activity android:name=".AboutSettings.About"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>
