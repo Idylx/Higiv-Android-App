@@ -1,6 +1,7 @@
 package ch.hes.it.higiv.Travel;
 
 
+import android.content.Intent;
 import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -13,6 +14,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+import ch.hes.it.higiv.MainActivity;
 import ch.hes.it.higiv.PermissionsServices.PermissionsServices;
 import ch.hes.it.higiv.R;
 import ch.hes.it.higiv.firebase.FirebaseCallBack;
@@ -42,7 +44,9 @@ public class TravelActivity extends AppCompatActivity {
         viewPager = (ViewPager) findViewById(R.id.travelContainer);
         setUpViewPager(viewPager);
 
-        mLocationPermissionGranted = permissionsServices.checkAndRequestLocationPermissions(this, this.getApplicationContext());
+        mLocationPermissionGranted = permissionsServices.simpleCheckLocationPermission(this.getApplicationContext());
+        if(!mLocationPermissionGranted)
+            startActivity(new Intent(TravelActivity.this, MainActivity.class));
 
     }
 

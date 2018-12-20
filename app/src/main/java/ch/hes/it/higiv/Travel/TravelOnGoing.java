@@ -176,7 +176,7 @@ public class TravelOnGoing extends Fragment {
     public Dialog onCreateDialog() {
         //test if the location is allow
         if(isServicesOK()){
-            getLocationPermission();
+            verifyLocationPermissions();
         }
         // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -287,8 +287,8 @@ public class TravelOnGoing extends Fragment {
         return permissionsServices.isServicesMapOK(getActivity());
     }
     //Call the manager to verify and request if needed the location permissions
-    public void getLocationPermission() {
-        if(permissionsServices.checkAndRequestLocationPermissions(getActivity(), getContext())){
+    public void verifyLocationPermissions() {
+        if(permissionsServices.simpleCheckLocationPermission(getContext())){
             mLocationPermissionGranted = true;
         }
     }

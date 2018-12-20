@@ -95,6 +95,16 @@ public class PermissionsServices {
         return false;
     }
 
+    //Check location permissions without pop up the dialog to enable the permission
+    public boolean simpleCheckLocationPermission(Context thisContext){
+
+        if (ContextCompat.checkSelfPermission(thisContext, FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
+            if (ContextCompat.checkSelfPermission(thisContext, COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED)
+                return true;
+
+        return false;
+    }
+
     //Check if the device has the location permissions allowed. if not, it will display a dialog for the user to enable them.
     public boolean checkAndRequestLocationPermissions(Activity thisActivity, Context thisContext) {
         boolean mLocationPermissionGranted = false;

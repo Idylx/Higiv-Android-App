@@ -94,7 +94,7 @@ public class TravelSafeFinished extends Fragment {
         // set end travel information
         travel.setTimeEnd(new SimpleDateFormat("dd-MM-yyyy kk:mm:ss").format(System.currentTimeMillis()));
         travelConnection.setEndTravel(travel, ((TravelActivity) getActivity()).getidTravel());
-        if(permissionsServices.checkAndRequestLocationPermissions(getActivity(), getContext()))
+        if(permissionsServices.simpleCheckLocationPermission(getContext()))
             travelConnection.setEndLocationTravel(((TravelActivity) getActivity()).getCurrentLocation(), ((TravelActivity) getActivity()).getidTravel());
     }
 

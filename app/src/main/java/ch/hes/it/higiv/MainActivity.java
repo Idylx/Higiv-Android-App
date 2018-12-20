@@ -5,11 +5,13 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Build;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.telephony.SmsManager;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -79,12 +81,20 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, TravelActivity.class));
+                mLocationPermissionGranted = permissionsServices.simpleCheckLocationPermission(getApplicationContext());
+                if(mLocationPermissionGranted)
+                    startActivity(new Intent(MainActivity.this, TravelActivity.class));
+                else
+                //add snackbar to main to ask for the location permissions
+                    Snackbar.make(view, R.string.SnackBarButtonText, Snackbar.LENGTH_LONG)
+                            .setAction(R.string.SnackBarButtonActionText, new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    permissionsServices.checkAndRequestLocationPermissions(MainActivity.this, getApplicationContext());
+                                }
+                            }).setActionTextColor(Color.WHITE)
+                            .show();
 
-
-                //add snackbar to main CAN BE REMOVED VERY SOON
-//                Snackbar.make(view, "Create a new Travel", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
             }
         });
 
@@ -248,7 +258,10 @@ public class MainActivity extends AppCompatActivity
 
         switch (id){
             case R.id.nav_create_travel:
-                startActivity(new Intent(MainActivity.this, TravelActivity.class));
+                if(permissionsServices.simpleCheckLocationPermission(this.getApplicationContext()))
+                    startActivity(new Intent(MainActivity.this, TravelActivity.class));
+                else
+                    Toast.makeText(MainActivity.this, R.string.NoPermissionsLocationForTravel, Toast.LENGTH_SHORT).show();
                 break;
             case R.id.nav_find_spot:
                 //bla bla
