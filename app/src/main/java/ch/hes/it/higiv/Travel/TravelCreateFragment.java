@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -98,6 +99,7 @@ public class TravelCreateFragment extends Fragment {
 
     //temporary bitmap for samsung phone
     private Bitmap temp;
+    private int rotationInDegrees;
 
     // connection to firebase
     private TravelConnection travelConnection = new TravelConnection();
@@ -318,7 +320,16 @@ public class TravelCreateFragment extends Fragment {
 
         if (requestCode == CAMERA_REQUEST_CODE && resultCode == getActivity().RESULT_OK) {
 
-            plateImage.setImageURI(uri);
+            // retrieve orientation of the camera
+            try {
+                ExifInterface exif = new ExifInterface(uri.getPath());
+                int rotation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+                rotationInDegrees = exifToDegrees(rotation);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            //plateImage.setImageURI(uri);
             int width = 0, height = 0;
 
             //to make the rotation possible, we must convert our uri to bitmap
@@ -330,18 +341,23 @@ public class TravelCreateFragment extends Fragment {
                 e.printStackTrace();
             }
 
-            //if the text of the plate can't be read, the picture is flipped to try to read it
-            if (!getTextFromImage())
-            {
-                Matrix matrix = new Matrix();
-                matrix.postRotate(90);
-                Bitmap scaledBitmap = Bitmap.createScaledBitmap(temp, width, height, true);
-                Bitmap rotatedBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
-                plateImage.setImageURI(getImageUri(getContext(), rotatedBitmap));
-                getTextFromImage();
-            }
+            //we must create a matrix to be able to do the rotation
+            Matrix matrix = new Matrix();
+            matrix.postRotate(rotationInDegrees);
+            Bitmap scaledBitmap = Bitmap.createScaledBitmap(temp, width, height, true);
+            Bitmap rotatedBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
+            plateImage.setImageURI(getImageUri(getContext(), rotatedBitmap));
+
             getTextFromImage();
         }
+    }
+
+    //retrieve the orientation degrees when the user take the picture
+    private static int exifToDegrees(int exifOrientation) {
+        if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_90) { return 90; }
+        else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_180) {  return 180; }
+        else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_270) {  return 270; }
+        return 0;
     }
 
     public Uri getImageUri(Context inContext, Bitmap inImage) {
