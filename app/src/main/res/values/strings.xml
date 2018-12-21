@@ -138,6 +138,7 @@
     <!-- About  / Settings -->
     <string name="TextAbout">This project has been carried out by students from the HES-SO</string>
     <string name="DeleteUserSettings">Delete your account</string>
+    <string name="ChooseLanguage">Language</string>
 
 
 </resources>

@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
@@ -59,7 +60,8 @@ public class TravelCreateFragment extends Fragment {
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private String inputDestination;
     private NumberPicker inputNbPersons;
-    private Button btnBeginTravel, btnCancelTravel, btnTakePicture;
+    private Button  btnTakePicture;
+    private ImageButton btnBeginTravel, btnCancelTravel ;
 
     private StorageReference mStorageRef, filepath;
     private EditText retrieveTextFromImage;
@@ -108,8 +110,8 @@ public class TravelCreateFragment extends Fragment {
         final View rootView = inflater.inflate(R.layout.fragment_travel_create, container, false);
 
         inputNbPersons = (NumberPicker) rootView.findViewById(R.id.number_of_places);
-        btnBeginTravel = (Button) rootView.findViewById(R.id.btn_begin_travel);
-        btnCancelTravel = (Button) rootView.findViewById(R.id.btn_cancel_travel);
+        btnBeginTravel = (ImageButton) rootView.findViewById(R.id.btn_begin_travel);
+        btnCancelTravel = (ImageButton) rootView.findViewById(R.id.btn_cancel_travel);
         btnTakePicture = (Button) rootView.findViewById(R.id.takePicture);
 
         //Set min max values for the NumberPicker

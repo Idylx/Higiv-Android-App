@@ -1,9 +1,11 @@
 package ch.hes.it.higiv.AboutSettings;
 
+import android.media.Image;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -13,7 +15,7 @@ import ch.hes.it.higiv.firebase.UserConnection;
 
 public class Settings extends AppCompatActivity {
 
-    private Button DeleteButton;
+    private ImageButton DeleteButton;
     private UserConnection userConnection;
     private FirebaseUser userAuth= FirebaseAuth.getInstance().getCurrentUser();
     @Override
@@ -21,7 +23,7 @@ public class Settings extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_settings);
-        DeleteButton = (Button) findViewById(R.id.deleteButton);
+        DeleteButton = (ImageButton) findViewById(R.id.deleteButton);
 
         //connection
         userConnection = new UserConnection();

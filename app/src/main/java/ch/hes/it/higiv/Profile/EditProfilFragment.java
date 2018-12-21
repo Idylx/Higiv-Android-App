@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -34,7 +35,7 @@ public class EditProfilFragment extends Fragment {
     private EditText PhoneLabel;
 
     private Button ResetButton;
-    private Button EditButton;
+    private ImageButton EditButton;
 
 
     private RadioGroup radioGroup;
@@ -71,7 +72,7 @@ public class EditProfilFragment extends Fragment {
 
         radioGroup = (RadioGroup) view .findViewById(R.id.radioGroup);
 
-        EditButton = (Button) view.findViewById(R.id.EditButton);
+        EditButton = (ImageButton) view.findViewById(R.id.EditButton);
         ResetButton = view.findViewById(R.id.resetButton);
 
 

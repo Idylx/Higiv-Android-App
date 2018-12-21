@@ -57,7 +57,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
-        android:layout_height="91dp"
+        android:layout_height="60dp"
         android:layout_marginTop="20dp"
         android:divider="@color/btn_login_bg"
         android:orientation="horizontal"
@@ -79,7 +79,7 @@
         <NumberPicker
             android:id="@+id/number_of_places"
             android:layout_width="206dp"
-            android:layout_height="148dp"
+            android:layout_height="30dp"
             android:layout_gravity="left"
             android:layout_marginStart="20dp"
             android:layout_marginTop="0dp"
@@ -94,45 +94,46 @@
     </LinearLayout>
 
 
-    <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:columnCount="2"
+        android:layout_width="344dp"
+        android:layout_height="104dp"
         android:orientation="horizontal"
         app:layout_optimizationLevel="standard">
 
-        <Button
-            android:id="@+id/btn_begin_travel"
-            android:layout_width="171dp"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="5dp"
-            android:layout_marginBottom="40dp"
-            android:background="@color/colorPrimary"
-            android:text="@string/btn_begin_travel"
-            android:textColor="@android:color/white"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
 
-        <Button
+        <ImageButton
             android:id="@+id/btn_cancel_travel"
-            android:layout_width="183dp"
-            android:layout_height="wrap_content"
-            android:layout_row="0"
-            android:layout_alignParentRight="true"
-            android:layout_gravity="center_vertical|center"
-            android:layout_marginLeft="5dp"
-            android:layout_marginEnd="32dp"
-            android:layout_marginBottom="40dp"
-            android:background="@color/colorPrimary"
-            android:text="@string/btn_cancel_travel"
-            android:textColor="@android:color/white"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/roundcorner"
+            android:src="@drawable/ic_close_white_24dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.85"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/DeleteUser"
+            tools:ignore="MissingConstraints" />
 
-    </GridLayout>
+        <ImageButton
+            android:id="@+id/btn_begin_travel"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/roundcorner"
+            android:scaleType="fitCenter"
+            android:src="@drawable/car_moving_white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.15"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/DeleteUser"
+            tools:ignore="MissingConstraints" />
+
+
+    </android.support.constraint.ConstraintLayout>
 
 
 
