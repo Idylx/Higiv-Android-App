@@ -92,6 +92,4 @@ public class Travel {
                 "Number of person: "  + numberOfPerson +
                 "\n"+ "IdUser: " + idUser;
     }
-
-
 }
