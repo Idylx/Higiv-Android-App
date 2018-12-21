@@ -2,8 +2,11 @@ package ch.hes.it.higiv.Travel;
 
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -41,6 +44,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
@@ -60,6 +64,7 @@ public class TravelCreateFragment extends Fragment {
     private String inputDestination;
     private NumberPicker inputNbPersons;
     private Button btnBeginTravel, btnCancelTravel, btnTakePicture;
+    private int imageHeight, imageWidth;
 
     private StorageReference mStorageRef, filepath;
     private EditText retrieveTextFromImage;
@@ -91,6 +96,8 @@ public class TravelCreateFragment extends Fragment {
     private String numberPlate;
     private int nbPerson = 1;
 
+    //temporary bitmap for samsung phone
+    private Bitmap temp;
 
     // connection to firebase
     private TravelConnection travelConnection = new TravelConnection();
@@ -112,12 +119,6 @@ public class TravelCreateFragment extends Fragment {
         btnBeginTravel = (Button) rootView.findViewById(R.id.btn_begin_travel);
         btnCancelTravel = (Button) rootView.findViewById(R.id.btn_cancel_travel);
         btnTakePicture = (Button) rootView.findViewById(R.id.takePicture);
-
-        /* début de code qui ne fonctionne pas encore ...
-        if (savedInstanceState != null){
-            plateImage.setImageURI(uri);
-        }
-        */
 
         //Set min max values for the NumberPicker
         inputNbPersons.setMinValue(1);
@@ -316,11 +317,37 @@ public class TravelCreateFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == CAMERA_REQUEST_CODE && resultCode == getActivity().RESULT_OK) {
+
             plateImage.setImageURI(uri);
+            int width = 0, height = 0;
+
+            try {
+                temp = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(),uri);
+                width = temp.getWidth();
+                height = temp.getHeight();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            if (width > height)
+            {
+                Matrix matrix = new Matrix();
+                matrix.postRotate(90);
+                Bitmap scaledBitmap = Bitmap.createScaledBitmap(temp, width, height, true);
+                Bitmap rotatedBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
+                plateImage.setImageURI(getImageUri(getContext(), rotatedBitmap));
+            }
+
             getTextFromImage();
         }
     }
 
+    public Uri getImageUri(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+        return Uri.parse(path);
+    }
 
     //If there is text on the photo, retrieve it
     public void getTextFromImage() {
