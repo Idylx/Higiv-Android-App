@@ -30,6 +30,7 @@ public class TravelSafeFinished extends Fragment {
     private ImageButton goodEvalButton;
     private ImageButton badEvalButton;
 
+
     private PlateConnection plateConnection = new PlateConnection();
     private TravelConnection travelConnection = new TravelConnection();
     private Plate plate;
