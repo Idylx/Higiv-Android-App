@@ -67,7 +67,6 @@ public class TravelCreateFragment extends Fragment {
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private String inputDestination;
     private NumberPicker inputNbPersons;
-    private Button btnBeginTravel, btnCancelTravel, btnTakePicture;
     private int imageHeight, imageWidth;
     private Button  btnTakePicture;
     private ImageButton btnBeginTravel, btnCancelTravel ;
