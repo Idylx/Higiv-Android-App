@@ -48,10 +48,12 @@
         </activity>
         <activity android:name=".Account.SignupActivity" />
         <activity android:name=".Account.ResetPasswordActivity" />
-        <activity android:name=".Profile.ActivityProfile" />
+        <activity android:name=".Profile.ActivityProfile"
+            android:launchMode="singleInstance"/>
         <activity
             android:name=".Travel.TravelActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:launchMode="singleInstance"/>
         <activity
             android:name=".MainActivity"
             android:launchMode="singleInstance"
@@ -63,10 +65,12 @@
             android:name="com.google.android.gms.vision.DEPENDENCIES"
             android:value="ocr" />
 
-        <activity android:name=".AboutSettings.Settings"></activity>
+        <activity android:name=".AboutSettings.Settings"
+            android:launchMode="singleInstance"/>
         <activity android:name=".AboutSettings.About"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"
+            android:launchMode="singleInstance"/>
     </application>
 
 </manifest>
