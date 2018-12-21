@@ -19,7 +19,7 @@
 
         <TextView
             android:id="@+id/ChooseLanguage"
-            android:layout_width="351dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
             android:layout_marginTop="0dp"
@@ -72,7 +72,7 @@
 
         <TextView
             android:id="@+id/DeleteUser"
-            android:layout_width="351dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
             android:layout_marginTop="40dp"
