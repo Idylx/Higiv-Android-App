@@ -321,6 +321,7 @@ public class TravelCreateFragment extends Fragment {
             plateImage.setImageURI(uri);
             int width = 0, height = 0;
 
+            //to make the rotation possible, we must convert our uri to bitmap
             try {
                 temp = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(),uri);
                 width = temp.getWidth();
@@ -329,15 +330,16 @@ public class TravelCreateFragment extends Fragment {
                 e.printStackTrace();
             }
 
-            if (width > height)
+            //if the text of the plate can't be read, the picture is flipped to try to read it
+            if (!getTextFromImage())
             {
                 Matrix matrix = new Matrix();
                 matrix.postRotate(90);
                 Bitmap scaledBitmap = Bitmap.createScaledBitmap(temp, width, height, true);
                 Bitmap rotatedBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
                 plateImage.setImageURI(getImageUri(getContext(), rotatedBitmap));
+                getTextFromImage();
             }
-
             getTextFromImage();
         }
     }
@@ -350,7 +352,7 @@ public class TravelCreateFragment extends Fragment {
     }
 
     //If there is text on the photo, retrieve it
-    public void getTextFromImage() {
+    public boolean getTextFromImage() {
         textRecognizer = new TextRecognizer.Builder(getContext()).build();
 
         if (!textRecognizer.isOperational()) {
@@ -375,8 +377,11 @@ public class TravelCreateFragment extends Fragment {
             if (!textOfImage.isEmpty())
             {
                 retrieveTextFromImage.setText(textOfImage);
+                return true;
             }
+            return false;
         }
+        return false;
     }
 
     //Check the permissions for the camera and storage
