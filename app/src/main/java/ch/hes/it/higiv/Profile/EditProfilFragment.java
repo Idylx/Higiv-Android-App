@@ -63,6 +63,8 @@ public class EditProfilFragment extends Fragment {
         PhoneLabel = (EditText) view.findViewById(R.id.PhoneLabel);
 
         EmailLabel.setText(FirebaseAuth.getInstance().getCurrentUser().getEmail());
+        //Make the email not modifiable
+        EmailLabel.setKeyListener(null);
 
         RadioMen = (RadioButton) view.findViewById(R.id.radioMen);
         RadioWomen = (RadioButton) view.findViewById(R.id.radioWomen);

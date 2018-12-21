@@ -11,8 +11,10 @@ import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.AppCompatEditText;
 import android.text.TextUtils;
 import android.util.SparseArray;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +24,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.Status;
@@ -77,6 +80,8 @@ public class TravelCreateFragment extends Fragment {
     private double progress;
     private ProgressDialog mProgress;
 
+    private PlaceAutocompleteFragment autocompleteFragment;
+
     //A Uri object to store file path
     private Uri uri, photoFileUri;
     private static final int CAMERA_REQUEST_CODE = 666;
@@ -129,8 +134,9 @@ public class TravelCreateFragment extends Fragment {
         });
 
 
-        PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment) getActivity().getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
+        autocompleteFragment = (PlaceAutocompleteFragment) getActivity().getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
         autocompleteFragment.setHint("Destination");
+        //Search and add the destination
         autocompleteFragment.setOnPlaceSelectedListener(
 
                 new PlaceSelectionListener() {
@@ -141,9 +147,16 @@ public class TravelCreateFragment extends Fragment {
 
                     @Override
                     public void onError(Status status) {
-
                     }
                 });
+        //Remove the destination
+        autocompleteFragment.getView().findViewById(R.id.place_autocomplete_clear_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                inputDestination = "";
+                autocompleteFragment.setText("");
+            }
+        });
 
         inputNbPersons.setShowDividers(LinearLayout.SHOW_DIVIDER_NONE);
 
