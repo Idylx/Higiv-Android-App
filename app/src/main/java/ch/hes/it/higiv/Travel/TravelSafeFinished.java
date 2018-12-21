@@ -54,12 +54,17 @@ public class TravelSafeFinished extends Fragment {
         goodEvalButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setEndTravel();
-                plateConnection.setGoodEvaluation(plate);
+                try {
+                    setEndTravel();
+                    plateConnection.setGoodEvaluation(plate);
 
-                Toast.makeText(getActivity(),R.string.satisfied, Toast.LENGTH_SHORT).show();
-                // end activity
-                ((TravelActivity)getActivity()).finish();
+                    Toast.makeText(getActivity(), R.string.satisfied, Toast.LENGTH_SHORT).show();
+                    // end activity
+
+                    ((TravelActivity) getActivity()).finish();
+                }catch(NullPointerException e){
+                    Toast.makeText(getActivity(), R.string.bad_happens, Toast.LENGTH_SHORT).show();
+                }
 
             }
         });
@@ -68,6 +73,7 @@ public class TravelSafeFinished extends Fragment {
         badEvalButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                try {
                 setEndTravel();
                 plateConnection.setBadEvaluation(plate);
 
@@ -75,6 +81,9 @@ public class TravelSafeFinished extends Fragment {
 
                 // end activity
                 ((TravelActivity)getActivity()).finish();
+                }catch(NullPointerException e){
+                    Toast.makeText(getActivity(),  R.string.bad_happens, Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

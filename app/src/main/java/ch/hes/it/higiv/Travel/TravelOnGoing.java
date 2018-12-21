@@ -3,10 +3,14 @@ package ch.hes.it.higiv.Travel;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -20,6 +24,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
 import com.google.firebase.auth.FirebaseAuth;
 
 import ch.hes.it.higiv.Model.Travel;
@@ -30,7 +39,7 @@ import ch.hes.it.higiv.firebase.FirebaseCallBack;
 import ch.hes.it.higiv.firebase.UserConnection;
 import ch.hes.it.higiv.firebase.TravelConnection;
 
-public class TravelOnGoing extends Fragment {
+public class TravelOnGoing extends Fragment{
 
     private Button StopButton, AlertButton;
     private TextView DestinationTv, CarPlateTv, NumberOfPersonTv;
@@ -40,17 +49,22 @@ public class TravelOnGoing extends Fragment {
     private String plateString = "";
     private String idTravel;
 
+    PermissionsServices permissionsServices = new PermissionsServices();
+
     TravelConnection travelConnection = new TravelConnection();
+    LocationListener locationListener;
+
+    private LocationManager locationManager;
 
     private User user;
 
     private String phoneNumber;
     private String message;
-    private PermissionsServices permissionsServices = new PermissionsServices();
 
     private Boolean mLocationPermissionGranted = false;
     private double latitude;
     private double longitude;
+    private int locationCounter = 0;
 
     @Nullable
     @Override
@@ -68,13 +82,34 @@ public class TravelOnGoing extends Fragment {
         //Calls the Firebase Manager --> link to Firebase
         UserConnection userConnection = new UserConnection();
 
+        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+
+
+        // Define a listener that responds to location updates
+        locationListener = new LocationListener() {
+            public void onLocationChanged(Location location) {
+                locationCounter++;
+                // Called when a new location is found by the network location provider.
+                travelConnection.setTrackedLocation(location, idTravel, Integer.toString(locationCounter));
+            }
+
+            public void onStatusChanged(String provider, int status, Bundle extras) {}
+
+            public void onProviderEnabled(String provider) {}
+
+            public void onProviderDisabled(String provider) {}
+        };
+
+
+        // Register the listener with the Location Manager to receive location updates
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 0, locationListener);
         //Calls the getUser methode from the manager and wait for the callback
         userConnection.getUser(FirebaseAuth.getInstance().getUid(), new FirebaseCallBack() {
             @Override
             public void onCallBack(Object o) {
-                user = (User)o;
-                if(user != null){
-                    if(!user.getEmergencyPhone().isEmpty()){
+                user = (User) o;
+                if (user != null) {
+                    if (!user.getEmergencyPhone().isEmpty()) {
                         phoneNumber = user.getEmergencyPhone();
                     }
                 }
@@ -84,9 +119,13 @@ public class TravelOnGoing extends Fragment {
 
         idTravel = ((TravelActivity) getActivity()).getidTravel();
 
+
+
         StopButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                locationManager.removeUpdates(locationListener);
 
                 //Go to safe finished fragment
                 ((TravelActivity) getActivity()).addFragmentToAdapter(new TravelSafeFinished());
@@ -200,6 +239,7 @@ public class TravelOnGoing extends Fragment {
         });
     }
 
+
     //Calls the manager to retrieve the device's location
     private void getDeviceLocation() {
 
@@ -230,8 +270,11 @@ public class TravelOnGoing extends Fragment {
     }
     //Call the manager to verify and request if needed the location permissions
     public void getLocationPermission() {
-        if(permissionsServices.checkAndRequestLocationPermissions(getActivity(), getContext())){
+        if(checkPermission()){
             mLocationPermissionGranted = true;
         }
     }
+
+
+
 }

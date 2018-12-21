@@ -60,6 +60,7 @@
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" />
 
+
         <!-- add this to the manifest to use recognition for our app -->
         <meta-data android:name="com.google.android.gms.vision.DEPENDENCIES"
             android:value="ocr"/>

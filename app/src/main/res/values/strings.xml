@@ -102,6 +102,7 @@
     <string name="safe_travel">Enjoy the ride ?</string>
     <string name="satisfied">We noticed that your enjoy your ride !</string>
     <string name="unsatisfied">We noticed that you didn\'t enjoy your ride !</string>
+    <string name="bad_happens">Something bad happens, please retry</string>
 
     <!--Send message-->
     <string name="dialogSendMessage">Do you really want to send an alert message?</string>
