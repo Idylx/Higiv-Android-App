@@ -3,8 +3,11 @@ package ch.hes.it.higiv.Travel;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -18,7 +21,6 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -35,7 +37,7 @@ import ch.hes.it.higiv.firebase.FirebaseCallBack;
 import ch.hes.it.higiv.firebase.UserConnection;
 import ch.hes.it.higiv.firebase.TravelConnection;
 
-public class TravelOnGoing extends Fragment {
+public class TravelOnGoing extends Fragment{
 
     private ImageButton StopButton, AlertButton;
     private TextView DestinationTv, CarPlateTv, NumberOfPersonTv;
@@ -45,17 +47,22 @@ public class TravelOnGoing extends Fragment {
     private String plateString = "";
     private String idTravel;
 
+    PermissionsServices permissionsServices = new PermissionsServices();
+
     TravelConnection travelConnection = new TravelConnection();
+    LocationListener locationListener;
+
+    private LocationManager locationManager;
 
     private User user;
 
     private String phoneNumber;
     private String message;
-    private PermissionsServices permissionsServices = new PermissionsServices();
 
     private Boolean mLocationPermissionGranted = false;
     private double latitude;
     private double longitude;
+    private int locationCounter = 0;
 
     //animation
     private ImageView wheelImg1;
@@ -127,6 +134,27 @@ public class TravelOnGoing extends Fragment {
         //Calls the Firebase Manager --> link to Firebase
         UserConnection userConnection = new UserConnection();
 
+        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+
+
+        // Define a listener that responds to location updates
+        locationListener = new LocationListener() {
+            public void onLocationChanged(Location location) {
+                locationCounter++;
+                // Called when a new location is found by the network location provider.
+                travelConnection.setTrackedLocation(location, idTravel, Integer.toString(locationCounter));
+            }
+
+            public void onStatusChanged(String provider, int status, Bundle extras) {}
+
+            public void onProviderEnabled(String provider) {}
+
+            public void onProviderDisabled(String provider) {}
+        };
+
+
+        // Register the listener with the Location Manager to receive location updates
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 0, locationListener);
         //Calls the getUser methode from the manager and wait for the callback
         userConnection.getUser(FirebaseAuth.getInstance().getUid(), new FirebaseCallBack() {
             @Override

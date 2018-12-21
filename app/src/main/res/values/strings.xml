@@ -78,11 +78,10 @@
     <string name="GenderFemale">Ms.</string>
     <string name="GenderOther">Other</string>
 
-
     <!-- Travel -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="destination">Destination</string>
-    <string name="plate_number">Number plate</string>
+    <string name="plate_number">Plate number</string>
     <string name="btn_create_travel">Create a travel</string>
     <string name="plate_number_state">VS</string>
     <string name="number_of_person">Number of person</string>
@@ -102,6 +101,7 @@
     <string name="safe_travel">Enjoy the ride ?</string>
     <string name="satisfied">We noticed that your enjoy your ride !</string>
     <string name="unsatisfied">We noticed that you didn\'t enjoy your ride !</string>
+    <string name="bad_happens">Something bad happens, please retry</string>
 
     <!--Send message-->
     <string name="dialogSendMessage">Do you really want to send an alert message?</string>
