@@ -67,7 +67,6 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         // get the instance of firebase auhtentifcation
         auth = FirebaseAuth.getInstance();
         

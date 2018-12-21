@@ -2,8 +2,12 @@ package ch.hes.it.higiv.Travel;
 
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -11,7 +15,6 @@ import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.AppCompatEditText;
 import android.text.TextUtils;
 import android.util.SparseArray;
 import android.view.KeyEvent;
@@ -45,6 +48,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
@@ -63,6 +67,7 @@ public class TravelCreateFragment extends Fragment {
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private String inputDestination;
     private NumberPicker inputNbPersons;
+    private int imageHeight, imageWidth;
     private Button  btnTakePicture;
     private ImageButton btnBeginTravel, btnCancelTravel ;
 
@@ -97,6 +102,9 @@ public class TravelCreateFragment extends Fragment {
     private String numberPlate;
     private int nbPerson = 1;
 
+    //temporary bitmap for samsung phone
+    private Bitmap temp;
+    private int rotationInDegrees;
 
     // connection to firebase
     private TravelConnection travelConnection = new TravelConnection();
@@ -147,6 +155,7 @@ public class TravelCreateFragment extends Fragment {
 
                     @Override
                     public void onError(Status status) {
+
                     }
                 });
         //Remove the destination
@@ -237,55 +246,58 @@ public class TravelCreateFragment extends Fragment {
                     return;
                 }
 
-                //get the camera image
-                baos = new ByteArrayOutputStream();
-                plateImage.getDrawingCache().compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                //if the user hasn't taken a picture
+                if (plateImage.getDrawable() != null)
+                {
+                    //get the camera image
+                    baos = new ByteArrayOutputStream();
+                    plateImage.getDrawingCache().compress(Bitmap.CompressFormat.JPEG, 100, baos);
 
-                mProgress.setTitle("Uploading");
-                mProgress.show();
+                    mProgress.setTitle("Uploading");
+                    mProgress.show();
 
-                //name of the image file (add time to have different files to avoid rewrite on the same file)
-                SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    //name of the image file (add time to have different files to avoid rewrite on the same file)
+                    SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-                filepath = mStorageRef.child(retrieveTextFromImage.getText().toString().toUpperCase() + "/" + sdfDate.format(new Date()));
+                    filepath = mStorageRef.child(retrieveTextFromImage.getText().toString().toUpperCase() + "/" + sdfDate.format(new Date()));
 
-                travel.setFilePath(filepath.toString());
+                    travel.setFilePath(filepath.toString());
 
-                //upload image
-                filepath.putBytes(baos.toByteArray())
-                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                //if the upload is successfull
-                                //hiding the progress dialog
-                                mProgress.dismiss();
+                    //upload image
+                    filepath.putBytes(baos.toByteArray())
+                            .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                    //if the upload is successfull
+                                    //hiding the progress dialog
+                                    mProgress.dismiss();
 
-                                //and displaying a success toast
-                                Toast.makeText(getContext(), "File Uploaded ", Toast.LENGTH_LONG).show();
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception exception) {
-                                //if the upload is not successfull
-                                //hiding the progress dialog
-                                mProgress.dismiss();
+                                    //and displaying a success toast
+                                    Toast.makeText(getContext(), "File Uploaded ", Toast.LENGTH_LONG).show();
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception exception) {
+                                    //if the upload is not successfull
+                                    //hiding the progress dialog
+                                    mProgress.dismiss();
 
-                                //and displaying error message
-                                Toast.makeText(getContext(), "Failed again" + exception.getMessage(), Toast.LENGTH_LONG).show();
-                            }
-                        })
-                        .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                                //calculating progress percentage
-                                progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                                    //and displaying error message
+                                    Toast.makeText(getContext(), "Failed again" + exception.getMessage(), Toast.LENGTH_LONG).show();
+                                }
+                            })
+                            .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                                    //calculating progress percentage
+                                    progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
 
-                                //displaying percentage in progress dialog
-                                mProgress.setMessage("Uploaded " + ((int) progress) + "%...");
-                            }
-                        });
-
+                                    //displaying percentage in progress dialog
+                                    mProgress.setMessage("Uploaded " + ((int) progress) + "%...");
+                                }
+                            });
+                }
             }
         });
 
@@ -322,13 +334,56 @@ public class TravelCreateFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == CAMERA_REQUEST_CODE && resultCode == getActivity().RESULT_OK) {
-            plateImage.setImageURI(uri);
+
+            // retrieve orientation of the camera
+            try {
+                ExifInterface exif = new ExifInterface(uri.getPath());
+                int rotation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+                rotationInDegrees = exifToDegrees(rotation);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            //plateImage.setImageURI(uri);
+            int width = 0, height = 0;
+
+            //to make the rotation possible, we must convert our uri to bitmap
+            try {
+                temp = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(),uri);
+                width = temp.getWidth();
+                height = temp.getHeight();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            //we must create a matrix to be able to do the rotation
+            Matrix matrix = new Matrix();
+            matrix.postRotate(rotationInDegrees);
+            Bitmap scaledBitmap = Bitmap.createScaledBitmap(temp, width, height, true);
+            Bitmap rotatedBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
+            plateImage.setImageURI(getImageUri(getContext(), rotatedBitmap));
+
             getTextFromImage();
         }
     }
 
+    //retrieve the orientation degrees when the user take the picture
+    private static int exifToDegrees(int exifOrientation) {
+        if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_90) { return 90; }
+        else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_180) {  return 180; }
+        else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_270) {  return 270; }
+        return 0;
+    }
+
+    public Uri getImageUri(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+        return Uri.parse(path);
+    }
+
     //If there is text on the photo, retrieve it
-    public void getTextFromImage() {
+    public boolean getTextFromImage() {
         textRecognizer = new TextRecognizer.Builder(getContext()).build();
 
         if (!textRecognizer.isOperational()) {
@@ -350,9 +405,14 @@ public class TravelCreateFragment extends Fragment {
             textOfImage = textOfImage.toUpperCase();
             textOfImage = textOfImage.replace("\n","");
 
-
-            retrieveTextFromImage.setText(textOfImage);
+            if (!textOfImage.isEmpty())
+            {
+                retrieveTextFromImage.setText(textOfImage);
+                return true;
+            }
+            return false;
         }
+        return false;
     }
 
     //Check the permissions for the camera and storage
