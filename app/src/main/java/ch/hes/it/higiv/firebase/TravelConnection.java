@@ -36,6 +36,11 @@ public class TravelConnection extends FirebaseConnection {
     mDatabaseReference.child("travels").child(idTravel).child("timeEnd").setValue(travel.getTimeEnd());
     }
 
+    public void setReport(Travel travel, String idTravel) {
+        mDatabaseReference.child("travels").child(idTravel).child("badComment").setValue(travel.getBadComment());
+    }
+
+
     public void setBeginLocationTravel(Location location, String idTravel) {
         mDatabaseReference.child("travels").child(idTravel).child("beginLocation").child("accuracy").setValue(location.getAccuracy());
         mDatabaseReference.child("travels").child(idTravel).child("beginLocation").child("latitude").setValue(location.getLatitude());

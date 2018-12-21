@@ -15,7 +15,7 @@
 
     <!-- use this to use recognition for our app -->
     <uses-permission android:name="android.permission.CAMERA" />
-    
+
     <!-- use this to save the picture plate on firebase cloud storage -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -59,13 +59,15 @@
             android:name=".MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" />
-
+        <activity android:name=".Picture.Takepicture"
+            android:screenOrientation="portrait" />
 
         <!-- add this to the manifest to use recognition for our app -->
         <meta-data android:name="com.google.android.gms.vision.DEPENDENCIES"
             android:value="ocr"/>
 
 
+>>>>>>>>> Temporary merge branch 2
     </application>
 
 </manifest>
