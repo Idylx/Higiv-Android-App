@@ -19,6 +19,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,7 +37,7 @@ import ch.hes.it.higiv.firebase.TravelConnection;
 
 public class TravelOnGoing extends Fragment {
 
-    private Button StopButton, AlertButton;
+    private ImageButton StopButton, AlertButton;
     private TextView DestinationTv, CarPlateTv, NumberOfPersonTv;
 
     //Object Travel to retrieve from firebase
@@ -72,8 +73,8 @@ public class TravelOnGoing extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_travel_on_going, container, false);
 
-        StopButton = (Button) view.findViewById(R.id.btn_cancel_travel);
-        AlertButton = (Button) view.findViewById(R.id.btn_send_alert);
+        StopButton = (ImageButton) view.findViewById(R.id.btn_cancel_travel);
+        AlertButton = (ImageButton) view.findViewById(R.id.btn_send_alert);
 
         DestinationTv = (TextView) view.findViewById(R.id.destination_tv);
         CarPlateTv = (TextView) view.findViewById(R.id.car_plate_tv);

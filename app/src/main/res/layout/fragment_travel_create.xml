@@ -22,7 +22,7 @@
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="5dp"
         android:orientation="vertical">
 
         <ImageView
@@ -58,7 +58,7 @@
         android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="5dp"
         android:divider="@color/btn_login_bg"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
@@ -79,7 +79,7 @@
         <NumberPicker
             android:id="@+id/number_of_places"
             android:layout_width="206dp"
-            android:layout_height="30dp"
+            android:layout_height="match_parent"
             android:layout_gravity="left"
             android:layout_marginStart="20dp"
             android:layout_marginTop="0dp"
@@ -97,8 +97,9 @@
     <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="344dp"
+        android:layout_width="match_parent"
         android:layout_height="104dp"
+        android:layout_marginTop="20dp"
         android:orientation="horizontal"
         app:layout_optimizationLevel="standard">
 
