@@ -1,10 +1,12 @@
 package ch.hes.it.higiv.Travel;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -37,7 +39,7 @@ import ch.hes.it.higiv.firebase.FirebaseCallBack;
 import ch.hes.it.higiv.firebase.UserConnection;
 import ch.hes.it.higiv.firebase.TravelConnection;
 
-public class TravelOnGoing extends Fragment{
+public class TravelOnGoing extends Fragment {
 
     private ImageButton StopButton, AlertButton;
     private TextView DestinationTv, CarPlateTv, NumberOfPersonTv;
@@ -74,6 +76,8 @@ public class TravelOnGoing extends Fragment{
     private ImageView cloud2Img;
     private ImageView carImg;
 
+
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -92,10 +96,10 @@ public class TravelOnGoing extends Fragment{
         wheelImg2 = (ImageView) view.findViewById(R.id.wheel2);
         lampImg = (ImageView) view.findViewById(R.id.lamp);
         moutainImg = (ImageView) view.findViewById(R.id.moutain);
-        treeImg =(ImageView) view.findViewById(R.id.tree);
-        cloud1Img =(ImageView) view.findViewById(R.id.cloud1);
-        cloud2Img =(ImageView) view.findViewById(R.id.cloud2);
-        carImg =(ImageView) view.findViewById(R.id.car);
+        treeImg = (ImageView) view.findViewById(R.id.tree);
+        cloud1Img = (ImageView) view.findViewById(R.id.cloud1);
+        cloud2Img = (ImageView) view.findViewById(R.id.cloud2);
+        carImg = (ImageView) view.findViewById(R.id.car);
 
         //animation for the rotation of wheels
         Animation animWheel = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate);
@@ -131,30 +135,16 @@ public class TravelOnGoing extends Fragment{
         animRightCar.setInterpolator(new LinearInterpolator());
         carImg.startAnimation(animRightCar);
 
+
+
         //Calls the Firebase Manager --> link to Firebase
         UserConnection userConnection = new UserConnection();
 
+
+        // get systemService of location enable
         locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
 
 
-        // Define a listener that responds to location updates
-        locationListener = new LocationListener() {
-            public void onLocationChanged(Location location) {
-                locationCounter++;
-                // Called when a new location is found by the network location provider.
-                travelConnection.setTrackedLocation(location, idTravel, Integer.toString(locationCounter));
-            }
-
-            public void onStatusChanged(String provider, int status, Bundle extras) {}
-
-            public void onProviderEnabled(String provider) {}
-
-            public void onProviderDisabled(String provider) {}
-        };
-
-
-        // Register the listener with the Location Manager to receive location updates
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 0, locationListener);
         //Calls the getUser methode from the manager and wait for the callback
         userConnection.getUser(FirebaseAuth.getInstance().getUid(), new FirebaseCallBack() {
             @Override
@@ -169,11 +159,34 @@ public class TravelOnGoing extends Fragment{
             }
         });
 
+        // Define a listener that responds to location updates
+        locationListener = new LocationListener() {
+            public void onLocationChanged(Location location) {
+                locationCounter++;
+                // Called when a new location is found by the network location provider.
+                travelConnection.setTrackedLocation(location, idTravel, Integer.toString(locationCounter));
+            }
+
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+            }
+
+            public void onProviderEnabled(String provider) {
+            }
+
+            public void onProviderDisabled(String provider) {
+            }
+        };
+        enableTracking();
+
         idTravel = ((TravelActivity) getActivity()).getidTravel();
 
         StopButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
+                //disable tracking
+                locationManager.removeUpdates(locationListener);
 
                 //Go to safe finished fragment
                 ((TravelActivity) getActivity()).addFragmentToAdapter(new TravelSafeFinished());
@@ -244,6 +257,14 @@ public class TravelOnGoing extends Fragment{
     //method for request the permission to the user
     private void requestPermission() {
         ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.SEND_SMS}, 1);
+    }
+
+
+    //need suppressLint avoid error message
+    @SuppressLint("MissingPermission")
+    private void enableTracking(){
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 0, locationListener);
+
     }
 
     //Create the SMS message to be sent
