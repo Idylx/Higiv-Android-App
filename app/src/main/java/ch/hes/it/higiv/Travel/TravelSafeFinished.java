@@ -107,7 +107,6 @@ public class TravelSafeFinished extends Fragment {
                     alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
 
-                            ((TravelActivity)getActivity()).finish();
                         }
                     });
 
