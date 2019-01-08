@@ -101,4 +101,6 @@ public class TravelActivity extends AppCompatActivity {
         });
     }
 
+    // TEMPORARY SOLUTION TO AVOID "LOSING" A TRAVEL BY PRESSING BACK BUTTON
+    public void onBackPressed() { }
 }
