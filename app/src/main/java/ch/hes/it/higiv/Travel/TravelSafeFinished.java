@@ -83,10 +83,9 @@ public class TravelSafeFinished extends Fragment {
             @Override
             public void onClick(View v) {
                 try {
-                setEndTravel();
-                plateConnection.setBadEvaluation(plate);
 
-                Toast.makeText(getActivity(),R.string.unsatisfied, Toast.LENGTH_SHORT).show();
+
+
 
                     AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
                     alert.setMessage("Add a comment");
@@ -97,7 +96,11 @@ public class TravelSafeFinished extends Fragment {
 
                     alert.setPositiveButton("Send comment", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
-                            // Do something with value!
+
+                            Toast.makeText(getActivity(),R.string.unsatisfied, Toast.LENGTH_SHORT).show();
+                            setEndTravel();
+                            plateConnection.setBadEvaluation(plate);
+
                             travel.setBadComment(input.getText().toString());
                             travelConnection.setReport(travel, ((TravelActivity) getActivity()).getidTravel());
                             ((TravelActivity)getActivity()).finish();
