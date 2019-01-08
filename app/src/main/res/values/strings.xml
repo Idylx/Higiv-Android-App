@@ -1,15 +1,10 @@
 <resources>
     <string name="app_name">HIGIV</string>
-    <string name="prompt_email">Email</string>
     <string name="prompt_password">Password (optional)</string>
-    <string name="action_sign_in">Sign in or register</string>
+    <string name="sign_in">Sign in or register</string>
     <string name="error_invalid_email">This email address is invalid</string>
-    <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
-    <string name="permission_rationale">"Contacts permissions are needed for providing email completions."</string>
-    <string name="action_sign_in_short">Register</string>
-    <string name="email">Email</string>
     <string name="minimum_password">Password too short, enter minimum 6 characters!</string>
     <string name="auth_failed">Authentication failed, check your email and password or sign up</string>
     <string name="change_email">Change Email</string>
@@ -18,22 +13,20 @@
     <string name="remove_user">Remove user</string>
     <string name="new_pass">New Password</string>
     <string name="title_activity_profile">Firebase</string>
-    <string name="title_activity_login">Sign in</string>
-    <string name="hint_email">Email</string>
-    <string name="hint_password">Password</string>
+    <string name="password">Password</string>
     <string name="hint_name">Full name</string>
     <string name="btn_login">LOG IN</string>
-    <string name="btn_link_to_register">Register!</string>
+    <string name="btn_link_to_register">Register</string>
     <string name="btn_link_to_login">I already have an account. Login!</string>
     <string name="title_activity_reset_password">Reset Password Activity</string>
     <string name="btn_forgot_password">Forgot your password?</string>
-    <string name="btn_reset_password">Reset Password</string>
+    <string name="reset_password">Reset Password</string>
     <string name="btn_back"><![CDATA[<< Back]]></string>
     <string name="hint_new_email">New Email</string>
     <string name="btn_change">Change</string>
     <string name="btn_send">Send</string>
     <string name="btn_remove">Remove</string>
-    <string name="btn_sign_out">Sign Out</string>
+    <string name="btn_sign_out">Sign out</string>
     <string name="lbl_forgot_password">Forgot password?</string>
     <string name="lbl_create_account">Create an account</string>
     <string name="forgot_password_msg">We just need your registered Email to sent you the password reset instructions.</string>
@@ -56,33 +49,33 @@
     <!-- Edit User page -->
     <string name="FirstnameEditPage">Firstname</string>
     <string name="LastnameEditPage">Lastname</string>
-    <string name="EmailEditPage">Email</string>
     <string name="GenderEditPage">Gender</string>
-    <string name="PasswordEditPage">Password</string>
     <string name="EditButtonEditPage">Save</string>
     <string name="MenEditPage">Man</string>
     <string name="womenEditPage">Woman</string>
     <string name="otherEditPage">Others</string>
     <string name="ProfilVerificationToast">Please fill up all the fields</string>
-    <string name="DeleteProfil">deleted profile</string>
-    <string name="DeleteUserButton">Delete User</string>
+    <string name="DeleteProfil">Deleted profile</string>
+    <string name="DeleteUserButton">Delete user</string>
     <string name="PhoneEditPage">Emergency phone</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="others">Others</string>
 
     <!-- Detail User page -->
     <string name="EmailDetailProfil">Email:</string>
     <string name="GenderDetailProfil">Gender:</string>
-    <string name="EditButtonDetailProfile">Edit Profile</string>
+    <string name="EditButtonDetailProfile">Edit profile</string>
     <string name="ProfileLabelDetailProfile">Profile</string>
     <string name="ResetPwdButton">Reset Password</string>
     <string name="GenderMale">Mr.</string>
     <string name="GenderFemale">Ms.</string>
     <string name="GenderOther">Other</string>
 
-
     <!-- Travel -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="destination">Destination</string>
-    <string name="plate_number">Number plate</string>
+    <string name="plate_number">Plate number</string>
     <string name="btn_create_travel">Create a travel</string>
     <string name="plate_number_state">VS</string>
     <string name="number_of_person">Number of person</string>
@@ -96,29 +89,43 @@
     <string name="enter_plate_number">Enter your plate number please !</string>
     <string name="enter_nb_person">Enter how many person you are please !</string>
     <string name="title_activity_travel">TravelActivity</string>
-    <string name="btn_cancel_travel">Cancel</string>
+    <string name="cancel">Cancel</string>
     <string name="travel_overview">Travel overview</string>
     <string name="car_plate">Car plate</string>
+    <string name="safe_travel">Enjoy the ride ?</string>
+    <string name="satisfied">We noticed that your enjoy your ride !</string>
+    <string name="unsatisfied">We noticed that you didn\'t enjoy your ride !</string>
+    <string name="bad_happens">Something bad happens, please retry</string>
+    <string name="uploading">Uploading !</string>
+    <string name="file_uploaded">File uploaded !</string>
+    <string name="failed_again">Failed again !</string>
+    <string name="get_text_from_image_failed">Could not get the text</string>
+    <string name="create_directory_failed">Failed to create directory</string>
+    <string name="add_comment">Add a comment</string>
+    <string name="send_comment">Send comment</string>
 
     <!--Send message-->
     <string name="dialogSendMessage">Do you really want to send an alert message?</string>
     <string name="dialogYes">Yes</string>
     <string name="dialogCancel">Cancel</string>
-    <string name="messageSendToast">Message Sent</string>
+    <string name="messageSendToast">Message sent</string>
     <string name="permissionNotActivToast">Activate the permission to access the SMS</string>
-    <string name="phoneNumberDontExist">You did not enter a phone number!</string>
+    <string name="phoneNumberDontExist">You did not enter a phone number !</string>
     <string name="messageContainAlert">-----ALERT-----</string>
     <string name="messageContainUser">is in danger!</string>
     <string name="messageContainPlate">Plate number:</string>
     <string name="messageContainLocalisation">Geolocation at the time of the alert:</string>
+    <string name="send_reset_email_failed">Failed to send reset email!</string>
 
 
     <!-- Sign Up -->
-    <string name="SignUp_EnterEmail">Enter email address!</string>
-    <string name="SignUp_EnterPwd">Enter password!</string>
-    <string name="SignUp_WrongPwd">Password too short, enter at least 6 characters!</string>
+    <string name="SignUp_EnterEmail">Enter email address !</string>
+    <string name="SignUp_EnterPwd">Enter password !</string>
     <string name="SignUp_SuccessfulCreation">Account successfully created!</string>
     <string name="SignUp_AuthFailed">Authentification failed!</string>
+    <string name="password_too_short">Password too short, enter at least 6 characters !</string>
+    <string name="enter_registered_email">Enter your registered email id</string>
+
 
     <!-- Camera -->
     <string name="FailedDirectoryCreation">Failed to create directory </string>
@@ -127,6 +134,20 @@
     <string name="WrongServicesMap">You can\'t make map requests</string>
     <string name="NoDeviceLocation">Unable to retrieve device location</string>
     <string name="NoPermissionsLocation">Location permission not granted</string>
+    <string name="NoPermissionsLocationForTravel">Please enable the location to create a travel</string>
+    <string name="SnackBarButtonText">Location Permissions</string>
+    <string name="SnackBarButtonActionText">Enable location</string>
+
+
+    <!-- About  / Settings -->
+    <string name="TextAbout">This project has been carried out by students from the HES-SO</string>
+    <string name="DeleteUserSettings">Delete your account</string>
+    <string name="ChooseLanguage">Language</string>
+    <string name="saved">Saved !</string>
+    <string name="instructions_reset_password">We have sent you instructions to reset your password!</string>
+    <string name="permission_rationale">Contacts permissions are needed for providing email completions</string>
+    <string name="email">Email</string>
+    <string name="take_picture">Take a picture of the plate</string>
 
 
 </resources>

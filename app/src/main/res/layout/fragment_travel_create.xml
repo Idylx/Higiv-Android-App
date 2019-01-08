@@ -127,7 +127,7 @@
             android:layout_marginEnd="32dp"
             android:layout_marginBottom="40dp"
             android:background="@color/colorPrimary"
-            android:text="@string/btn_cancel_travel"
+            android:text="@string/cancel"
             android:textColor="@android:color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
