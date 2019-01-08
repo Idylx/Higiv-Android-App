@@ -184,13 +184,28 @@ public class TravelOnGoing extends Fragment {
             @Override
             public void onClick(View v) {
 
+                AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(getContext());
+                dlgAlert.setMessage("Are you sure you've finished the trip?");
+                dlgAlert.setTitle("Finish Travel");
+                dlgAlert.setPositiveButton(R.string.dialogYes,
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                //disable tracking
+                                locationManager.removeUpdates(locationListener);
 
-                //disable tracking
-                locationManager.removeUpdates(locationListener);
+                                //Go to safe finished fragment
+                                ((TravelActivity) getActivity()).addFragmentToAdapter(new TravelSafeFinished());
+                                ((TravelActivity)getActivity()).setViewPager(2);
+                            }
+                        });
+                dlgAlert.setNegativeButton(R.string.dialogCancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User cancelled the dialog
+                    }
+                });
+                dlgAlert.setCancelable(true);
+                dlgAlert.create().show();
 
-                //Go to safe finished fragment
-                ((TravelActivity) getActivity()).addFragmentToAdapter(new TravelSafeFinished());
-                ((TravelActivity)getActivity()).setViewPager(2);
             }
         });
 
