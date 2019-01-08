@@ -1,8 +1,10 @@
 package ch.hes.it.higiv.Travel;
 
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -311,7 +313,18 @@ public class TravelCreateFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (checkPermissions()) {
-                    startCamera();
+                    AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(getContext());
+                    dlgAlert.setMessage("Please take a visible picture of the plate!");
+                    dlgAlert.setTitle("Take picture of plate");
+                    dlgAlert.setPositiveButton("Ok",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    startCamera();
+                                }
+                            });
+                    dlgAlert.setCancelable(true);
+                    dlgAlert.create().show();
+
                 } else {
                     requestPermissions();
                 }
