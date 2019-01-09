@@ -143,9 +143,9 @@ public class TravelCreateFragment extends Fragment {
             }
         });
 
-
+        //Enter destination fragment
         autocompleteFragment = (PlaceAutocompleteFragment) getActivity().getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
-        autocompleteFragment.setHint("Destination");
+        autocompleteFragment.setHint(getResources().getString(R.string.destination));
         //Search and add the destination
         autocompleteFragment.setOnPlaceSelectedListener(
 
@@ -183,10 +183,10 @@ public class TravelCreateFragment extends Fragment {
         btnBeginTravel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                //get device Location from travel activity
                 ((TravelActivity) getActivity()).getDeviceLocation();
 
-                //Checking if there isn't empty fields, and if it's the case set the focus on the empty field
+                //Checking if there aren't empty fields, and if it's the case set the focus on the empty field
                 if (TextUtils.isEmpty(inputDestination)) {
                     Toast.makeText(getActivity(), R.string.enter_destination, Toast.LENGTH_SHORT).show();
                     return;
@@ -235,7 +235,7 @@ public class TravelCreateFragment extends Fragment {
                         if(permissionsServices.checkAndRequestLocationPermissions(getActivity(), getContext()))
                             travelConnection.setBeginLocationTravel(((TravelActivity) getActivity()).getCurrentLocation(), travelID);
 
-                        //create next fragment
+                        //create next fragment and change current fragment to the new one just added
                         ((TravelActivity) getActivity()).addFragmentToAdapter(new TravelOnGoing());
                         ((TravelActivity) getActivity()).setViewPager(1);
 
@@ -244,7 +244,7 @@ public class TravelCreateFragment extends Fragment {
                 });
 
                 if (TextUtils.isEmpty(retrieveTextFromImage.getText())) {
-                    Toast.makeText(getContext(), "Enter the plate number of the car", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), R.string.enter_plate_number, Toast.LENGTH_LONG).show();
                     return;
                 }
 
@@ -255,7 +255,7 @@ public class TravelCreateFragment extends Fragment {
                     baos = new ByteArrayOutputStream();
                     plateImage.getDrawingCache().compress(Bitmap.CompressFormat.JPEG, 100, baos);
 
-                    mProgress.setTitle("Uploading");
+                    mProgress.setTitle(R.string.uploading);
                     mProgress.show();
 
                     //name of the image file (add time to have different files to avoid rewrite on the same file)
@@ -275,7 +275,7 @@ public class TravelCreateFragment extends Fragment {
                                     mProgress.dismiss();
 
                                     //and displaying a success toast
-                                    Toast.makeText(getContext(), "File Uploaded ", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getContext(), R.string.file_uploaded, Toast.LENGTH_LONG).show();
                                 }
                             })
                             .addOnFailureListener(new OnFailureListener() {
@@ -286,7 +286,7 @@ public class TravelCreateFragment extends Fragment {
                                     mProgress.dismiss();
 
                                     //and displaying error message
-                                    Toast.makeText(getContext(), "Failed again" + exception.getMessage(), Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getContext(), R.string.upload_failed + exception.getMessage(), Toast.LENGTH_LONG).show();
                                 }
                             })
                             .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
@@ -296,7 +296,7 @@ public class TravelCreateFragment extends Fragment {
                                     progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
 
                                     //displaying percentage in progress dialog
-                                    mProgress.setMessage("Uploaded " + ((int) progress) + "%...");
+                                    mProgress.setMessage(R.string.uploaded + ((int) progress) + "%...");
                                 }
                             });
                 }

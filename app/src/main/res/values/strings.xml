@@ -1,5 +1,8 @@
 <resources>
+    <!-- Name of App -->
     <string name="app_name">HIGIV</string>
+
+    <!-- Login / Register / Account -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password (optional)</string>
     <string name="action_sign_in">Sign in or register</string>
@@ -37,6 +40,8 @@
     <string name="lbl_forgot_password">Forgot password?</string>
     <string name="lbl_create_account">Create an account</string>
     <string name="forgot_password_msg">We just need your registered Email to sent you the password reset instructions.</string>
+
+    <!-- Main Activity -->
     <string name="title_activity_main">Main Activity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -92,16 +97,25 @@
     <string name="btn_send_alert">Send alert</string>
     <string name="enter_destination">Enter destination please</string>
     <string name="enter_state">Enter state please !</string>
-    <string name="enter_plate_number">Enter your plate number please !</string>
-    <string name="enter_nb_person">Enter how many person you are please !</string>
+    <string name="enter_plate_number">Enter the plate number of the car</string>
+    <string name="enter_nb_person">How many people you are?</string>
     <string name="title_activity_travel">TravelActivity</string>
     <string name="btn_cancel_travel">Cancel</string>
     <string name="travel_overview">Travel overview</string>
     <string name="car_plate">Car plate</string>
-    <string name="safe_travel">Enjoy the ride ?</string>
-    <string name="satisfied">We noticed that your enjoy your ride !</string>
-    <string name="unsatisfied">We noticed that you didn\'t enjoy your ride !</string>
-    <string name="bad_happens">Something bad happens, please retry</string>
+    <string name="safe_travel">Enjoyed the ride ?</string>
+    <string name="satisfied">Good to hear you have enjoyed your ride !</string>
+    <string name="unsatisfied">Sorry to hear you didn\'t enjoy your ride !</string>
+    <string name="bad_happens">Something wen\'t wrong, please retry</string>
+
+    <!-- Picture -->
+    <string name="picture_of_plate">Please take a picture of the plate. This will be used </string>
+
+    <!-- File uploads -->
+    <string name="uploading">Uploading</string>
+    <string name="file_uploaded">File Uploaded</string>
+    <string name="upload_failed">Upload failed</string>
+    <string name="uploaded">Uploaded</string>
 
     <!--Send message-->
     <string name="dialogSendMessage">Do you really want to send an alert message?</string>
@@ -109,7 +123,7 @@
     <string name="dialogCancel">Cancel</string>
     <string name="messageSendToast">Message Sent</string>
     <string name="permissionNotActivToast">Activate the permission to access the SMS</string>
-    <string name="phoneNumberDontExist">You did not enter a phone number!</string>
+    <string name="phoneNumberDontExist">You haven\'t entered a phone number!</string>
     <string name="messageContainAlert">-----ALERT-----</string>
     <string name="messageContainUser">is in danger!</string>
     <string name="messageContainPlate">Plate number:</string>
@@ -128,7 +142,7 @@
 
     <!-- Maps -->
     <string name="WrongServicesMap">You can\'t make map requests</string>
-    <string name="NoDeviceLocation">Unable to retrieve device location</string>
+    <string name="NoDeviceLocation">Unable to retrieve the device\'s location</string>
     <string name="NoPermissionsLocation">Location permission not granted</string>
     <string name="NoPermissionsLocationForTravel">Please enable the location to create a travel</string>
     <string name="SnackBarButtonText">Location Permissions</string>
