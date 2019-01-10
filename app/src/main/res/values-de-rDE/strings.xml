@@ -100,7 +100,7 @@
     <string name="SignUp_EnterEmail">E-Mail-Adresse eingeben!</string>
     <string name="SignUp_EnterPwd">Passwort eingeben !</string>
     <string name="SignUp_SuccessfulCreation">Account erfolgreich erstellt!</string>
-    <string name="SignUp_AuthFailed">Die Authentifizierung ist fehlgeschlagen!</string>
+    <string name="SignUp_AuthFailed">Die Authentifizierung ist fehlgeschlagen! Schon bestehendes Konto?</string>
     <string name="password_too_short">Passwort zu kurz, mindestens 6 Zeichen eingeben !</string>
     <string name="enter_registered_email">Geben Sie Ihre registrierte E-Mail-ID ein</string>
     <string name="FailedDirectoryCreation">Verzeichnis konnte nicht erstellt werden</string>

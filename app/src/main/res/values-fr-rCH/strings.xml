@@ -102,7 +102,7 @@
     <string name="ResetPwdButton">Réinitialiser le mot de passe</string>
     <string name="plate_number">N° de plaque</string>
     <string name="SignUp_SuccessfulCreation">Compte créé avec succès !</string>
-    <string name="SignUp_AuthFailed">Echec de connexion</string>
+    <string name="SignUp_AuthFailed">Echec de connexion! Compte déjà existant?</string>
     <string name="FailedDirectoryCreation">Échec de la création d\'un répertoire</string>
     <string name="WrongServicesMap">Vous ne pouvez pas faire de demande de carte</string>
     <string name="NoDeviceLocation">Impossible de récupérer l\'emplacement de l\'appareil</string>

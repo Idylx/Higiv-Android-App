@@ -89,7 +89,6 @@ public class SignupActivity extends AppCompatActivity {
                         .addOnCompleteListener(SignupActivity.this, new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
-                                Toast.makeText(SignupActivity.this, R.string.SignUp_SuccessfulCreation, Toast.LENGTH_SHORT).show();
                                 progressBar.setVisibility(View.GONE);
                                 // If sign in fails, display a message to the user. If sign in succeeds
                                 // the auth state listener will be notified and logic to handle the
@@ -98,6 +97,7 @@ public class SignupActivity extends AppCompatActivity {
                                     Toast.makeText(SignupActivity.this, R.string.SignUp_AuthFailed,
                                             Toast.LENGTH_SHORT).show();
                                 } else {
+                                    Toast.makeText(SignupActivity.this, R.string.SignUp_SuccessfulCreation, Toast.LENGTH_SHORT).show();
                                     startActivity(new Intent(SignupActivity.this, MainActivity.class));
                                     finish();
                                 }

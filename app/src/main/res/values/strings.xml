@@ -108,7 +108,7 @@
     <string name="SignUp_EnterEmail">Enter email address!</string>
     <string name="SignUp_EnterPwd">Enter password!</string>
     <string name="SignUp_SuccessfulCreation">Account successfully created!</string>
-    <string name="SignUp_AuthFailed">Authentification failed!</string>
+    <string name="SignUp_AuthFailed">Authentification failed! Account already created?</string>
 
     <!-- Camera -->
     <string name="FailedDirectoryCreation">Failed to create directory </string>
