@@ -16,8 +16,7 @@
     <string name="new_pass">Neues Passwort</string>
     <string name="title_activity_profile">Firebase</string>
     <string name="password">Passwort</string>
-    <string name="hint_name">Vollständiger Name</string>
-    <string name="btn_login">EINLOGGEN</string>
+    <string name="btn_login">Einloggen</string>
     <string name="btn_link_to_register">Registrieren</string>
     <string name="btn_link_to_login">Ich habe bereits ein Konto. Anmelden!</string>
     <string name="title_activity_reset_password">Passwortaktivität zurücksetzen</string>
@@ -25,14 +24,9 @@
     <string name="reset_password">Passwort zurücksetzen</string>
     <string name="btn_back"><![CDATA[<< Back]]></string>
     <string name="hint_new_email">Neue E-Mail</string>
-    <string name="btn_change">Ändern</string>
-    <string name="btn_send">Senden</string>
-    <string name="btn_remove">Entfernen</string>
     <string name="btn_sign_out">Abmeldung</string>
-    <string name="lbl_forgot_password">Passwort vergessen?</string>
     <string name="lbl_create_account">Ein Konto erstellen</string>
     <string name="forgot_password_msg">Wir benötigen nur Ihre registrierte E-Mail, um Ihnen die Anweisungen zum Zurücksetzen des Passworts zuzusenden.</string>
-    <string name="title_activity_main">Haupttätigkeit</string>
     <string name="navigation_drawer_open">Navigationsschublade öffnen</string>
     <string name="navigation_drawer_close">Navigationsschublade schließen</string>
     <string name="nav_header_title">Android Studio</string>
@@ -57,9 +51,6 @@
     <string name="DeleteProfil">Gelöschtes Profil</string>
     <string name="DeleteUserButton">Benutzer löschen</string>
     <string name="PhoneEditPage">Notrufnummer</string>
-    <string name="male">Mann</string>
-    <string name="female">Frau</string>
-    <string name="others">Andere</string>
     <string name="EmailDetailProfil">E-Mail:</string>
     <string name="GenderDetailProfil">Geschlecht:</string>
     <string name="EditButtonDetailProfile">Profil bearbeiten</string>
@@ -68,11 +59,9 @@
     <string name="GenderMale">Herr</string>
     <string name="GenderFemale">Frau</string>
     <string name="GenderOther">Andere</string>
-    <string name="hello_blank_fragment">Hallo leeres Fragment</string>
     <string name="destination">Zielort</string>
     <string name="plate_number">Kennzeichen</string>
     <string name="btn_create_travel">Erstellen einer Anreise</string>
-    <string name="plate_number_state">VS</string>
     <string name="number_of_person">Anzahl der Personen</string>
     <string name="CreationTravelSuccessful">Anreise angelegt !</string>
     <string name="CreationTravelFailed">Reisekreation fehlgeschlagen !</string>
@@ -80,10 +69,9 @@
     <string name="btn_stop_travel">Stopp</string>
     <string name="btn_send_alert">Benachrichtigung senden</string>
     <string name="enter_destination">Bitte geben Sie das Ziel ein</string>
-    <string name="enter_state">Bitte geben Sie den Status ein!</string>
+    <string name="enter_state">Bitte geben Sie den Status ein</string>
     <string name="enter_plate_number">Geben Sie bitte Ihre Nummer ein!</string>
     <string name="enter_nb_person">Gib ein, wie viele Personen du bist, bitte!</string>
-    <string name="title_activity_travel">TravelActivity</string>
     <string name="cancel">Abbrechen</string>
     <string name="travel_overview">Anreise-Übersicht</string>
     <string name="car_plate">Kennzeichen</string>
@@ -126,7 +114,9 @@
     <string name="DeleteUserSettings">Löschen Sie Ihr Konto</string>
     <string name="ChooseLanguage">Sprache</string>
     <string name="saved">Gerettet!</string>
-    <string name="instructions_reset_password">Wir haben dir Anweisungen zum Zurücksetzen deines Passworts geschickt!</string>
-    <string name="permission_rationale">Für die Bereitstellung von E-Mail-Vervollständigungen sind Kontaktberechtigungen erforderlich</string>
+    <string name="instructions_reset_password">Wir haben dir Anweisungen zum Zurücksetzen deines Passworts geschickt</string>
     <string name="take_picture">Machen Sie ein Foto von der Autoplakette</string>
+    <string name="askPasswordDeleteAccount">Gib dein Passwort ein, um dein Konto zu löschen</string>
+    <string name="accountDeleted">Dein Profil wird gelöscht</string>
+    <string name="failDeleteAccount">Ihr Konto konnte nicht gelöscht werden</string>
 </resources>

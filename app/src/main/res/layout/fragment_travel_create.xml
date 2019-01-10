@@ -35,7 +35,7 @@
             android:id="@+id/takePicture"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Take picture" />
+            android:text="@string/take_picture" />
 
         <EditText
             android:id="@+id/retrieveTextImage"
