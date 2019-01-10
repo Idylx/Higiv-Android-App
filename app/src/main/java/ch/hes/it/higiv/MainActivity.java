@@ -239,7 +239,6 @@ public class MainActivity extends AppCompatActivity
 
                 //return on login
                 startActivity(new Intent(MainActivity.this, LoginActivity.class));
-
                 finish();
                 break;
         }
@@ -311,6 +310,10 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
+        if (auth.getCurrentUser() == null){
+            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+            finish();
+        }
 
     }
 

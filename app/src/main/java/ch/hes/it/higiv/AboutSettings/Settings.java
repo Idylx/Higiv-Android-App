@@ -1,20 +1,37 @@
 package ch.hes.it.higiv.AboutSettings;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.Intent;
 import android.media.Image;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Locale;
 
 import ch.hes.it.higiv.MainActivity;
+import ch.hes.it.higiv.Account.LoginActivity;
+import ch.hes.it.higiv.MainActivity;
 import ch.hes.it.higiv.R;
+import ch.hes.it.higiv.firebase.FirebaseConnection;
 import ch.hes.it.higiv.firebase.UserConnection;
 
 public class Settings extends AppCompatActivity {
@@ -27,6 +44,9 @@ public class Settings extends AppCompatActivity {
     private FirebaseUser userAuth= FirebaseAuth.getInstance().getCurrentUser();
     private Locale myLocale;
 
+    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private ProgressBar progressBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +57,7 @@ public class Settings extends AppCompatActivity {
         ButtonEnglish = (ImageButton) findViewById(R.id.ButtonEnglish);
         ButtonGerman = (ImageButton) findViewById(R.id.ButtonGerman);
 
+        progressBar = (ProgressBar) findViewById(R.id.progressBarSettings);
         //connection
         userConnection = new UserConnection();
 
@@ -44,9 +65,16 @@ public class Settings extends AppCompatActivity {
         DeleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                userConnection.deleteUser(Settings.this, userAuth);
+
+                progressBar.setVisibility(View.VISIBLE);
+                onCreateDialog() .show();
+
             }
         });
+
+
+
+
 
         //button action for french
         ButtonFrench.setOnClickListener(new View.OnClickListener() {
@@ -99,5 +127,64 @@ public class Settings extends AppCompatActivity {
         android.content.res.Configuration config = new android.content.res.Configuration();
         config.locale = myLocale;
         getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
+    }
+    public Dialog onCreateDialog() {
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(Settings.this);
+        // Set an EditText view to get user input
+        final EditText input = new EditText(Settings.this);
+
+        input.setInputType(InputType.TYPE_CLASS_TEXT| InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        //set the edit text in the alert dialog
+        builder.setView(input);
+
+        builder.setMessage(R.string.askPasswordDeleteAccount)
+                //yes
+                .setPositiveButton(R.string.dialogYes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+
+                        try {
+
+                            //reauthenticate the user
+                            AuthCredential credential = EmailAuthProvider
+                                    .getCredential(user.getEmail(), input.getText().toString() );
+                            if(user!=null) {
+                                user.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        //delete the user on the complete of the reauthentification
+                                        user.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                progressBar.setVisibility(View.GONE);
+                                                //user deleted successfully
+                                                if (task.isSuccessful()) {
+                                                    userConnection.deleteUser(Settings.this, user);
+                                                    //return on login
+                                                    finish();
+                                                    Toast.makeText(Settings.this, R.string.accountDeleted, Toast.LENGTH_SHORT).show();
+                                                } else{
+                                                    Toast.makeText(Settings.this, R.string.failDeleteAccount, Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        }catch (Exception e)
+                        {
+                            Toast.makeText(Settings.this, "Failed to delete your account!", Toast.LENGTH_SHORT).show();//error
+                        }
+                    }
+                })
+                .setNegativeButton(R.string.dialogCancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User cancelled the dialog
+                        // Do nothing
+                    }
+                });
+
+        return builder.create();
     }
 }
