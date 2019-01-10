@@ -58,7 +58,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:focusableInTouchMode="true"
-                android:hint="@string/hint_password"
+                android:hint="@string/password"
                 android:imeActionId="6"
                 android:imeOptions="actionUnspecified"
                 android:inputType="textPassword"
@@ -75,7 +75,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:background="@color/colorPrimaryDark"
-            android:text="@string/action_sign_in_short"
+            android:text="@string/btn_link_to_register"
             android:textColor="@android:color/white"
             android:textStyle="bold" />
 

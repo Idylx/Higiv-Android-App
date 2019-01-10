@@ -286,7 +286,7 @@ public class TravelCreateFragment extends Fragment {
                                     mProgress.dismiss();
 
                                     //and displaying error message
-                                    Toast.makeText(getContext(), R.string.upload_failed + exception.getMessage(), Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getContext(), R.string.file_uploaded + exception.getMessage(), Toast.LENGTH_LONG).show();
                                 }
                             })
                             .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
@@ -296,7 +296,7 @@ public class TravelCreateFragment extends Fragment {
                                     progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
 
                                     //displaying percentage in progress dialog
-                                    mProgress.setMessage(R.string.uploaded + ((int) progress) + "%...");
+                                    mProgress.setMessage(R.string.uploading + ((int) progress) + "%...");
                                 }
                             });
                 }

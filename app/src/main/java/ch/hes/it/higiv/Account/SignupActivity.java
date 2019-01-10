@@ -79,7 +79,7 @@ public class SignupActivity extends AppCompatActivity {
                 }
 
                 if (password.length() < 6) {
-                    Toast.makeText(getApplicationContext(), R.string.SignUp_WrongPwd, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), R.string.password_too_short, Toast.LENGTH_SHORT).show();
                     return;
                 }
 
