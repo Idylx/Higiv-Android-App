@@ -123,4 +123,7 @@
     <string name="Finish_travel_confirmation">Bist du sicher, dass du mit der Reise fertig bist?</string>
     <string name="Add_comment">Einen Kommentar hinzufügen</string>
     <string name="Send_comment">Einen Kommentar senden</string>
+    <string name="PictureOfPlate">Bitte machen Sie ein Foto von dem Nummernschild, damit Sie das Nummernschild deutlich sehen können.</string>
+    <string name="PictureOfPlateTitle">Kennzeichenfoto</string>
+    <string name="NoCameraPermission">Bitte fügen Sie die Kameraberechtigungen hinzu</string>
 </resources>

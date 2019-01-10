@@ -123,4 +123,7 @@
     <string name="Finish_travel_confirmation">Etes-vous sûr d\'avoir terminé le trajet?</string>
     <string name="Add_comment">Ajouter un commentaire</string>
     <string name="Send_comment">Envoyer un commentaire</string>
+    <string name="NoCameraPermission">Veuillez ajouter les permissions de la camera</string>
+    <string name="PictureOfPlate">Veuillez prendre une photo de la plaque d\'immatriculation de façon a pouvoir voir clairement le numéro de plaque</string>
+    <string name="PictureOfPlateTitle">Photo de la plaque d\'immatriculation</string>
 </resources>

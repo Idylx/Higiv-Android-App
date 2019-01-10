@@ -148,6 +148,9 @@
     <string name="Finish_travel_confirmation">Are you sure you\'ve finished the trip?</string>
     <string name="Add_comment">Add a comment</string>
     <string name="Send_comment">Send comment</string>
+    <string name="NoCameraPermission">Please enable the camera permissions</string>
+    <string name="PictureOfPlate">Please take a picture of the car plate where we can clearly see the plate number</string>
+    <string name="PictureOfPlateTitle">Car plate picture</string>
 
 
 </resources>

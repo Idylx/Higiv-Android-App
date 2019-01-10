@@ -314,8 +314,8 @@ public class TravelCreateFragment extends Fragment {
             public void onClick(View v) {
                 if (checkPermissions()) {
                     AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(getContext());
-                    dlgAlert.setMessage("Please take a picture of the car plate! This will be used to verify if there is an error!");
-                    dlgAlert.setTitle("Car plate picture");
+                    dlgAlert.setMessage(R.string.PictureOfPlate);
+                    dlgAlert.setTitle(R.string.PictureOfPlateTitle);
                     dlgAlert.setPositiveButton("Ok",
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
