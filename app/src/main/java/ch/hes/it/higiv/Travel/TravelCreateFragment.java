@@ -314,8 +314,8 @@ public class TravelCreateFragment extends Fragment {
             public void onClick(View v) {
                 if (checkPermissions()) {
                     AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(getContext());
-                    dlgAlert.setMessage("Please take a visible picture of the plate!");
-                    dlgAlert.setTitle("Take picture of plate");
+                    dlgAlert.setMessage("Please take a picture of the car plate! This will be used to verify if there is an error!");
+                    dlgAlert.setTitle("Car plate picture");
                     dlgAlert.setPositiveButton("Ok",
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
@@ -327,6 +327,8 @@ public class TravelCreateFragment extends Fragment {
 
                 } else {
                     requestPermissions();
+                    Toast.makeText(getActivity(), R.string.NoCameraPermission, Toast.LENGTH_SHORT).show();
+
                 }
             }
         });
