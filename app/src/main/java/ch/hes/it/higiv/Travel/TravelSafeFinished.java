@@ -88,13 +88,13 @@ public class TravelSafeFinished extends Fragment {
 
 
                     AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
-                    alert.setMessage("Add a comment");
+                    alert.setMessage(R.string.Add_comment);
 
                     // Set an EditText view to get user input
                     final EditText input = new EditText(getActivity());
                     alert.setView(input);
 
-                    alert.setPositiveButton("Send comment", new DialogInterface.OnClickListener() {
+                    alert.setPositiveButton(R.string.Send_comment, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
 
                             Toast.makeText(getActivity(),R.string.unsatisfied, Toast.LENGTH_SHORT).show();
@@ -107,7 +107,7 @@ public class TravelSafeFinished extends Fragment {
                         }
                     });
 
-                    alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    alert.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
 
                         }

@@ -185,8 +185,8 @@ public class TravelOnGoing extends Fragment {
             public void onClick(View v) {
 
                 AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(getContext());
-                dlgAlert.setMessage("Are you sure you've finished the trip?");
-                dlgAlert.setTitle("Finish Travel");
+                dlgAlert.setMessage(R.string.Finish_travel_confirmation);
+                dlgAlert.setTitle(R.string.Finish_travel);
                 dlgAlert.setPositiveButton(R.string.dialogYes,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {

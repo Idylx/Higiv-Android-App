@@ -119,4 +119,8 @@
     <string name="askPasswordDeleteAccount">Entrer votre mot de passe pour supprimer votre compte</string>
     <string name="accountDeleted">Votre profil est supprimé</string>
     <string name="failDeleteAccount">Echec de suppression de votre compte</string>
+    <string name="Finish_travel">Trajet terminé</string>
+    <string name="Finish_travel_confirmation">Es-tu sur d\'avoir terminé le trajet?</string>
+    <string name="Add_comment">Ajouter un commentaire</string>
+    <string name="Send_comment">Envoyer un commentaire</string>
 </resources>

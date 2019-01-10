@@ -119,4 +119,8 @@
     <string name="askPasswordDeleteAccount">Gib dein Passwort ein, um dein Konto zu löschen</string>
     <string name="accountDeleted">Dein Profil wird gelöscht</string>
     <string name="failDeleteAccount">Ihr Konto konnte nicht gelöscht werden</string>
+    <string name="Finish_travel">Route abgeschlossen</string>
+    <string name="Finish_travel_confirmation">Bist du sicher, dass du mit der Reise fertig bist?</string>
+    <string name="Add_comment">Einen Kommentar hinzufügen</string>
+    <string name="Send_comment">Einen Kommentar senden</string>
 </resources>

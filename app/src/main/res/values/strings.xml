@@ -144,6 +144,10 @@
     <string name="askPasswordDeleteAccount">Enter your account to delete your account</string>
     <string name="accountDeleted">Your profile is deleted</string>
     <string name="failDeleteAccount">Failed to delete your account</string>
+    <string name="Finish_travel">Finish travel</string>
+    <string name="Finish_travel_confirmation">Are you sure you\'ve finished the trip?</string>
+    <string name="Add_comment">Add a comment</string>
+    <string name="Send_comment">Send comment</string>
 
 
 </resources>
