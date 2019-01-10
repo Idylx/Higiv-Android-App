@@ -295,6 +295,7 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.nav_settings:
                 startActivity(new Intent(MainActivity.this, Settings.class));
+                MainActivity.this.finish();
                 break;
             case R.id.nav_about:
                 startActivity(new Intent(MainActivity.this, About.class));

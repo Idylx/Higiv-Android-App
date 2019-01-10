@@ -13,6 +13,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Locale;
 
+import ch.hes.it.higiv.MainActivity;
 import ch.hes.it.higiv.R;
 import ch.hes.it.higiv.firebase.UserConnection;
 
@@ -53,7 +54,7 @@ public class Settings extends AppCompatActivity {
             public void onClick(View view) {
                 String lang = "fr";
                 changeLang(lang);
-                Intent intent = new Intent(Settings.this, Settings.class);
+                Intent intent = new Intent(Settings.this, MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 Settings.this.finish();
@@ -66,7 +67,7 @@ public class Settings extends AppCompatActivity {
             public void onClick(View view) {
                 String lang = "en";
                 changeLang(lang);
-                Intent intent = new Intent(Settings.this, Settings.class);
+                Intent intent = new Intent(Settings.this, MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 Settings.this.finish();
@@ -79,7 +80,7 @@ public class Settings extends AppCompatActivity {
             public void onClick(View view) {
                 String lang = "de";
                 changeLang(lang);
-                Intent intent = new Intent(Settings.this, Settings.class);
+                Intent intent = new Intent(Settings.this, MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 Settings.this.finish();
