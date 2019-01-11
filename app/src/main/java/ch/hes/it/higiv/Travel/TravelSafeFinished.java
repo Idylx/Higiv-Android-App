@@ -43,7 +43,7 @@ public class TravelSafeFinished extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-
+        //get different object from db
         View view = inflater.inflate(R.layout.fragment_travel_safe_finished, container, false);
         travelConnection.getTravel(((TravelActivity) getActivity()).getidTravel(), new FirebaseCallBack() {
             @Override
@@ -83,10 +83,7 @@ public class TravelSafeFinished extends Fragment {
             @Override
             public void onClick(View v) {
                 try {
-
-
-
-
+                    //build dialog for the comment
                     AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
                     alert.setMessage(R.string.Add_comment);
 

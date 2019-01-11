@@ -414,6 +414,7 @@ public class TravelCreateFragment extends Fragment {
                 sb.append(items.valueAt(i).getValue());
             }
 
+            //replace the text and adapting it to a plate
             textOfImage = (sb.toString()).replace("-", "");
             textOfImage = textOfImage.replace(" ", "");
             textOfImage = textOfImage.replace(".", "");

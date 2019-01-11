@@ -26,8 +26,6 @@ public class TravelActivity extends AppCompatActivity {
 
     PermissionsServices permissionsServices = new PermissionsServices();
 
-
-
     Location currentLocation;
 
     ViewPager viewPager;
@@ -44,6 +42,7 @@ public class TravelActivity extends AppCompatActivity {
         viewPager = (ViewPager) findViewById(R.id.travelContainer);
         setUpViewPager(viewPager);
 
+        //get permission
         mLocationPermissionGranted = permissionsServices.simpleCheckLocationPermission(this.getApplicationContext());
         if(!mLocationPermissionGranted)
             startActivity(new Intent(TravelActivity.this, MainActivity.class));

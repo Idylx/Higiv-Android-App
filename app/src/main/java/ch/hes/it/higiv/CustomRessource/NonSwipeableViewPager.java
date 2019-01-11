@@ -7,7 +7,7 @@ import android.view.MotionEvent;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Scroller;
 import java.lang.reflect.Field;
-
+//block the swipeable quality of a fragment
 public class NonSwipeableViewPager extends ViewPager {
 
     public NonSwipeableViewPager(Context context) {
