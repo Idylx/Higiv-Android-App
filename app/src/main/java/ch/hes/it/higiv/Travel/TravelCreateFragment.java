@@ -248,7 +248,7 @@ public class TravelCreateFragment extends Fragment {
                     return;
                 }
 
-                //if the user hasn't taken a picture
+                //if the user has taken a picture
                 if (plateImage.getDrawable() != null)
                 {
                     //get the camera image
