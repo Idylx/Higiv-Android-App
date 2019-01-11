@@ -283,9 +283,9 @@ public class MainActivity extends AppCompatActivity
                 else
                     Toast.makeText(MainActivity.this, R.string.NoPermissionsLocationForTravel, Toast.LENGTH_SHORT).show();
                 break;
-            case R.id.nav_find_spot:
+            /*case R.id.nav_find_spot:
                 //bla bla
-                break;
+                break;*/
             case R.id.nav_send_alert:
                 //Calls the Firebase Manager --> link to Firebase
                 UserConnection userConnection = new UserConnection();
