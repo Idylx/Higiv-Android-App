@@ -87,6 +87,8 @@
             android:ems="10"
             android:hint="@string/PhoneEditPage"
             android:inputType="phone"
+            android:digits="01234567890+"
+            android:maxLength="14"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.9"
             app:layout_constraintStart_toStartOf="parent"
