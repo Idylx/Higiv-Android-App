@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.os.Build;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -29,7 +28,9 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -167,6 +168,27 @@ public class MainActivity extends AppCompatActivity
             getDeviceLocation();
             mMap.setMyLocationEnabled(true);
         }
+        addMarker(46.283033, 7.540020, "Spot Technopole");
+        addMarker(46.291836, 7.531598, "Spot Sierre");
+        addMarker(46.228390, 7.363108, "Spot Sion");
+        addMarker(46.097702, 7.219110, "Spot Verbier");
+        addMarker(46.178343, 7.576370, "Spot Grimentz");
+        addMarker(46.105749, 7.080271, "Spot Martigny");
+        addMarker(46.211320, 7.398243, "Spot Vex");
+        addMarker(46.183452, 7.294325, "Spot Nendaz");
+        addMarker(46.172417, 7.421416, "Spot Hérémence");
+        addMarker(46.271760, 7.380845, "Spot Arbaz");
+        addMarker(46.151253, 7.178783, "Spot Saxon");
+        addMarker(46.181638, 6.874700, "Spot Champery");
+        addMarker(46.261071, 6.949517, "Spot Monthey");
+    }
+    public void addMarker(double lat, double lon, String spot){
+        mMap.addMarker(new MarkerOptions()
+                .position(new LatLng(lat, lon))
+                .title(spot)
+                .zIndex(1.0f)
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.logo_bitmap_little)));
+
     }
 
     //Initiailize the map
@@ -390,6 +412,7 @@ public class MainActivity extends AppCompatActivity
         }
         return alert + "\n" + firstname + lastname + " " + statName + "\n" + getString(R.string.messageContainLocalisation) + " " + geolocalisation;
     }
+
 
 
 }
