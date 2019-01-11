@@ -371,7 +371,7 @@ public class MainActivity extends AppCompatActivity
 
                     }
                 })
-                .setNegativeButton(R.string.dialogCancel, new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // User cancelled the dialog
                     }
